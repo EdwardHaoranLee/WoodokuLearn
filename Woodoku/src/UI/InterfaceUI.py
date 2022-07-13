@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Tuple
 
 from Woodoku.src.Entity.WoodokuBoard import WoodokuBoard
 from Woodoku.src.Entity.WoodokuShape import WoodokuShape
@@ -30,6 +30,31 @@ class InterfaceUI(ABC):
         :param shapes: All the shapes in this round, no matter if chosen before.
         :param shape_availability: If the shape in <shapes> is still waiting to be chosen.
         :return: The index of shape chosen from user.
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def put_shape_at(self) -> Tuple[int, int]:
+        """
+        Get the coords from user on where to put shape.
+
+        :return: (x, y) coordinates.
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def show_earned(self, score: int) -> None:
+        """
+        Show user the earned score after a successful placement.
+
+        :param score: The change in score.
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def show_cannot_place(self) -> None:
+        """
+        If the current shape cannot be placed at user-inputted location, call this method.
         """
         raise NotImplementedError()
 
