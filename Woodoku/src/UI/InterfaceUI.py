@@ -8,7 +8,7 @@ from Woodoku.src.Entity.WoodokuShape import WoodokuShape
 class InterfaceUI(ABC):
 
     @abstractmethod
-    def start_game(self, board) -> None:
+    def show_start_game(self, board) -> None:
         raise NotImplementedError()
 
     @abstractmethod

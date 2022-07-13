@@ -8,7 +8,7 @@ from Woodoku.src.UI.InterfaceUI import InterfaceUI
 
 class CommandLineUI(ABC, InterfaceUI):
 
-    def start_game(self, board: WoodokuBoard) -> None:
+    def show_start_game(self, board: WoodokuBoard) -> None:
         pass
 
     def show_board(self, board: WoodokuBoard) -> None:
