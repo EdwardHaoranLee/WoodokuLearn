@@ -15,6 +15,9 @@ class WoodokuBoardRepresentation:
     def __init__(self):
         pass
 
+    def __str__(self):
+        pass
+
     def add_blocks(self, blocks_coord: List[Tuple[int, int]]) -> None:
         pass
 
@@ -36,6 +39,9 @@ class WoodokuBoard:
     __representation: WoodokuBoardRepresentation
 
     def __init__(self):
+        pass
+
+    def __str__(self):
         pass
 
     def initialize(self):
