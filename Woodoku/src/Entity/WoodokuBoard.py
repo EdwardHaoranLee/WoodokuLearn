@@ -69,7 +69,6 @@ class WoodokuBoard:
             bool: if the `shape` fits the board
         """
         # TODO: improve performance
-        # Exhaustively scan the board
         rng = np.random.default_rng()
         all_blocks = [(i, j) for i in range(9) for j in range(9)]
         rng.shuffle(all_blocks)
@@ -124,8 +123,9 @@ class WoodokuBoard:
     def __find_groups(self) -> Tuple[Dict[str, int], Set[Tuple[int, int]]]:
         """Check current board and see if there is any groups such as
         complete rows, columns or 3x3 box and report them. Remove all groups.
-        https://en.wikipedia.org/wiki/Glossary_of_Sudoku#Terminology_and_grid_layout
 
+        Terminology Reference:
+        [Wikipedia Sudoku Glossary](https://en.wikipedia.org/wiki/Glossary_of_Sudoku#Terminology_and_grid_layout)
 
         Returns:
             Tuple[Dict[str, int], Set[Tuple[int,int]]]:
