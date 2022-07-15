@@ -1,3 +1,5 @@
+import numpy as np
+from numpy import ndarray
 from WoodokuShape import WoodokuShape
 from ScoreAgent import ScoreAgent
 from typing import Dict, List, Tuple
@@ -12,17 +14,21 @@ class WoodokuBoardRepresentation:
     The first block on the bottom row is (n - 1, 0).
     The bottom-right block's coordinate is (n - 1, n - 1).
     """
-    def __init__(self):
-        pass
+    board: ndarray
+
+    def __init__(self, n: int):
+        self.board = np.zeros((2, n))
 
     def __str__(self):
         pass
 
     def add_blocks(self, blocks_coord: List[Tuple[int, int]]) -> None:
-        pass
+        for position in blocks_coord:
+            self.board[position[0]][position[1]] = 1
 
     def remove_blocks(self, blocks_coord: List[Tuple[int, int]]) -> None:
-        pass
+        for position in blocks_coord:
+            self.board[position[0]][position[1]] = 0
 
     def is_occupied(self, blocks_coord: List[Tuple[int, int]]) -> bool:
         """
@@ -31,7 +37,10 @@ class WoodokuBoardRepresentation:
         :param blocks_coord:
         :return:
         """
-        pass
+        for position in blocks_coord:
+            if self.board[position[0]][position[1]] == 0:
+                return False
+        return False
 
 
 class WoodokuBoard:
