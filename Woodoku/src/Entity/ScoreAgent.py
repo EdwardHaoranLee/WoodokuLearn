@@ -8,11 +8,10 @@ class ScoreAgent:
         pass
 
     def calculate_winning(self, winning_map: Dict[str, int]) -> None:
-        """
-        Given winning map, calculate score and add to score.
+        """Given `winning_map`, calculate score and add to score
 
-        :param winning_map: e.g. { "row": 1, "column": 2, "3x3 block": 0 }
-        :return:
+        Args:
+            winning_map (Dict[str, int]): _description_
         """
         pass
 
