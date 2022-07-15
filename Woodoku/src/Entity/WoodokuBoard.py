@@ -1,16 +1,20 @@
+import numpy as np
+
 from Entity.WoodokuShape import WoodokuShape
 from Entity.ScoreAgent import ScoreAgent
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Set
+from Exceptions.Exceptions import CannotPlaceShapeError
 
 
-class WoodokuBoardRepresentation:
-    """A data class representing the low-level implementation of the board
+class _WoodokuBoardRepresentation:
+    """Private data class representing the low-level implementation of the board
 
     The top-left block's coordinate is (0, 0).
     The last block on the top row is (0, n - 1).
     The first block on the bottom row is (n - 1, 0).
     The bottom-right block's coordinate is (n - 1, n - 1).
     """
+
     def __init__(self):
         pass
 
@@ -28,22 +32,24 @@ class WoodokuBoardRepresentation:
         occupied, return true. Otherwise, false.
 
         Args:
-            blocks_coord (List[Tuple[int, int]]): list or coordinates to check 
+            blocks_coord (List[Tuple[int, int]]): list of coordinates to check
+
+        Raises:
+            CannotPlaceShapeError: raised when checking a invalid block
 
         Returns:
             bool: if any coordinates in `blocks_coord` is occupied
         """
-        pass
+        # TODO: raise the Error, according to docstring, the code below is just
+        # a placeholder
+        raise CannotPlaceShapeError(0, 0)
 
 
 class WoodokuBoard:
-    """A 9x9 Woodoku Board
+    """A 9x9 Woodoku Board"""
 
-    Raises:
-        CanNotAddShapeError: still cannot add shape after checking the board
-    """
     __scoreAgent: ScoreAgent
-    __representation: WoodokuBoardRepresentation
+    __representation: _WoodokuBoardRepresentation
 
     def __init__(self):
         pass
@@ -83,10 +89,10 @@ class WoodokuBoard:
 
     def add_shape(self, shape: WoodokuShape, x: int, y: int) -> None:
         """Add the shape to woodoku at coordinate (x, y). Only called if the shape
-        can be added. If unable to add, raise exception.
+        can be added at `(x,y)`.
 
         This method includes actions:
-        1. Clear winning row/column/3x3 block
+        1. Clear winning row/column/3x3 box
         2. Call scoreAgent to calculate score
 
         Args:
@@ -99,34 +105,39 @@ class WoodokuBoard:
     def get_score(self) -> int:
         pass
 
-    def __find_winning_blocks(self) -> Dict[str, int]:
-        """Check current board and see if there is any winning blocks such as
-        complete rows, columns or 3x3 block.
+    def __find_groups(self) -> Tuple[Dict[str, int], Set[Tuple[int, int]]]:
+        """Check current board and see if there is any groups such as
+        complete rows, columns or 3x3 box and report them. Remove all groups.
+        https://en.wikipedia.org/wiki/Glossary_of_Sudoku#Terminology_and_grid_layout
+
 
         Returns:
-            A dictionary mapping from name of the winning block to the number of
-            winning block. e.g. { "row": 1, "column": 2, "3x3 block": 0 }
+            Tuple[Dict[str, int], Set[Tuple[int,int]]]:
+                1. A dictionary mapping from name of the group to the number of groups.
+                e.g. { "row": 1, "column": 2, "box": 0 }
+                2. Set of block coordinates for the group
+
         """
         pass
 
-    def __get_row_all_coords(self, row_num: int) -> List[Tuple[int, int]]:
+    def __get_row_coords(self, row_index: int) -> List[Tuple[int, int]]:
         pass
 
-    def __get_column_all_coords(self, column_num: int) -> List[Tuple[int, int]]:
+    def __get_col_coords(self, col_index: int) -> List[Tuple[int, int]]:
         pass
 
-    def __get_3x3_all_coords(self, index: int) -> List[Tuple[int, int]]:
-        """The index of 3x3 block is as following:
-        _____________
-        | 0 | 1 | 2 |
-        | 3 | 4 | 5 |
-        | 6 | 7 | 8 |
-        _____________
+    def __get_box_coords(self, index: int) -> List[Tuple[int, int]]:
+        """The index of 3x3 box is as following:
+        | 0 	| 1 	| 2 	|
+        |---	|---	|---	|
+        | 3 	| 4 	| 5 	|
+        | 6 	| 7 	| 8 	|
 
         Args:
-            index (int): The index of 3x3 block as list above
+            index (int): The index of 3x3 box as list above
 
         Returns:
-            List[Tuple[int, int]]: All the coordinates in that 3x3 block
+            List[Tuple[int, int]]: All the coordinates in that 3x3 box
+
         """
         pass
