@@ -29,3 +29,6 @@ class WoodokuShape:
 
     def get_coords(self) -> List[Tuple[int, int]]:
         return self.__coords
+    
+    def map_to_board_at(self, x:int, y:int)-> List[Tuple[int,int]]: 
+        return [(x + row, y + col) for (row, col) in self.get_coords()]
