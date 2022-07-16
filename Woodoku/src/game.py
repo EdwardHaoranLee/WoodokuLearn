@@ -24,9 +24,9 @@ def random_shapes(shapes: List[WoodokuShape], num: int) -> List[WoodokuShape]:
     pass
 
 
-def is_lose(board: WoodokuBoard, shapes: List[WoodokuShape], shape_availability: List[bool]) -> bool:
-    for i in range(len(shapes)):
-        if shape_availability[i] and board.can_add_shape_to_board(shapes[i]):
+def is_out_of_space(board: WoodokuBoard, shapes: List[WoodokuShape], shape_availability: List[bool]) -> bool:
+    for i, shape in enumerate(shapes):
+        if shape_availability[i] and board.can_add_shape_to_board(shape):
             return True
 
     return False
