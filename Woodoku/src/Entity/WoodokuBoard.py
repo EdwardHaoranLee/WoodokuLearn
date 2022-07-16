@@ -103,15 +103,14 @@ class WoodokuBoard:
             shape (WoodokuShape): The shape needed to be checked
             x (int): x coordinate
             y (int): y coordinate
+        Raises: 
+            ShapeOutOfBoundError: if any block in `blocks` is invalid
 
         Returns:
             bool: if `shape` can be added to `(x,y)`
         """
         blocks = shape.map_to_board_at(x,y)
-        try:
             return self.__representation.is_not_occupied(blocks)
-        except ShapeOutOfBoardError:
-            return False
 
     def add_shape(self, shape: WoodokuShape, x: int, y: int) -> None:
         """Add the shape to woodoku at coordinate (x, y). Only called if the shape
@@ -212,4 +211,5 @@ class WoodokuBoard:
         return [(row, col) for row in range(x, x + 3) for col in range(y, y + 3)]
     
     def __str__(self) -> str:
-        return str(self.__representation)
+		#TODO: include score in print out, should be implemented along with CommandLineUI
+        pass
