@@ -3,7 +3,7 @@ import numpy as np
 from Entity.WoodokuShape import WoodokuShape
 from Entity.ScoreAgent import ScoreAgent
 from typing import Dict, List, Tuple, Set
-from Exceptions.Exceptions import CannotPlaceShapeError
+from Exceptions.Exceptions import ShapeOutOfBoardError
 
 
 class _WoodokuBoardRepresentation:
@@ -64,7 +64,7 @@ class WoodokuBoard:
         """Check if the woodoku shape can fit into the board. If all current
         shapes are not be able to add, the game fails.
 
-        Exhaustively scans the board in a random fashion to average the complexity
+        scans the board in a random fashion to average the complexity
 
         Args:
             shape (WoodokuShape): a woodoku shape for validation
@@ -72,7 +72,6 @@ class WoodokuBoard:
         Returns:
             bool: if the `shape` fits the board
         """
-        # TODO: improve performance
         rng = np.random.default_rng()
         all_blocks = [(i, j) for i in range(9) for j in range(9)]
         rng.shuffle(all_blocks)
@@ -126,7 +125,7 @@ class WoodokuBoard:
 
     def __find_groups(self) -> Tuple[Dict[str, int], Set[Tuple[int, int]]]:
         """Check current board and see if there is any groups such as
-        complete rows, columns or 3x3 box and report them. Remove all groups.
+        complete rows, columns or 3x3 box and report them. 
 
         Terminology Reference:
         [Wikipedia Sudoku Glossary](https://en.wikipedia.org/wiki/Glossary_of_Sudoku#Terminology_and_grid_layout)

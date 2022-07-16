@@ -1,7 +1,5 @@
-from mimetypes import init
 
-
-class CannotPlaceShapeError(Exception):
+class ShapeOutOfBoardError(Exception):
     """Exception raised for Error in placing a shape"""
     def __init__(self, x:int, y:int) -> None:
         self.x = x
@@ -9,5 +7,5 @@ class CannotPlaceShapeError(Exception):
 
 
     def __str__(self) -> str:
-        return f"Cannot place shape at coordinate ({self.x}, {self.y})"
+        return f"Cannot place shape at with top left corner at ({self.x}, {self.y})"
     
