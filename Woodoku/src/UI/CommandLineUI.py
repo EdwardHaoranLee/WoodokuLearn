@@ -1,12 +1,11 @@
-from abc import ABC
 from typing import List, Tuple
 
-from Woodoku.src.Entity.WoodokuBoard import WoodokuBoard
-from Woodoku.src.Entity.WoodokuShape import WoodokuShape
-from Woodoku.src.UI.InterfaceUI import InterfaceUI
+from Entity.WoodokuBoard import WoodokuBoard
+from Entity.WoodokuShape import WoodokuShape
+from UI.UIInterface import UIInterface
 
 
-class CommandLineUI(ABC, InterfaceUI):
+class CommandLineUI(UIInterface):
 
     def show_start_game(self, board: WoodokuBoard) -> None:
         pass

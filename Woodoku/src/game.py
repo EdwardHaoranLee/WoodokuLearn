@@ -1,9 +1,9 @@
 from typing import List
 
-from Woodoku.src.Entity.WoodokuBoard import WoodokuBoard
-from Woodoku.src.Entity.WoodokuShape import WoodokuShape
-from Woodoku.src.UI.CommandLineUI import CommandLineUI
-from Woodoku.src.UI.InterfaceUI import InterfaceUI
+from Entity.WoodokuBoard import WoodokuBoard
+from Entity.WoodokuShape import WoodokuShape
+from UI.CommandLineUI import CommandLineUI
+from UI.UIInterface import UIInterface
 
 CONFIG_FILE = ''
 NUM_SHAPES = 3
@@ -28,9 +28,8 @@ def check_if_lose(board: WoodokuBoard, shapes: List[WoodokuShape], shape_availab
     pass
 
 
-def game(ui: InterfaceUI) -> None:
+def game(ui: UIInterface) -> None:
     board = WoodokuBoard()
-    board.initialize()
 
     # Generating all possible shapes that might appear in game.
     all_shapes = read_shapes_from_file(CONFIG_FILE)

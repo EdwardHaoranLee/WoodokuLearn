@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import List, Tuple
 
-from Woodoku.src.Entity.WoodokuBoard import WoodokuBoard
-from Woodoku.src.Entity.WoodokuShape import WoodokuShape
+from Entity.WoodokuBoard import WoodokuBoard
+from Entity.WoodokuShape import WoodokuShape
 
 
-class InterfaceUI(ABC):
+class UIInterface(ABC):
 
     @abstractmethod
     def show_start_game(self, board) -> None:
@@ -28,8 +28,8 @@ class InterfaceUI(ABC):
         Show the UI to let user choose one of the shapes.
 
         :param shapes: All the shapes in this round, no matter if chosen before.
-        :param shape_availability: If the shape in <shapes> is still waiting to be chosen.
-        :return: The index of shape chosen from user.
+        :param shape_availability: List of bool representing if the shape in is still waiting to be chosen
+        :return: The index of shape chosen by the user.
         """
         raise NotImplementedError()
 
