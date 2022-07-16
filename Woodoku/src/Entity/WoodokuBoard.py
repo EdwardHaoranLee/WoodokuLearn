@@ -43,6 +43,10 @@ class _WoodokuBoardRepresentation:
         # TODO: raise the Error, according to docstring, the code below is just
         # a placeholder
         raise CannotPlaceShapeError(0, 0)
+    
+    # TODO: implement str representation
+    def __str__(self) -> str:
+        raise NotImplementedError()
 
 
 class WoodokuBoard:
@@ -191,8 +195,7 @@ class WoodokuBoard:
 
         # map to 9x9 coordinates
         x, y = x * 3, y * 3
-
         return [(row, col) for row in range(x, x + 3) for col in range(y, y + 3)]
-
-    def __str__(self):
-        pass
+    
+    def __str__(self) -> str:
+        return str(self.__representation)
