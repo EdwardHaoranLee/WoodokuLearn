@@ -18,9 +18,6 @@ class _WoodokuBoardRepresentation:
     def __init__(self):
         pass
 
-    def __str__(self):
-        pass
-
     def add_blocks(self, blocks_coord: List[Tuple[int, int]]) -> None:
         pass
 
@@ -28,25 +25,41 @@ class _WoodokuBoardRepresentation:
         pass
 
     def is_occupied(self, blocks_coord: List[Tuple[int, int]]) -> bool:
-        """Check if each coord has a block on it. If all of those coords are
+        """Check if each block has is occupied. If all of those blocks are
         occupied, return true. Otherwise, false.
 
         Args:
-            blocks_coord (List[Tuple[int, int]]): list of coordinates to check
-
-        Raises:
-            CannotPlaceShapeError: raised when checking a invalid block
+            blocks_coord (List[Tuple[int, int]]): list of blocks to check
 
         Returns:
-            bool: if any coordinates in `blocks_coord` is occupied
+            bool: if all blocks in `blocks_coord` is occupied
         """
-        # TODO: raise the Error, according to docstring, the code below is just
-        # a placeholder
-        raise CannotPlaceShapeError(0, 0)
+
+    def is_not_occupied(self, blocks_coord: List[Tuple[int, int]]) -> bool:
+        """Check if each block is empty. If all of those blocks are empty,
+        return true. Otherwise, false.
+
+        Args:
+            blocks_coord (List[Tuple[int, int]]): list of blocks to check
+
+        Returns:
+            bool: if all blocks in `blocks_coord` is empty
+        """
     
-    # TODO: implement str representation
+    def __validate(block: Tuple[int, int]) -> None:
+        """validate if block is within the 9x9 board. raise Error if not.
+
+        Args:
+            block (Tuple[int, int]): The block to be validated
+
+        Raises:
+            ShapeOutOfBoardError: when some block is not valid 
+        """
+        pass
+    
+    
     def __str__(self) -> str:
-        raise NotImplementedError()
+        pass
 
 
 class WoodokuBoard:
