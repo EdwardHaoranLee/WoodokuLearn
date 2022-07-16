@@ -53,7 +53,7 @@ def game(ui: UIInterface) -> None:
         # When there is any shape in this round still waiting to be chosen.
         while any(shape_availability):
 
-            if is_lose(board, shapes, shape_availability):
+            if is_out_of_space(board, shapes, shape_availability):
                 ui.show_result(board, shapes, shape_availability)
                 return
 
