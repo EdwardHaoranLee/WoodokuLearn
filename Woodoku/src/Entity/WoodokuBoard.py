@@ -88,7 +88,6 @@ class WoodokuBoard:
         rng = np.random.default_rng()
         all_blocks = [(i, j) for i in range(9) for j in range(9)]
         rng.shuffle(all_blocks)
-        print(all_blocks)
 
         for row, col in all_blocks:
             if self.can_add_shape_at_location(shape, x=row, y=col):
@@ -108,8 +107,11 @@ class WoodokuBoard:
         Returns:
             bool: if `shape` can be added to `(x,y)`
         """
-        blocks = self.__map_shape_to_board_at(shape, x, y)
-        return not self.__representation.is_occupied(blocks)
+        blocks = shape.map_to_board_at(x,y)
+        try:
+            return self.__representation.is_not_occupied(blocks)
+        except ShapeOutOfBoardError:
+            return False
 
     def add_shape(self, shape: WoodokuShape, x: int, y: int) -> None:
         """Add the shape to woodoku at coordinate (x, y). Only called if the shape
