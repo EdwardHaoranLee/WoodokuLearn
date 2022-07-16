@@ -15,18 +15,33 @@ class WoodokuBoardRepresentation:
     The bottom-right block's coordinate is (n - 1, n - 1).
     """
     board: ndarray
+    length: int
 
     def __init__(self, n: int):
-        self.board = np.zeros((2, n))
+        self.length = n
+        self.board = np.zeros((self.length, self.length))
 
     def __str__(self):
-        pass
+        # reformat = np.reshape(self.board, self.length * self.length)
+        return np.array2string(self.board)
 
     def add_blocks(self, blocks_coord: List[Tuple[int, int]]) -> None:
+        """
+        Mark each position specified in blocks_coord as one to indicate that the position is occupied.
+
+        :param blocks_coord: a list of (x,y) tuples to be added to the board
+        :return:
+        """
         for position in blocks_coord:
             self.board[position[0]][position[1]] = 1
 
     def remove_blocks(self, blocks_coord: List[Tuple[int, int]]) -> None:
+        """
+        Mark each position specified in blocks_coord as zero to indicate that the position is not occupied.
+
+        :param blocks_coord: a list of (x,y) tuples to be added to the board
+        :return:
+        """
         for position in blocks_coord:
             self.board[position[0]][position[1]] = 0
 
