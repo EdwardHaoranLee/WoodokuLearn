@@ -1,9 +1,10 @@
 import numpy as np
 from numpy import ndarray
 from WoodokuShape import WoodokuShape
-from score_agent import ScoreAgent
+from ScoreAgent import ScoreAgent
 from typing import Dict, List, Tuple
 
+N = 9
 
 class WoodokuBoardRepresentation:
     """
@@ -15,40 +16,32 @@ class WoodokuBoardRepresentation:
     The bottom-right block's coordinate is (n - 1, n - 1).
     """
     board: ndarray
-    length: int
 
-    def __init__(self, n: int):
-        self.length = n
-        self.board = np.zeros((self.length, self.length))
+    def __init__(self):
+        self.board = np.full((N, N), False)
 
     def __str__(self):
-        # reformat = np.reshape(self.board, self.length * self.length)
-        return np.array2string(self.board)
-
-    def __eq__(self, other):
-        if isinstance(other, WoodokuBoardRepresentation) and other.board == self.board:
-            return True
-        return False
+        pass
 
     def add_blocks(self, blocks_coord: List[Tuple[int, int]]) -> None:
         """
-        Mark each position specified in blocks_coord as one to indicate that the position is occupied.
+        Mark each position specified in blocks_coord as True to indicate that the position is occupied.
 
         :param blocks_coord: a list of (x,y) tuples to be added to the board
         :return:
         """
-        for position in blocks_coord:
-            self.board[position[0]][position[1]] = 1
+        for row, col in blocks_coord:
+            self.board[row, col] = True
 
     def remove_blocks(self, blocks_coord: List[Tuple[int, int]]) -> None:
         """
-        Mark each position specified in blocks_coord as zero to indicate that the position is not occupied.
+        Mark each position specified in blocks_coord as False to indicate that the position is not occupied.
 
         :param blocks_coord: a list of (x,y) tuples to be added to the board
         :return:
         """
-        for position in blocks_coord:
-            self.board[position[0]][position[1]] = 0
+        for row, col in blocks_coord:
+            self.board[row, col] = False
 
     def is_occupied(self, blocks_coord: List[Tuple[int, int]]) -> bool:
         """
@@ -57,10 +50,8 @@ class WoodokuBoardRepresentation:
         :param blocks_coord:
         :return:
         """
-        for position in blocks_coord:
-            if self.board[position[0]][position[1]] == 0:
-                return False
-        return False
+        pass
+        # will open a new pr to rewrite this method
 
 
 class WoodokuBoard:
