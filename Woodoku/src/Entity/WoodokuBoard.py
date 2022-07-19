@@ -25,9 +25,6 @@ class _WoodokuBoardRepresentation:
     def __init__(self):
         self.__board = np.full((N, N), False)
 
-    def __str__(self) -> str:
-        pass
-
     def add_blocks(self, blocks_coord: List[Tuple[int, int]]) -> None:
         """
         Mark each position specified in blocks_coord as True to indicate that the position is occupied.
@@ -89,6 +86,9 @@ class _WoodokuBoardRepresentation:
         """
         if not (0 <= block[0] <= N - 1 and 0 <= block[1] <= N - 1):
             raise ShapeOutOfBoardError(block[0], block[1])
+
+    def __str__(self) -> str:
+        raise NotImplementedError()
 
 
 class WoodokuBoard:
