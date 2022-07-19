@@ -1,7 +1,7 @@
 import numpy as np
 from numpy import ndarray
 from WoodokuShape import WoodokuShape
-from ScoreAgent import ScoreAgent
+from score_agent import ScoreAgent
 from typing import Dict, List, Tuple
 
 
@@ -24,6 +24,11 @@ class WoodokuBoardRepresentation:
     def __str__(self):
         # reformat = np.reshape(self.board, self.length * self.length)
         return np.array2string(self.board)
+
+    def __eq__(self, other):
+        if isinstance(other, WoodokuBoardRepresentation) and other.board == self.board:
+            return True
+        return False
 
     def add_blocks(self, blocks_coord: List[Tuple[int, int]]) -> None:
         """
