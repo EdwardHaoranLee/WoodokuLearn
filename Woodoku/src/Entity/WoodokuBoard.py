@@ -84,8 +84,9 @@ class _WoodokuBoardRepresentation:
         Raises:
             ShapeOutOfBoardError: when some block is not valid 
         """
-        if not (0 <= block[0] <= N - 1 and 0 <= block[1] <= N - 1):
-            raise ShapeOutOfBoardError(block[0], block[1])
+        x, y = block
+        if not (0 <= x <= N - 1 and 0 <= y <= N - 1):
+            raise ShapeOutOfBoardError(x, y)
 
     def __str__(self) -> str:
         raise NotImplementedError()
