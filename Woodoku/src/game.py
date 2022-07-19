@@ -1,3 +1,4 @@
+import random
 from typing import List
 
 from Entity.WoodokuBoard import WoodokuBoard
@@ -21,7 +22,7 @@ def random_shapes(shapes: List[WoodokuShape], num: int) -> List[WoodokuShape]:
     :param num: Number of shapes to choose.
     :return: The shapes for this round.
     """
-    pass
+    return list(random.choices(shapes, k=num))
 
 
 def check_if_lose(board: WoodokuBoard, shapes: List[WoodokuShape], shape_availability: List[bool]) -> bool:
