@@ -15,12 +15,14 @@ def read_shapes_from_file(filepath: str) -> List[WoodokuShape]:
 
 
 def random_shapes(shapes: List[WoodokuShape], num: int) -> List[WoodokuShape]:
-    """
-    Choose <num> non-repeated random shapes from <shapes>.
+    """Choose `num` non-repeated random shapes from `shapes`.
 
-    :param shapes: All shapes to choose.
-    :param num: Number of shapes to choose.
-    :return: The shapes for this round.
+    Args:
+        shapes (List[WoodokuShape]): All shapes available to choose in the game
+        num (int): Number of shapes to choose for this round
+
+    Returns:
+        List[WoodokuShape]: The shapes for this round.
     """
     return list(random.choices(shapes, k=num))
 
