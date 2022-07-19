@@ -5,7 +5,9 @@ from Entity.ScoreAgent import ScoreAgent
 from typing import Dict, List, Tuple, Set
 from Exceptions.Exceptions import ShapeOutOfBoardError
 
+# the length of the square game board
 N = 9
+
 
 class _WoodokuBoardRepresentation:
     """Private data class representing the low-level implementation of the board
@@ -14,11 +16,15 @@ class _WoodokuBoardRepresentation:
     The last block on the top row is (0, n - 1).
     The first block on the bottom row is (n - 1, 0).
     The bottom-right block's coordinate is (n - 1, n - 1).
+
+    _board: an 2d array to record the occupancy of each position on the game board. The value is set to True when
+    the position occupied
     """
+    __board: ndarray
 
     def __init__(self):
-        self.board = np.full((N, N), False)
-        
+        self.__board = np.full((N, N), False)
+
     def __str__(self) -> str:
         pass
 
@@ -30,7 +36,7 @@ class _WoodokuBoardRepresentation:
         :return:
         """
         for row, col in blocks_coord:
-            self.board[row, col] = True
+            self.__board[row, col] = True
 
     def remove_blocks(self, blocks_coord: List[Tuple[int, int]]) -> None:
         """
@@ -40,7 +46,7 @@ class _WoodokuBoardRepresentation:
         :return:
         """
         for row, col in blocks_coord:
-            self.board[row, col] = False
+            self.__board[row, col] = False
 
     def is_occupied(self, blocks_coord: List[Tuple[int, int]]) -> bool:
         """Check if each block has is occupied. If all of those blocks are
@@ -52,6 +58,10 @@ class _WoodokuBoardRepresentation:
         Returns:
             bool: if all blocks in `blocks_coord` is occupied
         """
+        for row, col in blocks_coord:
+            if not self.__board[row, col]:
+                return False
+        return True
 
     def is_not_occupied(self, blocks_coord: List[Tuple[int, int]]) -> bool:
         """Check if each block is empty. If all of those blocks are empty,
@@ -63,7 +73,11 @@ class _WoodokuBoardRepresentation:
         Returns:
             bool: if all blocks in `blocks_coord` is empty
         """
-    
+        for row, col in blocks_coord:
+            if self.__board[row, col]:
+                return False
+        return True
+
     def __validate(block: Tuple[int, int]) -> None:
         """validate if block is within the 9x9 board. raise Error if not.
 
@@ -73,7 +87,8 @@ class _WoodokuBoardRepresentation:
         Raises:
             ShapeOutOfBoardError: when some block is not valid 
         """
-        pass
+        if not (0 <= block[0] <= N - 1 and 0 <= block[1] <= N - 1):
+            raise ShapeOutOfBoardError(block[0], block[1])
 
 
 class WoodokuBoard:
@@ -85,7 +100,6 @@ class WoodokuBoard:
     def __init__(self):
         self.__scoreAgent = ScoreAgent()
         self.__representation = _WoodokuBoardRepresentation()
-
 
     def can_add_shape_to_board(self, shape: WoodokuShape) -> bool:
         """Check if the woodoku shape can fit into the board. If all current
@@ -123,7 +137,7 @@ class WoodokuBoard:
         Returns:
             bool: if `shape` can be added to `(x,y)`
         """
-        blocks = shape.map_to_board_at(x,y)
+        blocks = shape.map_to_board_at(x, y)
         return self.__representation.is_not_occupied(blocks)
 
     def add_shape(self, shape: WoodokuShape, x: int, y: int) -> None:
@@ -223,7 +237,7 @@ class WoodokuBoard:
         # map to 9x9 coordinates
         x, y = x * 3, y * 3
         return [(row, col) for row in range(x, x + 3) for col in range(y, y + 3)]
-    
+
     def __str__(self) -> str:
-		#TODO: include score in print out, should be implemented along with CommandLineUI
+        # TODO: include score in print out, should be implemented along with CommandLineUI
         pass
