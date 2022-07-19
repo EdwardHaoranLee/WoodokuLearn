@@ -1,5 +1,5 @@
-from WoodokuShape import WoodokuShape
-from ScoreAgent import ScoreAgent
+from Entity.WoodokuShape import WoodokuShape
+from Entity.ScoreAgent import ScoreAgent
 from typing import Dict, List, Tuple
 
 

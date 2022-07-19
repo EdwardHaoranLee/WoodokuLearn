@@ -1,16 +1,34 @@
 from typing import List
 
+import yaml
+
 from Entity.WoodokuBoard import WoodokuBoard
 from Entity.WoodokuShape import WoodokuShape
 from UI.CommandLineUI import CommandLineUI
 from UI.UIInterface import UIInterface
 
-CONFIG_FILE = ''
+CONFIG_FILE = './config.yaml'
 NUM_SHAPES = 3
 
 
 def read_shapes_from_file(filepath: str) -> List[WoodokuShape]:
-    pass
+    raw_shapes = []
+    with open(filepath) as config:
+        raw_shapes_list = yaml.safe_load(config)['raw_shapes']
+        for row in raw_shapes_list:
+            raw_shapes.append(WoodokuShape(row))
+
+    shapes = set()
+
+    # All the raw shape itself was added first, then rotates three times and add to set after each rotate.
+    # Duplicates are eliminated by set operation.
+    for shape in raw_shapes:
+        shapes.add(shape)
+        for _ in range(3):
+            new_shape = shape.rotate()
+            shapes.add(new_shape)
+
+    return list(shapes)
 
 
 def random_shapes(shapes: List[WoodokuShape], num: int) -> List[WoodokuShape]:
