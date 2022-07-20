@@ -1,8 +1,10 @@
+from typing import Dict, List, Tuple, Set
+
 import numpy as np
 from numpy import ndarray
-from Entity.WoodokuShape import WoodokuShape
+
 from Entity.ScoreAgent import ScoreAgent
-from typing import Dict, List, Tuple, Set
+from Entity.WoodokuShape import WoodokuShape
 from Exceptions.Exceptions import ShapeOutOfBoardError
 
 # the length of the square game board
