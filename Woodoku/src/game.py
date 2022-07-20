@@ -18,6 +18,19 @@ def read_shapes_from_file(filepath: str) -> List[WoodokuShape]:
         for row in raw_shapes_list:
             raw_shapes.append(WoodokuShape(row))
 
+    return raw_shapes
+
+
+def rotate_all_shapes(raw_shapes: List[WoodokuShape]) -> List[WoodokuShape]:
+    """
+    Rotate each shape in <raw_shapes> for three times, then gather all of them.
+
+    Args:
+        raw_shapes: The default shape without any rotation.
+
+    Returns:
+        The original shapes and all the rotated shapes (non-repeated).
+    """
     shapes = set()
 
     # All the raw shape itself was added first, then rotates three times and add to set after each rotate.
