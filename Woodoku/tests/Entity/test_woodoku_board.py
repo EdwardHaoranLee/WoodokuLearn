@@ -22,9 +22,6 @@ class TestWoodokuRepresentation:
         rep.remove_blocks(lst)
         return rep._board_getter_test()
 
-    def call_private_validate(self, rep: _WoodokuBoardRepresentation, pos: Tuple[int, int]):
-        return rep.__validate(pos)
-
     def test_add_blocks_add_one_block(self):
         board = self.board_after_adding(_WoodokuBoardRepresentation(), self.one_block_lst)
 
