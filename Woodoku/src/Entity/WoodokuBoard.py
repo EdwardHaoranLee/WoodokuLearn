@@ -25,7 +25,7 @@ class _WoodokuBoardRepresentation:
     def __init__(self):
         self.__board = np.full((N, N), False)
 
-    def _board_getter_test(self):
+    def board(self):
         return self.__board
 
     def add_blocks(self, blocks_coord: List[Tuple[int, int]]) -> None:

@@ -16,11 +16,11 @@ class TestWoodokuRepresentation:
 
     def board_after_adding(self, rep: _WoodokuBoardRepresentation, lst: list):
         rep.add_blocks(lst)
-        return rep._board_getter_test()
+        return rep.board()
 
     def board_after_removing(self, rep: _WoodokuBoardRepresentation, lst: list):
         rep.remove_blocks(lst)
-        return rep._board_getter_test()
+        return rep.board()
 
     def test_add_blocks_add_one_block(self):
         board = self.board_after_adding(_WoodokuBoardRepresentation(), self.one_block_lst)
