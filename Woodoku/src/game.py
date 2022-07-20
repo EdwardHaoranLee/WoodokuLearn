@@ -70,7 +70,7 @@ def game(ui: UIInterface) -> None:
     board = WoodokuBoard()
 
     # Generating all possible shapes that might appear in game.
-    all_shapes = read_shapes_from_file(CONFIG_FILE)
+    all_shapes = rotate_all_shapes(read_shapes_from_file(CONFIG_FILE))
 
     ui.show_start_game(board)
 
