@@ -1,3 +1,4 @@
+import random
 from typing import List
 
 import yaml
@@ -45,14 +46,16 @@ def rotate_all_shapes(raw_shapes: List[WoodokuShape]) -> List[WoodokuShape]:
 
 
 def random_shapes(shapes: List[WoodokuShape], num: int) -> List[WoodokuShape]:
-    """
-    Choose <num> non-repeated random shapes from <shapes>.
+    """Choose `num` non-repeated random shapes from `shapes`.
 
-    :param shapes: All shapes to choose.
-    :param num: Number of shapes to choose.
-    :return: The shapes for this round.
+    Args:
+        shapes (List[WoodokuShape]): All shapes available to choose in the game
+        num (int): Number of shapes to choose for this round
+
+    Returns:
+        List[WoodokuShape]: The shapes for this round.
     """
-    pass
+    return list(random.choices(shapes, k=num))
 
 
 def is_out_of_space(board: WoodokuBoard, shapes: List[WoodokuShape], shape_availability: List[bool]) -> bool:
