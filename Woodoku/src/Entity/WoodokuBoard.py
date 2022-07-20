@@ -1,8 +1,10 @@
+from typing import Dict, List, Tuple, Set
+
 import numpy as np
 from numpy import ndarray
-from Entity.WoodokuShape import WoodokuShape
+
 from Entity.ScoreAgent import ScoreAgent
-from typing import Dict, List, Tuple, Set
+from Entity.WoodokuShape import WoodokuShape
 from Exceptions.Exceptions import ShapeOutOfBoardError
 
 # the length of the square game board
@@ -75,6 +77,7 @@ class _WoodokuBoardRepresentation:
                 return False
         return True
 
+    @staticmethod
     def __validate(block: Tuple[int, int]) -> None:
         """validate if block is within the 9x9 board. raise Error if not.
 
@@ -166,7 +169,7 @@ class WoodokuBoard:
     def get_score(self) -> int:
         return self.__scoreAgent.get_score()
 
-    def __find_groups(self) -> Tuple[Dict[str, int], Set[Tuple[int, int]]]:
+    def __find_groups(self) -> Tuple[Dict[str, int], List[Tuple[int, int]]]:
         """Check current board and see if there is any groups such as
         complete rows, columns or 3x3 box and report them. 
 
@@ -200,15 +203,18 @@ class WoodokuBoard:
                 info["box"] += 1
                 group_blocks.update(box_blocks)
 
-        return info, group_blocks
+        return info, list(group_blocks)
 
-    def __get_row_coords(self, row_index: int) -> List[Tuple[int, int]]:
+    @staticmethod
+    def __get_row_coords(row_index: int) -> List[Tuple[int, int]]:
         return [(row_index, col) for col in range(9)]
 
-    def __get_col_coords(self, col_index: int) -> List[Tuple[int, int]]:
+    @staticmethod
+    def __get_col_coords(col_index: int) -> List[Tuple[int, int]]:
         return [(row, col_index) for row in range(9)]
 
-    def __get_box_coords(self, index: int) -> List[Tuple[int, int]]:
+    @staticmethod
+    def __get_box_coords(index: int) -> List[Tuple[int, int]]:
         """The index of 3x3 box is as following:
         | 0 	| 1 	| 2 	|
         |---	|---	|---	|
