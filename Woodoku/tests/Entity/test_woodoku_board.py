@@ -1,7 +1,6 @@
 import numpy as np
-import pytest
 
-from woodoku_board import _WoodokuBoardRepresentation
+from WoodokuBoard import _WoodokuBoardRepresentation
 
 N = 9
 
