@@ -1,9 +1,9 @@
 import numpy as np
 from numpy import ndarray
-from Entity.WoodokuShape import WoodokuShape
-from Entity.ScoreAgent import ScoreAgent
+from Entity.woodoku_shape import WoodokuShape
+from Entity.score_agent import ScoreAgent
 from typing import Dict, List, Tuple, Set
-from Exceptions.Exceptions import ShapeOutOfBoardError
+from Exceptions.exceptions import ShapeOutOfBoardError
 
 # the length of the square game board
 N = 9
