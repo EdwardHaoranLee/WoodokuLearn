@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple, Set
+from typing import Dict, List, Tuple, Set, Iterable
 
 import numpy as np
 from numpy import ndarray
@@ -27,7 +27,7 @@ class _WoodokuBoardRepresentation:
     def __init__(self):
         self.__board = np.full((N, N), False)
 
-    def add_blocks(self, blocks_coord: List[Tuple[int, int]]) -> None:
+    def add_blocks(self, blocks_coord: Iterable[Tuple[int, int]]) -> None:
         """
         Mark each position specified in blocks_coord as True to indicate that the position is occupied.
 
@@ -37,7 +37,7 @@ class _WoodokuBoardRepresentation:
         for row, col in blocks_coord:
             self.__board[row, col] = True
 
-    def remove_blocks(self, blocks_coord: List[Tuple[int, int]]) -> None:
+    def remove_blocks(self, blocks_coord: Iterable[Tuple[int, int]]) -> None:
         """
         Mark each position specified in blocks_coord as False to indicate that the position is not occupied.
 
@@ -47,7 +47,7 @@ class _WoodokuBoardRepresentation:
         for row, col in blocks_coord:
             self.__board[row, col] = False
 
-    def is_occupied(self, blocks_coord: List[Tuple[int, int]]) -> bool:
+    def is_occupied(self, blocks_coord: Iterable[Tuple[int, int]]) -> bool:
         """Check if each block has is occupied. If all of those blocks are
         occupied, return true. Otherwise, false.
 
@@ -62,7 +62,7 @@ class _WoodokuBoardRepresentation:
                 return False
         return True
 
-    def is_not_occupied(self, blocks_coord: List[Tuple[int, int]]) -> bool:
+    def is_not_occupied(self, blocks_coord: Iterable[Tuple[int, int]]) -> bool:
         """Check if each block is empty. If all of those blocks are empty,
         return true. Otherwise, false.
 
@@ -169,7 +169,7 @@ class WoodokuBoard:
     def get_score(self) -> int:
         return self.__scoreAgent.get_score()
 
-    def __find_groups(self) -> Tuple[Dict[str, int], List[Tuple[int, int]]]:
+    def __find_groups(self) -> Tuple[Dict[str, int], Iterable[Tuple[int, int]]]:
         """Check current board and see if there is any groups such as
         complete rows, columns or 3x3 box and report them. 
 
@@ -203,7 +203,7 @@ class WoodokuBoard:
                 info["box"] += 1
                 group_blocks.update(box_blocks)
 
-        return info, list(group_blocks)
+        return info, group_blocks
 
     @staticmethod
     def __get_row_coords(row_index: int) -> List[Tuple[int, int]]:
