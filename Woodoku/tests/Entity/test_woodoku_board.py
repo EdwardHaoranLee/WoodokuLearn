@@ -1,16 +1,15 @@
 import numpy as np
+import pytest
 
-from WoodokuBoard import _WoodokuBoardRepresentation
+from woodoku_board import _WoodokuBoardRepresentation
 
 N = 9
 
 
 class TestWoodokuRepresentation:
-    @classmethod
-    def setup(cls):
-        cls.one_block_lst = [(0, 0)]
-        cls.three_block_lst = [(1, 3), (5, 8), (0, 7)]
-        cls.five_block_lst = cls.three_block_lst + [(2, 1), (0, 8)]
+    one_block_lst = [(0, 0)]
+    three_block_lst = [(1, 3), (5, 8), (0, 7)]
+    five_block_lst = three_block_lst + [(2, 1), (0, 8)]
 
     def board_after_adding(self, rep: _WoodokuBoardRepresentation, lst: list):
         rep.add_blocks(lst)
@@ -20,37 +19,31 @@ class TestWoodokuRepresentation:
         rep.remove_blocks(lst)
         return rep._WoodokuBoardRepresentation__board
 
-    def test_add_blocks_add_one_block(self):
-        board = self.board_after_adding(_WoodokuBoardRepresentation(), self.one_block_lst)
+    @pytest.mark.parametrize("lst", [
+        one_block_lst,
+        three_block_lst,
+        five_block_lst,
+    ])
+    def test_add_blocks_add_list_of_blocks(self, lst):
+        board = self.board_after_adding(_WoodokuBoardRepresentation(), lst)
 
         expect = np.full((N, N), False)
-        x, y = self.one_block_lst[0]
-        expect[x, y] = True
-        assert (board == expect).all(), f'test fail because board =\n {board}, \n\n while expect =\n {expect}'
-
-    def test_add_blocks_add_three_blocks(self):
-        board = self.board_after_adding(_WoodokuBoardRepresentation(), self.three_block_lst)
-
-        expect = np.full((N, N), False)
-        for row, col in self.three_block_lst:
+        for row, col in lst:
             expect[row, col] = True
-        assert (board == expect).all(), f'test fail because board =\n {board}, \n\n while expect =\n {expect}'
+        assert (board == expect).all()
 
-    def test_remove_blocks_remove_one_block(self):
+    @pytest.mark.parametrize("lst", [
+        one_block_lst,
+        three_block_lst,
+        five_block_lst,
+    ])
+    def test_remove_blocks_remove_list_of_blocks(self, lst):
         rep = _WoodokuBoardRepresentation()
-        rep.add_blocks(self.one_block_lst)
-        board_removed = self.board_after_removing(rep, self.one_block_lst)
+        rep.add_blocks(lst)
+        board_removed = self.board_after_removing(rep, lst)
 
         expect = np.full((N, N), False)
-        assert (board_removed == expect).all(), f'test fail because board =\n {board_removed}, \n\n while expect =\n {expect}'
-
-    def test_remove_blocks_remove_five_block(self):
-        rep = _WoodokuBoardRepresentation()
-        rep.add_blocks(self.five_block_lst)
-        board_removed = self.board_after_removing(rep, self.five_block_lst)
-
-        expect = np.full((N, N), False)
-        assert (board_removed == expect).all(), f'test fail because board =\n {board_removed}, \n\n while expect =\n {expect}'
+        assert (board_removed == expect).all()
 
     # add five blocks and remove three of them
     def test_remove_blocks_remove_three_block(self):
