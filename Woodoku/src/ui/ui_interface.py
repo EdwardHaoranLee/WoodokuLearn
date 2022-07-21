@@ -25,7 +25,7 @@ class UIInterface(ABC):
         """
         Precondition: len(shapes) == len(shape_availability)
 
-        Show the ui to let user choose one of the shapes.
+        Show the UI to let user choose one of the shapes.
 
         :param shapes: All the shapes in this round, no matter if chosen before.
         :param shape_availability: List of bool representing if the shape in is still waiting to be chosen
