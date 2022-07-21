@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List, Tuple
 
-from Entity.woodoku_board import WoodokuBoard
-from Entity.woodoku_shape import WoodokuShape
+from entity.woodoku_board import WoodokuBoard
+from entity.woodoku_shape import WoodokuShape
 
 
 class UIInterface(ABC):
@@ -25,7 +25,7 @@ class UIInterface(ABC):
         """
         Precondition: len(shapes) == len(shape_availability)
 
-        Show the UI to let user choose one of the shapes.
+        Show the ui to let user choose one of the shapes.
 
         :param shapes: All the shapes in this round, no matter if chosen before.
         :param shape_availability: List of bool representing if the shape in is still waiting to be chosen
