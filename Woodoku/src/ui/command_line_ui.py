@@ -1,8 +1,8 @@
 from typing import List, Tuple
 
-from Entity.WoodokuBoard import WoodokuBoard
-from Entity.WoodokuShape import WoodokuShape
-from UI.UIInterface import UIInterface
+from entity.woodoku_board import WoodokuBoard
+from entity.woodoku_shape import WoodokuShape
+from ui.ui_interface import UIInterface
 
 
 class CommandLineUI(UIInterface):
