@@ -140,11 +140,9 @@ class TestWoodokuBoard:
         board.add_shape(self.gun_shape, 4, 1)
         board.add_shape(self.vertical_two_block, 6, 1)
         board.can_add_shape_at_location(self.l_shape, 7, 0)
-
         info, group_blocks = board._WoodokuBoard__find_groups()
         assert info == {"row": 0, "column": 1, "box": 0}
         assert group_blocks == set([(row, 1) for row in range(9)])
-        assert False, f"\n{board._WoodokuBoard__representation._WoodokuBoardRepresentation__board}"
 
     def test_find_groups_a_three_by_three_block(self):
         """
