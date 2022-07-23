@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from numpy import ndarray
 
-from woodoku_board import _WoodokuBoardRepresentation
+from entity.woodoku_board import _WoodokuBoardRepresentation
 
 N = 9
 
