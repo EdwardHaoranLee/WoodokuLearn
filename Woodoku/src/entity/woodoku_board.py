@@ -1,3 +1,5 @@
+from typing import Dict, List, Tuple, Set
+
 import numpy as np
 from numpy import ndarray
 from entity.woodoku_shape import WoodokuShape
@@ -24,9 +26,6 @@ class _WoodokuBoardRepresentation:
 
     def __init__(self):
         self.__board = np.full((N, N), False)
-
-    def board(self):
-        return self.__board
 
     def add_blocks(self, blocks_coord: List[Tuple[int, int]]) -> None:
         """
@@ -85,7 +84,7 @@ class _WoodokuBoardRepresentation:
             block (Tuple[int, int]): The block to be validated
 
         Raises:
-            ShapeOutOfBoardError: when some block is not valid 
+            ShapeOutOfBoardError: when some block is not valid
         """
         x, y = block
         if not (0 <= x <= N - 1 and 0 <= y <= N - 1):
@@ -135,7 +134,7 @@ class WoodokuBoard:
             shape (WoodokuShape): The shape needed to be checked
             x (int): x coordinate
             y (int): y coordinate
-        Raises: 
+        Raises:
             ShapeOutOfBoundError: if any block in `blocks` is invalid
 
         Returns:
@@ -171,7 +170,7 @@ class WoodokuBoard:
 
     def __find_groups(self) -> Tuple[Dict[str, int], Set[Tuple[int, int]]]:
         """Check current board and see if there is any groups such as
-        complete rows, columns or 3x3 box and report them. 
+        complete rows, columns or 3x3 box and report them.
 
         Terminology Reference:
         [Wikipedia Sudoku Glossary](https://en.wikipedia.org/wiki/Glossary_of_Sudoku#Terminology_and_grid_layout)
