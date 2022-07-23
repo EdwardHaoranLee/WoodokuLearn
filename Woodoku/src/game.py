@@ -3,10 +3,10 @@ from typing import List
 
 import yaml
 
-from Entity.WoodokuBoard import WoodokuBoard
-from Entity.WoodokuShape import WoodokuShape
-from UI.CommandLineUI import CommandLineUI
-from UI.UIInterface import UIInterface
+from entity.woodoku_board import WoodokuBoard
+from entity.woodoku_shape import WoodokuShape
+from ui.command_line_ui import CommandLineUI
+from ui.ui_interface import UIInterface
 
 CONFIG_FILE = './config.yaml'
 NUM_SHAPES = 3
