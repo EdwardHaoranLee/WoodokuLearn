@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List, Tuple
 
-from Entity.WoodokuBoard import WoodokuBoard
-from Entity.WoodokuShape import WoodokuShape
+from entity.woodoku_board import WoodokuBoard
+from entity.woodoku_shape import WoodokuShape
 
 
 class UIInterface(ABC):

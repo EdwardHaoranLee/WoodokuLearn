@@ -1,10 +1,10 @@
 import random
 from typing import List
 
-from Entity.WoodokuBoard import WoodokuBoard
-from Entity.WoodokuShape import WoodokuShape
-from UI.CommandLineUI import CommandLineUI
-from UI.UIInterface import UIInterface
+from entity.woodoku_board import WoodokuBoard
+from entity.woodoku_shape import WoodokuShape
+from ui.command_line_ui import CommandLineUI
+from ui.ui_interface import UIInterface
 
 CONFIG_FILE = ''
 NUM_SHAPES = 3
