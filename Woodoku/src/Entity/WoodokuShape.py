@@ -43,7 +43,7 @@ class WoodokuShape:
         return True
 
     def __hash__(self):
-        hash('WoodokuShape Salt' + str(self.__coords))
+        return hash('WoodokuShape Salt' + str(self.__coords))
 
     def get_coords(self) -> List[Tuple[int, int]]:
         return list(self.__coords)

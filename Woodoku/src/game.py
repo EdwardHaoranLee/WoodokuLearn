@@ -17,7 +17,8 @@ def read_shapes_from_file(filepath: str) -> List[WoodokuShape]:
     with open(filepath) as config:
         raw_shapes_list = yaml.safe_load(config)['raw_shapes']
         for row in raw_shapes_list:
-            raw_shapes.append(WoodokuShape(row))
+            tuple_row = [tuple(x) for x in row]
+            raw_shapes.append(WoodokuShape(tuple_row))
 
     return raw_shapes
 
