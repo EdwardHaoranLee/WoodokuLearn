@@ -24,7 +24,7 @@ class TestWoodokuRepresentation:
         three_block_lst,
         five_block_lst,
     ])
-    def test_add_blocks_add_list_of_blocks(self, lst):
+    def test_add_blocks_add_list_of_blocks(self, lst: list):
         board = self.board_after_adding(_WoodokuBoardRepresentation(), lst)
 
         expect = np.full((N, N), False)
@@ -37,7 +37,7 @@ class TestWoodokuRepresentation:
         three_block_lst,
         five_block_lst,
     ])
-    def test_remove_blocks_remove_list_of_blocks(self, lst):
+    def test_remove_blocks_remove_list_of_blocks(self, lst: list):
         rep = _WoodokuBoardRepresentation()
         rep.add_blocks(lst)
         board_removed = self.board_after_removing(rep, lst)
