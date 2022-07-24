@@ -14,6 +14,7 @@ class TestWoodokuBoard:
     gun_shape: WoodokuShape = WoodokuShape([(0, 0), (0, 1), (0, 2), (1, 0)])
     vertical_two_block: WoodokuShape = WoodokuShape([(0, 0), (1, 0)])
     one_block: WoodokuShape = WoodokuShape([(0, 0)])
+    cross: WoodokuShape = WoodokuShape([(0, 1), (1, 0), (1, 1), (1, 2), (2, 1)])
 
     @pytest.mark.parametrize('row', [row for row in range(9)])
     def test_find_groups_a_row(self, row) -> None:
@@ -60,7 +61,7 @@ class TestWoodokuBoard:
     @pytest.mark.parametrize('row, col, index', [
         (random.randint(0, 8), random.randint(0, 8), random.randint(0, 8))
      ])
-    def test_find_groups_a_col_a_row_and_a_three_by_three_block(self, row, col, index):
+    def test_find_groups_a_col_a_row_and_a_3_by_3_block(self, row, col, index):
         """
         three groups is expected to be found
         """
@@ -84,7 +85,10 @@ class TestWoodokuBoard:
     @pytest.mark.parametrize('shape', [
         l_shape,
         horizontal_bar_shape,
-        gun_shape
+        gun_shape,
+        vertical_two_block,
+        one_block,
+        cross
     ])
     def test_add_shape_on_empty_board(self, shape: WoodokuShape) -> None:
         """
@@ -129,7 +133,7 @@ class TestWoodokuBoard:
         assert group == 0
         assert group_blocks == set([])
 
-    def test_find_groups_almost_a_col(self) -> None:
+    def test_find_groups_almost_a_col_formed(self) -> None:
         """
         No column is formed
         """
@@ -212,7 +216,10 @@ class TestWoodokuBoard:
     @pytest.mark.parametrize('shape', [
         l_shape,
         horizontal_bar_shape,
-        gun_shape
+        gun_shape,
+        vertical_two_block,
+        one_block,
+        cross
     ])
     def test_can_add_shape_to_board_on_empty_board(self, shape: WoodokuShape) -> None:
         board = WoodokuBoard()
@@ -222,7 +229,8 @@ class TestWoodokuBoard:
         l_shape,
         horizontal_bar_shape,
         gun_shape,
-        vertical_two_block
+        vertical_two_block,
+        cross
     ])
     def test_can_add_shape_to_board_on_crowded_board_fail(self, shape) -> None:
         """
