@@ -80,6 +80,7 @@ class _WoodokuBoardRepresentation:
                 return False
         return True
 
+    # Comment out to silence the unused variable warning from pylint.
     # @staticmethod
     # def __validate(block: Tuple[int, int]) -> None:
     #     """validate if block is within the 9x9 board. raise Error if not.

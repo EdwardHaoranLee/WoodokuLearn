@@ -68,6 +68,7 @@ disable=
     W0107, # unnecessary-pass
     C0303, # trailing-whitespace
     W0511, # fixme
+    W9008, # redundant-returns-doc
 
 [REPORTS]
 

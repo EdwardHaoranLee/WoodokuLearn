@@ -1,17 +1,49 @@
 import random
 from typing import List
 
+import yaml
+
 from entity.woodoku_board import WoodokuBoard
 from entity.woodoku_shape import WoodokuShape
 from ui.command_line_ui import CommandLineUI
 from ui.ui_interface import UIInterface
 
-CONFIG_FILE = ""
+CONFIG_FILE = "./config.yaml"
 NUM_SHAPES = 3
 
 
 def read_shapes_from_file(filepath: str) -> List[WoodokuShape]:
-    pass
+    raw_shapes = []
+    with open(filepath, encoding="utf-8") as config:
+        raw_shapes_list = yaml.safe_load(config)["raw_shapes"]
+        for row in raw_shapes_list:
+            tuple_row = [tuple(x) for x in row]
+            raw_shapes.append(WoodokuShape(tuple_row))
+
+    return raw_shapes
+
+
+def rotate_all_shapes(raw_shapes: List[WoodokuShape]) -> List[WoodokuShape]:
+    """
+    Rotate each shape in <raw_shapes> for three times, then gather all of them.
+
+    Args:
+        raw_shapes: The default shape without any rotation.
+
+    Returns:
+        The original shapes and all the rotated shapes (non-repeated).
+    """
+    shapes = set()
+
+    # All the raw shape itself was added first, then rotates three times and add to set after each rotate.
+    # Duplicates are eliminated by set operation.
+    for shape in raw_shapes:
+        shapes.add(shape)
+        for _ in range(3):
+            new_shape = shape.rotate()
+            shapes.add(new_shape)
+
+    return list(shapes)
 
 
 def random_shapes(shapes: List[WoodokuShape], num: int) -> List[WoodokuShape]:
@@ -41,7 +73,7 @@ def game(ui: UIInterface) -> None:
     board = WoodokuBoard()
 
     # Generating all possible shapes that might appear in game.
-    all_shapes = read_shapes_from_file(CONFIG_FILE)
+    all_shapes = rotate_all_shapes(read_shapes_from_file(CONFIG_FILE))
 
     ui.show_start_game(board)
 
