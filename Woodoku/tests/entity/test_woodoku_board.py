@@ -1,3 +1,4 @@
+import random
 from typing import Tuple
 
 import numpy as np
@@ -14,6 +15,72 @@ class TestWoodokuBoard:
     gun_shape: WoodokuShape = WoodokuShape([(0, 0), (0, 1), (0, 2), (1, 0)])
     vertical_two_block: WoodokuShape = WoodokuShape([(0, 0), (1, 0)])
     one_block: WoodokuShape = WoodokuShape([(0, 0)])
+
+    @pytest.mark.parametrize('row', [row for row in range(9)])
+    def test_find_groups_a_row(self, row) -> None:
+        """
+        row should be the only group on the board
+        """
+        board = WoodokuBoard()
+        board_with_a_row_occupied = np.full((9, 9), False)
+        board_with_a_row_occupied[row] = np.full((9,), True)
+        board._WoodokuBoard__representation._WoodokuBoardRepresentation__board = board_with_a_row_occupied
+
+        group, group_blocks = board._WoodokuBoard__find_groups()
+        assert group == 1
+        assert group_blocks == set([(row, col) for col in range(9)])
+
+    @pytest.mark.parametrize('col', [col for col in range(9)])
+    def test_find_groups_a_col(self, col) -> None:
+        """
+        col column should be the only group on the board
+        """
+        board = WoodokuBoard()
+        board_with_a_col_occupied = np.full((9, 9), False)
+        board_with_a_col_occupied[:, col] = np.full((9,), True)
+        board._WoodokuBoard__representation._WoodokuBoardRepresentation__board = board_with_a_col_occupied
+
+        group, group_blocks = board._WoodokuBoard__find_groups()
+        assert group == 1
+        assert group_blocks == set([(row, col) for row in range(9)])
+
+    @pytest.mark.parametrize('index', [index for index in range(9)])
+    def test_find_groups_3_by_3(self, index) -> None:
+        """
+        The box created according to index is the only group on the board
+        """
+        board = WoodokuBoard()
+        box_coordinate = board._WoodokuBoard__get_box_coords(index)
+        for x, y in box_coordinate:
+            board._WoodokuBoard__representation._WoodokuBoardRepresentation__board[x, y] = True
+
+        group, group_blocks = board._WoodokuBoard__find_groups()
+        assert group == 1
+        assert group_blocks == set(box_coordinate)
+
+    @pytest.mark.parametrize('row, col, index', [
+        (random.randint(0, 8), random.randint(0, 8), random.randint(0, 8))
+     ])
+    def test_find_groups_a_col_a_row_and_a_three_by_three_block(self, row, col, index):
+        """
+        three groups is expected to be found
+        """
+        board = WoodokuBoard()
+        repo = np.full((9, 9), False)
+        repo[row] = np.full((9,), True)                               # add a row to the board
+        repo[:, col] = np.full((9,), True)                            # add a column to the board
+        box_coordinate = board._WoodokuBoard__get_box_coords(index)   # add a box to the board
+        for x, y in box_coordinate:
+            repo[x, y] = True
+
+        board._WoodokuBoard__representation._WoodokuBoardRepresentation__board = repo
+        group, group_blocks = board._WoodokuBoard__find_groups()
+        assert group == 3
+
+        expected_set = set([(row, i) for i in range(9)])
+        expected_set.update([(i, col) for i in range(9)])
+        expected_set.update(box_coordinate)
+        assert group_blocks == expected_set
 
     @pytest.mark.parametrize('shape', [
         l_shape,
@@ -34,19 +101,72 @@ class TestWoodokuBoard:
         (horizontal_bar_shape, (1, 0), gun_shape, (2, 0)),
         (gun_shape, (3, 0), horizontal_bar_shape, (1, 0))
     ])
-    def test_add_shape_on_board_without_conflict(self, first_shape: WoodokuShape, first_position: Tuple[int, int],
+    def test_add_shape_without_conflict(self, first_shape: WoodokuShape, first_position: Tuple[int, int],
                                                  sec_shape: WoodokuShape, sec_position: Tuple[int, int]) -> None:
         """
         first_shape and first_location are chosen so that sec_shape will be NOT overlapped with first_shape when
-        adding it at sec_location
+        adding it at sec_location and no group will form
         """
         board = WoodokuBoard()
-        try:
-            board.add_shape(first_shape, *first_position)
-            board.add_shape(sec_shape, *sec_position)
-        except ShapeOutOfBoardError as exc:
-            assert False, f"shape with coordinates: {first_shape.get_coords} , {sec_shape} " \
-                          f"and positions: {first_position}, {sec_position} raised an exception {exc}"
+        board.add_shape(first_shape, *first_position)
+        board.add_shape(sec_shape, *sec_position)
+
+        expected = np.full((9, 9), False)
+        for x, y in first_shape.map_to_board_at(*first_position):
+            expected[x, y] = True
+        for x, y in sec_shape.map_to_board_at(*sec_position):
+            expected[x, y] = True
+        assert (board._WoodokuBoard__representation._WoodokuBoardRepresentation__board == expected).all()
+
+    def test_add_shape_with_a_row_formed(self) -> None:
+        """
+        a row group should be removed by add_shape
+        """
+        board = WoodokuBoard()
+        board.add_shape(self.horizontal_bar_shape, 0, 0)
+        board.add_shape(self.gun_shape, 0, 5)
+        board.add_shape(self.vertical_two_block, 0, 8)
+        group, group_blocks = board._WoodokuBoard__find_groups()
+        assert group == 0
+        assert group_blocks == set([])
+
+    def test_find_groups_almost_a_col(self) -> None:
+        """
+        No column is formed
+        """
+        board = WoodokuBoard()
+        board.add_shape(self.gun_shape, 0, 1)
+        board.add_shape(self.vertical_two_block, 2, 1)
+        board.add_shape(self.gun_shape, 4, 1)
+        board.add_shape(self.vertical_two_block, 6, 1)
+        group, group_blocks = board._WoodokuBoard__find_groups()
+        assert group == 0
+
+    def test_add_shape_with_a_col_formed(self) -> None:
+        """
+        A column group should be removed by add_shape
+        """
+        board = WoodokuBoard()
+        board.add_shape(self.gun_shape, 0, 1)
+        board.add_shape(self.vertical_two_block, 2, 1)
+        board.add_shape(self.gun_shape, 4, 1)
+        board.add_shape(self.vertical_two_block, 6, 1)
+        board.add_shape(self.l_shape, 7, 0)
+        group, group_blocks = board._WoodokuBoard__find_groups()
+        assert group == 0
+        assert group_blocks == set([])
+
+    def test_add_shape_with_a_three_by_three_block_formed(self) -> None:
+        """
+        A 3X3 block group should be removed by add_shape
+        """
+        board = WoodokuBoard()
+        board.add_shape(self.gun_shape, 0, 0)
+        board.add_shape(self.horizontal_bar_shape, 1, 1)
+        board.add_shape(self.gun_shape, 2, 0)
+        group, group_blocks = board._WoodokuBoard__find_groups()
+        assert group == 0
+        assert group_blocks == set([])
 
     @pytest.mark.parametrize('shape, location', [
         (l_shape, (0, 0)),
@@ -99,65 +219,31 @@ class TestWoodokuBoard:
         board = WoodokuBoard()
         assert board.can_add_shape_to_board(shape)
 
-    def test_can_add_shape_to_board_on_conflicted_board(self) -> None:
+    @pytest.mark.parametrize('shape', [
+        l_shape,
+        horizontal_bar_shape,
+        gun_shape,
+        vertical_two_block
+    ])
+    def test_can_add_shape_to_board_on_crowded_board_fail(self, shape) -> None:
         """
-        first_shape and first_location are chosen so that sec_shape will be overlapped with first_shape when
-        adding it at sec_location
-        """
-        board = WoodokuBoard()
-        for i in range(9):
-            assert board.can_add_shape_to_board(self.horizontal_bar_shape)
-        assert not board.can_add_shape_to_board(self.horizontal_bar_shape)
-
-    def test_find_groups_a_row(self) -> None:
-        """
-        A first row should be the only group on the board
+        The board is designed that all positions are occupied except the left diagonal
         """
         board = WoodokuBoard()
-        board.add_shape(self.horizontal_bar_shape, 0, 0)
-        board.add_shape(self.gun_shape, 0, 5)
-        board.add_shape(self.vertical_two_block, 0, 8)
-        info, group_blocks = board._WoodokuBoard__find_groups()
-        assert info == {"row": 1, "column": 0, "box": 0}
-        assert group_blocks == set([(0, col) for col in range(9)])
+        repo = np.full((9, 9), True)
+        for x, y in [(i, i) for i in range(9)]:
+            repo[x, y] = False
+        board._WoodokuBoard__representation._WoodokuBoardRepresentation__board = repo
+        assert not board.can_add_shape_to_board(shape)
 
-    def test_find_groups_almost_a_col(self) -> None:
+    def test_can_add_shape_to_board_on_crowded_board_success(self) -> None:
         """
-        A first column should be the only group on the board
-        """
-        board = WoodokuBoard()
-        board.add_shape(self.gun_shape, 0, 1)
-        board.add_shape(self.vertical_two_block, 2, 1)
-        board.add_shape(self.gun_shape, 4, 1)
-        board.add_shape(self.vertical_two_block, 6, 1)
-        info, group_blocks = board._WoodokuBoard__find_groups()
-        assert info == {"row": 0, "column": 0, "box": 0}
-
-    def test_find_groups_a_col(self) -> None:
-        board = WoodokuBoard()
-        board.add_shape(self.gun_shape, 0, 1)
-        board.add_shape(self.vertical_two_block, 2, 1)
-        board.add_shape(self.gun_shape, 4, 1)
-        board.add_shape(self.vertical_two_block, 6, 1)
-        board.can_add_shape_at_location(self.l_shape, 7, 0)
-        info, group_blocks = board._WoodokuBoard__find_groups()
-        assert info == {"row": 0, "column": 1, "box": 0}
-        assert group_blocks == set([(row, 1) for row in range(9)])
-
-    def test_find_groups_a_three_by_three_block(self) -> None:
-        """
-        A 3X3 square at the right corner should be the only group on the board
+        The board is designed that all positions are occupied except the left diagonal
         """
         board = WoodokuBoard()
-        board.add_shape(self.gun_shape, 0, 0)
-        board.add_shape(self.horizontal_bar_shape, 1, 1)
-        board.add_shape(self.gun_shape, 2, 0)
-        info, group_blocks = board._WoodokuBoard__find_groups()
-        assert info == {"row": 0, "column": 0, "box": 1}
-        assert group_blocks == set([(0, col) for col in range(9)])
+        repo = np.full((9, 9), True)
+        for x, y in [(i, i) for i in range(9)]:
+            repo[x, y] = False
+        board._WoodokuBoard__representation._WoodokuBoardRepresentation__board = repo
+        assert board.can_add_shape_to_board(self.one_block)
 
-    # TODO: implement it
-    # def test_find_groups_a_col_and_a_row(self):
-
-    # TODO: implement it
-    # def test_find_groups_a_col_a_row_and_a_box(self):
