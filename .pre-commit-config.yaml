@@ -1,4 +1,9 @@
 repos:
+- repo: https://github.com/ambv/black
+  rev: 22.6.0
+  hooks:
+    - id: black
+      language_version: python3.9
 - repo: local
   hooks:
     - id: pylint
@@ -13,8 +18,3 @@ repos:
           "--rcfile=.pylintrc", # Link to your config file
           "--load-plugins=pylint.extensions.docparams", # Load an extension
         ]
-- repo: https://github.com/ambv/black
-  rev: 22.6.0
-  hooks:
-  - id: black
-    language_version: python3.9
