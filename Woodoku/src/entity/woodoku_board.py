@@ -38,8 +38,7 @@ class _WoodokuBoardRepresentation:
             ShapeOutOfBoundError: if any block in `blocks` is invalid
         """
         for row, col in blocks_coord:
-            if not self.__validate((row, col)):
-                raise ShapeOutOfBoardError(row, col)
+            self.__validate((row, col))
             self.__board[row, col] = True
 
     def remove_blocks(self, blocks_coord: Iterable[Tuple[int, int]]) -> None:
@@ -53,8 +52,7 @@ class _WoodokuBoardRepresentation:
             ShapeOutOfBoundError: if any block in `blocks` is invalid
         """
         for row, col in blocks_coord:
-            if not self.__validate((row, col)):
-                raise ShapeOutOfBoardError(row, col)
+            self.__validate((row, col))
             self.__board[row, col] = False
 
     def is_occupied(self, blocks_coord: Iterable[Tuple[int, int]]) -> bool:
@@ -71,8 +69,7 @@ class _WoodokuBoardRepresentation:
             ShapeOutOfBoundError: if any block in `blocks` is invalid
         """
         for row, col in blocks_coord:
-            if not self.__validate((row, col)):
-                raise ShapeOutOfBoardError(row, col)
+            self.__validate((row, col))
             if not self.__board[row, col]:
                 return False
         return True
@@ -91,8 +88,7 @@ class _WoodokuBoardRepresentation:
             ShapeOutOfBoundError: if any block in `blocks` is invalid
         """
         for row, col in blocks_coord:
-            if not self.__validate((row, col)):
-                raise ShapeOutOfBoardError(row, col)
+            self.__validate((row, col))
             if self.__board[row, col]:
                 return False
         return True
