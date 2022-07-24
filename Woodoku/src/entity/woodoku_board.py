@@ -142,9 +142,9 @@ class WoodokuBoard:
                 if self.can_add_shape_at_location(shape, x=row, y=col):
                     return True
             except ShapeOutOfBoardError(row, col):
-				# exceptions are ignored when checking can_add_shape_to_board
-				# as it is only for internal checking and avoids checking shapes that are out of the board
-				pass
+                # exceptions are ignored when checking can_add_shape_to_board
+                # as it is only for internal checking and avoids checking shapes that are out of the board
+                pass
         return False
 
     def can_add_shape_at_location(self, shape: WoodokuShape, x: int, y: int) -> bool:
