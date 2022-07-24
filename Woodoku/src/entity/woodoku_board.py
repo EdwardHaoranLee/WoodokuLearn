@@ -28,7 +28,6 @@ class _WoodokuBoardRepresentation:
     def __init__(self):
         self.__board = np.full((N, N), False)
 
-
     def add_blocks(self, blocks_coord: Iterable[Tuple[int, int]]) -> None:
         """
         Mark each position specified in blocks_coord as True to indicate that the position is occupied.
@@ -137,6 +136,7 @@ class WoodokuBoard:
             shape (WoodokuShape): The shape needed to be checked
             x (int): x coordinate
             y (int): y coordinate
+
         Raises:
             ShapeOutOfBoundError: if any block in `blocks` is invalid
 
