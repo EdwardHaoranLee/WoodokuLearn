@@ -1,7 +1,7 @@
 class ShapeOutOfBoardError(Exception):
     """Exception raised for Error in placing a shape"""
 
-    def __init__(self, x: int, y:int) -> None:
+    def __init__(self, x: int, y: int) -> None:
         super().__init__()
         self.x = x
         self.y = y
