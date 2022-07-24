@@ -2,9 +2,10 @@ import random
 from typing import Tuple
 import numpy as np
 import pytest
+from numpy import ndarray
 
 from exceptions.exceptions import ShapeOutOfBoardError
-from entity.woodoku_board import WoodokuBoard
+from entity.woodoku_board import WoodokuBoard, _WoodokuBoardRepresentation
 from entity.woodoku_shape import WoodokuShape
 
 
@@ -115,6 +116,7 @@ class TestWoodokuRepresentation:
         rep.add_blocks(self.five_block_lst)
         rep.remove_blocks(self.five_block_lst)
         assert rep.is_not_occupied(self.five_block_lst)
+
 
 class TestWoodokuBoard:
     l_shape: WoodokuShape = WoodokuShape([(0, 0), (1, 0), (1, 1), (1, 2)])
