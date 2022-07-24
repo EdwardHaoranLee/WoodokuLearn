@@ -3,7 +3,7 @@ repos:
   hooks:
     - id: pylint
       name: pylint
-      entry: .
+      entry: pylint
       language: system
       types: [python]
       args:
@@ -13,3 +13,8 @@ repos:
           "--rcfile=.pylintrc", # Link to your config file
           "--load-plugins=pylint.extensions.docparams", # Load an extension
         ]
+- repo: https://github.com/ambv/black
+  rev: stable
+  hooks:
+  - id: black
+    language_version: python3.9
