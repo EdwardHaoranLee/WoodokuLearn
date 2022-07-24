@@ -6,7 +6,7 @@ from entity.woodoku_shape import WoodokuShape
 from ui.command_line_ui import CommandLineUI
 from ui.ui_interface import UIInterface
 
-CONFIG_FILE = ''
+CONFIG_FILE = ""
 NUM_SHAPES = 3
 
 
@@ -27,7 +27,9 @@ def random_shapes(shapes: List[WoodokuShape], num: int) -> List[WoodokuShape]:
     return list(random.choices(shapes, k=num))
 
 
-def is_out_of_space(board: WoodokuBoard, shapes: List[WoodokuShape], shape_availability: List[bool]) -> bool:
+def is_out_of_space(
+    board: WoodokuBoard, shapes: List[WoodokuShape], shape_availability: List[bool]
+) -> bool:
     for i, shape in enumerate(shapes):
         if shape_availability[i] and board.can_add_shape_to_board(shape):
             return True
@@ -82,5 +84,5 @@ def game(ui: UIInterface) -> None:
                 ui.show_cannot_place()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     game(CommandLineUI())

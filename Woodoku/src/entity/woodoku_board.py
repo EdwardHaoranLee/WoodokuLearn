@@ -1,11 +1,13 @@
-from typing import Dict, List, Tuple, Set, Iterable
+from typing import Dict, List, Tuple
+from typing import Iterable
 
 import numpy as np
 from numpy import ndarray
-from entity.woodoku_shape import WoodokuShape
+
 from entity.score_agent import ScoreAgent
-from typing import Dict, List, Tuple, Set
-from exceptions.exceptions import ShapeOutOfBoardError
+from entity.woodoku_shape import WoodokuShape
+
+# from exceptions.exceptions import ShapeOutOfBoardError
 
 # the length of the square game board
 N = 9
@@ -22,6 +24,7 @@ class _WoodokuBoardRepresentation:
     _board: an 2d array to record the occupancy of each position on the game board. The value is set to True when
     the position occupied
     """
+
     __board: ndarray
 
     def __init__(self):
@@ -77,19 +80,18 @@ class _WoodokuBoardRepresentation:
                 return False
         return True
 
-    @staticmethod
-    def __validate(block: Tuple[int, int]) -> None:
-        """validate if block is within the 9x9 board. raise Error if not.
-
-        Args:
-            block (Tuple[int, int]): The block to be validated
-
-        Raises:
-            ShapeOutOfBoardError: when some block is not valid 
-        """
-        x, y = block
-        if not (0 <= x <= N - 1 and 0 <= y <= N - 1):
-            raise ShapeOutOfBoardError(x, y)
+    # @staticmethod
+    # def __validate(block: Tuple[int, int]) -> None:
+    #     """validate if block is within the 9x9 board. raise Error if not.
+    #     Args:
+    #         block (Tuple[int, int]): The block to be validated
+    #
+    #     Raises:
+    #         ShapeOutOfBoardError: when some block is not valid
+    #     """
+    #     x, y = block
+    #     if not (0 <= x <= N - 1 and 0 <= y <= N - 1):
+    #         raise ShapeOutOfBoardError(x, y)
 
     def __str__(self) -> str:
         raise NotImplementedError()
@@ -98,11 +100,11 @@ class _WoodokuBoardRepresentation:
 class WoodokuBoard:
     """A 9x9 Woodoku Board"""
 
-    __scoreAgent: ScoreAgent
+    __score_agent: ScoreAgent
     __representation: _WoodokuBoardRepresentation
 
     def __init__(self):
-        self.__scoreAgent = ScoreAgent()
+        self.__score_agent = ScoreAgent()
         self.__representation = _WoodokuBoardRepresentation()
 
     def can_add_shape_to_board(self, shape: WoodokuShape) -> bool:
@@ -135,7 +137,7 @@ class WoodokuBoard:
             shape (WoodokuShape): The shape needed to be checked
             x (int): x coordinate
             y (int): y coordinate
-        Raises: 
+        Raises:
             ShapeOutOfBoundError: if any block in `blocks` is invalid
 
         Returns:
@@ -163,15 +165,15 @@ class WoodokuBoard:
 
         # determine groups and clear the groups
         group_info, group_blocks = self.__find_groups()
-        self.__scoreAgent.calculate_winning(group_info)
+        self.__score_agent.calculate_winning(group_info)
         self.__representation.remove_blocks(group_blocks)
 
     def get_score(self) -> int:
-        return self.__scoreAgent.get_score()
+        return self.__score_agent.get_score()
 
     def __find_groups(self) -> Tuple[Dict[str, int], Iterable[Tuple[int, int]]]:
         """Check current board and see if there is any groups such as
-        complete rows, columns or 3x3 box and report them. 
+        complete rows, columns or 3x3 box and report them.
 
         Terminology Reference:
         [Wikipedia Sudoku Glossary](https://en.wikipedia.org/wiki/Glossary_of_Sudoku#Terminology_and_grid_layout)
