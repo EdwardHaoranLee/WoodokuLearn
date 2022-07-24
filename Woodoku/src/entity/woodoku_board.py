@@ -32,20 +32,28 @@ class _WoodokuBoardRepresentation:
         """
         Mark each position specified in blocks_coord as True to indicate that the position is occupied.
 
-        :param blocks_coord: a list of (x,y) tuples to be added to the board
-        :return:
+        Args:
+             blocks_coord: a list of (x,y) tuples to be added to the board
+
+        Raises:
+            ShapeOutOfBoundError: if any block in `blocks` is invalid
         """
         for row, col in blocks_coord:
+            self.__validate((row, col))
             self.__board[row, col] = True
 
     def remove_blocks(self, blocks_coord: Iterable[Tuple[int, int]]) -> None:
         """
         Mark each position specified in blocks_coord as False to indicate that the position is not occupied.
 
-        :param blocks_coord: a list of (x,y) tuples to be added to the board
-        :return:
+        Args:
+         blocks_coord: a list of (x,y) tuples to be added to the board
+
+        Raises:
+            ShapeOutOfBoundError: if any block in `blocks` is invalid
         """
         for row, col in blocks_coord:
+            self.__validate((row, col))
             self.__board[row, col] = False
 
     def is_occupied(self, blocks_coord: Iterable[Tuple[int, int]]) -> bool:
@@ -57,8 +65,12 @@ class _WoodokuBoardRepresentation:
 
         Returns:
             bool: if all blocks in `blocks_coord` is occupied
+
+        Raises:
+            ShapeOutOfBoundError: if any block in `blocks` is invalid
         """
         for row, col in blocks_coord:
+            self.__validate((row, col))
             if not self.__board[row, col]:
                 return False
         return True
@@ -72,8 +84,12 @@ class _WoodokuBoardRepresentation:
 
         Returns:
             bool: if all blocks in `blocks_coord` is empty
+
+        Raises:
+            ShapeOutOfBoundError: if any block in `blocks` is invalid
         """
         for row, col in blocks_coord:
+            self.__validate((row, col))
             if self.__board[row, col]:
                 return False
         return True
@@ -123,9 +139,13 @@ class WoodokuBoard:
         rng.shuffle(all_blocks)
 
         for row, col in all_blocks:
-            if self.can_add_shape_at_location(shape, x=row, y=col):
-                return True
-
+            try:
+                if self.can_add_shape_at_location(shape, x=row, y=col):
+                    return True
+            except ShapeOutOfBoardError(row, col):
+                # exceptions are ignored when checking can_add_shape_to_board
+                # as it is only for internal checking and avoids checking shapes that are out of the board
+                pass
         return False
 
     def can_add_shape_at_location(self, shape: WoodokuShape, x: int, y: int) -> bool:
