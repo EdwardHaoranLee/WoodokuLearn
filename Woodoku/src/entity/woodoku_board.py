@@ -31,20 +31,30 @@ class _WoodokuBoardRepresentation:
         """
         Mark each position specified in blocks_coord as True to indicate that the position is occupied.
 
-        :param blocks_coord: a list of (x,y) tuples to be added to the board
-        :return:
+        Args:
+             blocks_coord: a list of (x,y) tuples to be added to the board
+
+        Raises:
+            ShapeOutOfBoundError: if any block in `blocks` is invalid
         """
         for row, col in blocks_coord:
+            if not self.__validate((row, col)):
+                raise ShapeOutOfBoardError(row, col)
             self.__board[row, col] = True
 
     def remove_blocks(self, blocks_coord: Iterable[Tuple[int, int]]) -> None:
         """
         Mark each position specified in blocks_coord as False to indicate that the position is not occupied.
 
-        :param blocks_coord: a list of (x,y) tuples to be added to the board
-        :return:
+        Args:
+         blocks_coord: a list of (x,y) tuples to be added to the board
+
+        Raises:
+            ShapeOutOfBoundError: if any block in `blocks` is invalid
         """
         for row, col in blocks_coord:
+            if not self.__validate((row, col)):
+                raise ShapeOutOfBoardError(row, col)
             self.__board[row, col] = False
 
     def is_occupied(self, blocks_coord: Iterable[Tuple[int, int]]) -> bool:
@@ -56,8 +66,13 @@ class _WoodokuBoardRepresentation:
 
         Returns:
             bool: if all blocks in `blocks_coord` is occupied
+
+        Raises:
+            ShapeOutOfBoundError: if any block in `blocks` is invalid
         """
         for row, col in blocks_coord:
+            if not self.__validate((row, col)):
+                raise ShapeOutOfBoardError(row, col)
             if not self.__board[row, col]:
                 return False
         return True
@@ -71,8 +86,13 @@ class _WoodokuBoardRepresentation:
 
         Returns:
             bool: if all blocks in `blocks_coord` is empty
+
+        Raises:
+            ShapeOutOfBoundError: if any block in `blocks` is invalid
         """
         for row, col in blocks_coord:
+            if not self.__validate((row, col)):
+                raise ShapeOutOfBoardError(row, col)
             if self.__board[row, col]:
                 return False
         return True
