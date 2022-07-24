@@ -14,7 +14,7 @@ repos:
           "--load-plugins=pylint.extensions.docparams", # Load an extension
         ]
 - repo: https://github.com/ambv/black
-  rev: stable
+  rev: 22.6.0
   hooks:
   - id: black
     language_version: python3.9

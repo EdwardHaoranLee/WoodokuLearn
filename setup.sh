@@ -10,3 +10,4 @@ which black
 pip install pre-commit
 pre-commit install
 pre-commit migrate-config
+pre-commit autoupdate
