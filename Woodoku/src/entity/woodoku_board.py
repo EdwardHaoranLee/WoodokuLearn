@@ -138,9 +138,11 @@ class WoodokuBoard:
         rng.shuffle(all_blocks)
 
         for row, col in all_blocks:
-            if self.can_add_shape_at_location(shape, x=row, y=col):
-                return True
-
+            try:
+                if self.can_add_shape_at_location(shape, x=row, y=col):
+                    return True
+            except ShapeOutOfBoardError(row, col):
+                pass
         return False
 
     def can_add_shape_at_location(self, shape: WoodokuShape, x: int, y: int) -> bool:
