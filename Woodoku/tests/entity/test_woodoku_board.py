@@ -5,8 +5,8 @@ import numpy as np
 import pytest
 
 from exceptions.exceptions import ShapeOutOfBoardError
-from woodoku_board import WoodokuBoard
-from woodoku_shape import WoodokuShape
+from entity.woodoku_board import WoodokuBoard
+from entity.woodoku_shape import WoodokuShape
 
 
 class TestWoodokuBoard:
