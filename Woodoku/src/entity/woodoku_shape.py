@@ -61,14 +61,14 @@ class WoodokuShape:
 
         """
         pass
-        
-     def __str__(self):
-          result = ""
-          for row in range(5):
-              for col in range(5):
-                  if (row, col) in self.__coords:
-                      result += f"{green(BLOCK)}  "
-                  else:
-                      result += "   "
-              result += "\n"
-          return result
+
+    def __str__(self):
+        result = ""
+        for row in range(5):
+            for col in range(5):
+                if (row, col) in self.__coords:
+                    result += f"{green(BLOCK)}  "
+                else:
+                    result += "   "
+            result += "\n"
+        return result

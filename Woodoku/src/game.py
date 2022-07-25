@@ -118,7 +118,6 @@ def game(ui: UIInterface) -> None:
 if __name__ == '__main__':
     ui = CommandLineUI()
     board = WoodokuBoard()
-    ui.show_board(board)
 
     # test start game
     ui.show_start_game(board)

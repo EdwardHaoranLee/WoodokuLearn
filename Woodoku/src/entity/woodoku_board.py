@@ -115,22 +115,9 @@ class _WoodokuBoardRepresentation:
         horizontal_bar = HORIZONTAL * 5
         for row in range(18):
             if row == 0:
-                row_str = f"{TOP_LEFT}"
-                for col in range(8):
-                    line = horizontal_bar
-                    line += TOP_JOIN
-                    row_str += line
-                line = horizontal_bar
-                line += TOP_RIGHT
-                row_str += line
+                row_str = inbetween(TOP_LEFT, TOP_JOIN, TOP_RIGHT, horizontal_bar)
             elif row % 2 == 0:
-                row_str = f"{LEFT_JOIN}"
-                for col in range(8):
-                    line = horizontal_bar
-                    line += CROSS
-                    row_str += line
-                row_str += horizontal_bar
-                row_str += RIGHT_JOIN
+                row_str = inbetween(LEFT_JOIN, CROSS, RIGHT_JOIN, horizontal_bar)
             else:
                 row_str = f"{VERTICAL}"
                 for col in range(9):
@@ -140,13 +127,7 @@ class _WoodokuBoardRepresentation:
                     row_str += pos
             row_str += "\n"
             result += row_str
-        row_str = f"{BOTTOM_LEFT}"
-        for col in range(8):
-            line = horizontal_bar
-            line += BOTTOM_JOIN
-            row_str += line
-        row_str += horizontal_bar
-        row_str += BOTTOM_RIGHT
+        row_str = inbetween(BOTTOM_LEFT, BOTTOM_JOIN, BOTTOM_RIGHT, horizontal_bar)
         result += row_str
         return result
 

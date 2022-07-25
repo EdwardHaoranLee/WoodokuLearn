@@ -30,3 +30,14 @@ def green(text):
 
 def orange(text):
     return colored(*ORANGE, text)
+
+
+def inbetween(start: str, in_between: str, end: str, horizontal_bar: str) -> str:
+    row_str = f"{start}"
+    for col in range(8):
+        line = horizontal_bar
+        line += in_between
+        row_str += line
+    row_str += horizontal_bar
+    row_str += end
+    return row_str
