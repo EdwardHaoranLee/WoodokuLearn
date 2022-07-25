@@ -1,5 +1,7 @@
 from typing import List, Tuple
 
+from elements import *
+
 
 class WoodokuShape:
     """A Woodoku shape to be place on the Woodoku board
@@ -32,3 +34,14 @@ class WoodokuShape:
 
     def map_to_board_at(self, x: int, y: int) -> List[Tuple[int, int]]:
         return [(x + row, y + col) for (row, col) in self.get_coords()]
+
+    def __str__(self):
+        result = ""
+        for row in range(5):
+            for col in range(5):
+                if (row, col) in self.__coords:
+                    result += f"{green(BLOCK)}  "
+                else:
+                    result += "   "
+            result += "\n"
+        return result

@@ -2,6 +2,8 @@ from typing import Dict, List, Tuple, Set, Iterable
 
 import numpy as np
 from numpy import ndarray
+
+from elements import *
 from entity.woodoku_shape import WoodokuShape
 from entity.score_agent import ScoreAgent
 from typing import Dict, List, Tuple, Set
@@ -92,7 +94,44 @@ class _WoodokuBoardRepresentation:
             raise ShapeOutOfBoardError(x, y)
 
     def __str__(self) -> str:
-        raise NotImplementedError()
+        result = ""
+        horizontal_bar = HORIZONTAL * 5
+        for row in range(18):
+            if row == 0:
+                row_str = f"{TOP_LEFT}"
+                for col in range(8):
+                    line = horizontal_bar
+                    line += TOP_JOIN
+                    row_str += line
+                line = horizontal_bar
+                line += TOP_RIGHT
+                row_str += line
+            elif row % 2 == 0:
+                row_str = f"{LEFT_JOIN}"
+                for col in range(8):
+                    line = horizontal_bar
+                    line += CROSS
+                    row_str += line
+                row_str += horizontal_bar
+                row_str += RIGHT_JOIN
+            else:
+                row_str = f"{VERTICAL}"
+                for col in range(9):
+                    pos = f"     {VERTICAL}"
+                    if self.__board[row // 2, col]:
+                        pos = f"  {green(BLOCK)}  {VERTICAL}"
+                    row_str += pos
+            row_str += "\n"
+            result += row_str
+        row_str = f"{BOTTOM_LEFT}"
+        for col in range(8):
+            line = horizontal_bar
+            line += BOTTOM_JOIN
+            row_str += line
+        row_str += horizontal_bar
+        row_str += BOTTOM_RIGHT
+        result += row_str
+        return result
 
 
 class WoodokuBoard:
@@ -246,5 +285,5 @@ class WoodokuBoard:
         return [(row, col) for row in range(x, x + 3) for col in range(y, y + 3)]
 
     def __str__(self) -> str:
-        # TODO: include score in print out, should be implemented along with CommandLineUI
-        pass
+        score = f"\nYour current score is {self.__scoreAgent.get_score()}\n"
+        return orange(score) + str(self.__representation)
