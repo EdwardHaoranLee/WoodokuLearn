@@ -117,6 +117,3 @@ def game(ui: UIInterface) -> None:
 
 if __name__ == '__main__':
     game(CommandLineUI())
-
-
-
