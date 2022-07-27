@@ -3,7 +3,12 @@ from typing import List, Tuple, Set, Iterable
 import numpy as np
 from numpy.typing import NDArray
 
-from ui.utils import *
+from ui.utils import (ALL_BOLD_CROSS, BLOCK, BOLD_BOTTOM_JOIN, BOLD_HORIZONTAL,
+                      BOLD_TOP_JOIN, BOLD_VERTICAL, BOTTOM_JOIN, BOTTOM_LEFT,
+                      BOTTOM_RIGHT, CROSS, HORIZONTAL, HORIZONTAL_BOLD_CROSS,
+                      LEFT_JOIN, RIGHT_JOIN, TOP_JOIN, TOP_LEFT, TOP_RIGHT,
+                      VERTICAL, VERTICAL_CROSS, black, green, inbetween,
+                      orange)
 from entity.woodoku_shape import WoodokuShape
 from entity.score_agent import ScoreAgent
 from exceptions.exceptions import ShapeOutOfBoardError

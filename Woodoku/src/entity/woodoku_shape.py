@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from typing import List, Tuple, Set, Any
-from ui.utils import *
+from ui.utils import green, BLOCK
 
 
 class WoodokuShape:

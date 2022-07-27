@@ -1,6 +1,6 @@
 from typing import Callable, List, Tuple
 
-from ui.utils import *
+from ui.utils import get_input, red, orange
 from entity.woodoku_board import WoodokuBoard
 from entity.woodoku_shape import WoodokuShape
 from ui.ui_interface import UIInterface
