@@ -1,0 +1,10 @@
+name: black
+
+on: [pull_request]
+
+jobs:
+  pep8-format-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: psf/black@stable

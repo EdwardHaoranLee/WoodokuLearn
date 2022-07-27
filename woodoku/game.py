@@ -1,17 +1,52 @@
 import random
+from os import path
 from typing import List
 
-from Entity.WoodokuBoard import WoodokuBoard
-from Entity.WoodokuShape import WoodokuShape
-from UI.CommandLineUI import CommandLineUI
-from UI.UIInterface import UIInterface
+import yaml
 
-CONFIG_FILE = ''
+from woodoku.entity.woodoku_board import WoodokuBoard
+from woodoku.entity.woodoku_shape import WoodokuShape
+from woodoku.ui.command_line_ui import CommandLineUI
+from woodoku.ui.ui_interface import UIInterface
+
+
+# get the current absolute path to config.yaml at runtime
+CONFIG_FILE = path.join(path.dirname(__file__), "config.yaml")
 NUM_SHAPES = 3
 
 
 def read_shapes_from_file(filepath: str) -> List[WoodokuShape]:
-    pass
+    raw_shapes = []
+    with open(filepath, encoding="utf-8") as config:
+        raw_shapes_list = yaml.safe_load(config)["raw_shapes"]
+        for row in raw_shapes_list:
+            tuple_row = [tuple(x) for x in row]
+            raw_shapes.append(WoodokuShape(tuple_row))
+
+    return raw_shapes
+
+
+def rotate_all_shapes(raw_shapes: List[WoodokuShape]) -> List[WoodokuShape]:
+    """
+    Rotate each shape in <raw_shapes> for three times, then gather all of them.
+
+    Args:
+        raw_shapes: The default shape without any rotation.
+
+    Returns:
+        The original shapes and all the rotated shapes (non-repeated).
+    """
+    shapes = set()
+
+    # All the raw shape itself was added first, then rotates three times and add to set after each rotate.
+    # Duplicates are eliminated by set operation.
+    for shape in raw_shapes:
+        shapes.add(shape)
+        for _ in range(3):
+            new_shape = shape.rotate()
+            shapes.add(new_shape)
+
+    return list(shapes)
 
 
 def random_shapes(shapes: List[WoodokuShape], num: int) -> List[WoodokuShape]:
@@ -27,7 +62,9 @@ def random_shapes(shapes: List[WoodokuShape], num: int) -> List[WoodokuShape]:
     return list(random.choices(shapes, k=num))
 
 
-def is_out_of_space(board: WoodokuBoard, shapes: List[WoodokuShape], shape_availability: List[bool]) -> bool:
+def is_out_of_space(
+    board: WoodokuBoard, shapes: List[WoodokuShape], shape_availability: List[bool]
+) -> bool:
     for i, shape in enumerate(shapes):
         if shape_availability[i] and board.can_add_shape_to_board(shape):
             return True
@@ -39,7 +76,7 @@ def game(ui: UIInterface) -> None:
     board = WoodokuBoard()
 
     # Generating all possible shapes that might appear in game.
-    all_shapes = read_shapes_from_file(CONFIG_FILE)
+    all_shapes = rotate_all_shapes(read_shapes_from_file(CONFIG_FILE))
 
     ui.show_start_game(board)
 
@@ -82,5 +119,5 @@ def game(ui: UIInterface) -> None:
                 ui.show_cannot_place()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     game(CommandLineUI())

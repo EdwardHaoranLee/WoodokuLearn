@@ -1,11 +1,10 @@
-from typing import Dict, List, Tuple, Set
+from typing import Iterable, List, Set, Tuple
 
 import numpy as np
 from numpy import ndarray
-
-from Entity.ScoreAgent import ScoreAgent
-from Entity.WoodokuShape import WoodokuShape
-from Exceptions.Exceptions import ShapeOutOfBoardError
+from woodoku.entity.score_agent import ScoreAgent
+from woodoku.entity.woodoku_shape import WoodokuShape
+from woodoku.exceptions.shape_out_of_board_error import ShapeOutOfBoardError
 
 # the length of the square game board
 N = 9
@@ -22,32 +21,41 @@ class _WoodokuBoardRepresentation:
     _board: an 2d array to record the occupancy of each position on the game board. The value is set to True when
     the position occupied
     """
+
     __board: ndarray
 
     def __init__(self):
         self.__board = np.full((N, N), False)
 
-    def add_blocks(self, blocks_coord: List[Tuple[int, int]]) -> None:
+    def add_blocks(self, blocks_coord: Iterable[Tuple[int, int]]) -> None:
         """
         Mark each position specified in blocks_coord as True to indicate that the position is occupied.
 
-        :param blocks_coord: a list of (x,y) tuples to be added to the board
-        :return:
+        Args:
+             blocks_coord: a list of (x,y) tuples to be added to the board
+
+        Raises:
+            ShapeOutOfBoundError: if any block in `blocks` is invalid
         """
         for row, col in blocks_coord:
+            self.__validate((row, col))
             self.__board[row, col] = True
 
-    def remove_blocks(self, blocks_coord: List[Tuple[int, int]]) -> None:
+    def remove_blocks(self, blocks_coord: Iterable[Tuple[int, int]]) -> None:
         """
         Mark each position specified in blocks_coord as False to indicate that the position is not occupied.
 
-        :param blocks_coord: a list of (x,y) tuples to be added to the board
-        :return:
+        Args:
+         blocks_coord: a list of (x,y) tuples to be added to the board
+
+        Raises:
+            ShapeOutOfBoundError: if any block in `blocks` is invalid
         """
         for row, col in blocks_coord:
+            self.__validate((row, col))
             self.__board[row, col] = False
 
-    def is_occupied(self, blocks_coord: List[Tuple[int, int]]) -> bool:
+    def is_occupied(self, blocks_coord: Iterable[Tuple[int, int]]) -> bool:
         """Check if each block has is occupied. If all of those blocks are
         occupied, return true. Otherwise, false.
 
@@ -56,13 +64,17 @@ class _WoodokuBoardRepresentation:
 
         Returns:
             bool: if all blocks in `blocks_coord` is occupied
+
+        Raises:
+            ShapeOutOfBoundError: if any block in `blocks` is invalid
         """
         for row, col in blocks_coord:
+            self.__validate((row, col))
             if not self.__board[row, col]:
                 return False
         return True
 
-    def is_not_occupied(self, blocks_coord: List[Tuple[int, int]]) -> bool:
+    def is_not_occupied(self, blocks_coord: Iterable[Tuple[int, int]]) -> bool:
         """Check if each block is empty. If all of those blocks are empty,
         return true. Otherwise, false.
 
@@ -71,12 +83,17 @@ class _WoodokuBoardRepresentation:
 
         Returns:
             bool: if all blocks in `blocks_coord` is empty
+
+        Raises:
+            ShapeOutOfBoundError: if any block in `blocks` is invalid
         """
         for row, col in blocks_coord:
+            self.__validate((row, col))
             if self.__board[row, col]:
                 return False
         return True
 
+    @staticmethod
     def __validate(block: Tuple[int, int]) -> None:
         """validate if block is within the 9x9 board. raise Error if not.
 
@@ -84,7 +101,7 @@ class _WoodokuBoardRepresentation:
             block (Tuple[int, int]): The block to be validated
 
         Raises:
-            ShapeOutOfBoardError: when some block is not valid 
+            ShapeOutOfBoardError: when some block is not valid
         """
         x, y = block
         if not (0 <= x <= N - 1 and 0 <= y <= N - 1):
@@ -97,11 +114,11 @@ class _WoodokuBoardRepresentation:
 class WoodokuBoard:
     """A 9x9 Woodoku Board"""
 
-    __scoreAgent: ScoreAgent
+    __score_agent: ScoreAgent
     __representation: _WoodokuBoardRepresentation
 
     def __init__(self):
-        self.__scoreAgent = ScoreAgent()
+        self.__score_agent = ScoreAgent()
         self.__representation = _WoodokuBoardRepresentation()
 
     def can_add_shape_to_board(self, shape: WoodokuShape) -> bool:
@@ -121,9 +138,13 @@ class WoodokuBoard:
         rng.shuffle(all_blocks)
 
         for row, col in all_blocks:
-            if self.can_add_shape_at_location(shape, x=row, y=col):
-                return True
-
+            try:
+                if self.can_add_shape_at_location(shape, x=row, y=col):
+                    return True
+            except ShapeOutOfBoardError:
+                # exceptions are ignored when checking can_add_shape_to_board
+                # as it is only for internal checking and avoids checking shapes that are out of the board
+                pass
         return False
 
     def can_add_shape_at_location(self, shape: WoodokuShape, x: int, y: int) -> bool:
@@ -134,7 +155,8 @@ class WoodokuBoard:
             shape (WoodokuShape): The shape needed to be checked
             x (int): x coordinate
             y (int): y coordinate
-        Raises: 
+
+        Raises:
             ShapeOutOfBoundError: if any block in `blocks` is invalid
 
         Returns:
@@ -161,28 +183,26 @@ class WoodokuBoard:
         self.__representation.add_blocks(shape_blocks)
 
         # determine groups and clear the groups
-        group_info, group_blocks = self.__find_groups()
-        self.__scoreAgent.calculate_winning(group_info)
+        groups, group_blocks = self.__find_groups()
+        self.__score_agent.calculate_winning(len(shape), groups)
         self.__representation.remove_blocks(group_blocks)
 
     def get_score(self) -> int:
-        return self.__scoreAgent.get_score()
+        return self.__score_agent.get_score()
 
-    def __find_groups(self) -> Tuple[Dict[str, int], Set[Tuple[int, int]]]:
+    def __find_groups(self) -> Tuple[int, Set[Tuple[int, int]]]:
         """Check current board and see if there is any groups such as
-        complete rows, columns or 3x3 box and report them. 
+        complete rows, columns or 3x3 box and report them.
 
         Terminology Reference:
         [Wikipedia Sudoku Glossary](https://en.wikipedia.org/wiki/Glossary_of_Sudoku#Terminology_and_grid_layout)
 
         Returns:
-            Tuple[Dict[str, int], Set[Tuple[int,int]]]:
-                1. A dictionary mapping from name of the group to the number of groups.
-                e.g. { "row": 1, "column": 2, "box": 0 }
+            Tuple[int, Set[Tuple[int,int]]]:
+                1. Number of groups that is complete
                 2. Set of block coordinates for the group
-
         """
-        info = {"row": 0, "column": 0, "box": 0}
+        groups = 0
         rep = self.__representation
         group_blocks = set()  # use set to handle overlapping group removal
         for index in range(9):
@@ -191,26 +211,29 @@ class WoodokuBoard:
             box_blocks = self.__get_box_coords(index)
 
             if rep.is_occupied(row_blocks):
-                info["row"] += 1
+                groups += 1
                 group_blocks.update(row_blocks)
 
             if rep.is_occupied(col_blocks):
-                info["column"] += 1
+                groups += 1
                 group_blocks.update(col_blocks)
 
             if rep.is_occupied(box_blocks):
-                info["box"] += 1
+                groups += 1
                 group_blocks.update(box_blocks)
 
-        return info, group_blocks
+        return groups, group_blocks
 
-    def __get_row_coords(self, row_index: int) -> List[Tuple[int, int]]:
+    @staticmethod
+    def __get_row_coords(row_index: int) -> List[Tuple[int, int]]:
         return [(row_index, col) for col in range(9)]
 
-    def __get_col_coords(self, col_index: int) -> List[Tuple[int, int]]:
+    @staticmethod
+    def __get_col_coords(col_index: int) -> List[Tuple[int, int]]:
         return [(row, col_index) for row in range(9)]
 
-    def __get_box_coords(self, index: int) -> List[Tuple[int, int]]:
+    @staticmethod
+    def __get_box_coords(index: int) -> List[Tuple[int, int]]:
         """The index of 3x3 box is as following:
         | 0 	| 1 	| 2 	|
         |---	|---	|---	|
