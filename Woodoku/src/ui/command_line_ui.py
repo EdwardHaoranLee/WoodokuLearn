@@ -57,9 +57,6 @@ class CommandLineUI(UIInterface):
     def show_cannot_place(self) -> None:
         print(red("You are not able to place the shape at the position you chose\n"))
 
-    def show_cannot_place(self) -> None:
-        print(red("You are not able to place the shape at the position you chose\n"))
-
     def show_result(
         self,
         board: WoodokuBoard,
