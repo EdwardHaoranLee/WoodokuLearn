@@ -1,10 +1,11 @@
-from typing import Dict, List, Tuple, Set, Iterable
+from typing import Iterable
+from typing import List, Tuple, Set
 
 import numpy as np
 from numpy import ndarray
-from entity.woodoku_shape import WoodokuShape
+
 from entity.score_agent import ScoreAgent
-from typing import List, Tuple, Set
+from entity.woodoku_shape import WoodokuShape
 from exceptions.exceptions import ShapeOutOfBoardError
 
 # the length of the square game board
@@ -115,11 +116,11 @@ class _WoodokuBoardRepresentation:
 class WoodokuBoard:
     """A 9x9 Woodoku Board"""
 
-    __scoreAgent: ScoreAgent
+    __score_agent: ScoreAgent
     __representation: _WoodokuBoardRepresentation
 
     def __init__(self):
-        self.__scoreAgent = ScoreAgent()
+        self.__score_agent = ScoreAgent()
         self.__representation = _WoodokuBoardRepresentation()
 
     def can_add_shape_to_board(self, shape: WoodokuShape) -> bool:
@@ -185,11 +186,11 @@ class WoodokuBoard:
 
         # determine groups and clear the groups
         groups, group_blocks = self.__find_groups()
-        self.__scoreAgent.calculate_winning(len(shape), groups)
+        self.__score_agent.calculate_winning(len(shape), groups)
         self.__representation.remove_blocks(group_blocks)
 
     def get_score(self) -> int:
-        return self.__scoreAgent.get_score()
+        return self.__score_agent.get_score()
 
     def __find_groups(self) -> Tuple[int, Set[Tuple[int, int]]]:
         """Check current board and see if there is any groups such as

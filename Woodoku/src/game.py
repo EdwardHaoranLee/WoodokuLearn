@@ -8,14 +8,14 @@ from entity.woodoku_shape import WoodokuShape
 from ui.command_line_ui import CommandLineUI
 from ui.ui_interface import UIInterface
 
-CONFIG_FILE = './config.yaml'
+CONFIG_FILE = "./config.yaml"
 NUM_SHAPES = 3
 
 
 def read_shapes_from_file(filepath: str) -> List[WoodokuShape]:
     raw_shapes = []
-    with open(filepath) as config:
-        raw_shapes_list = yaml.safe_load(config)['raw_shapes']
+    with open(filepath, encoding="utf-8") as config:
+        raw_shapes_list = yaml.safe_load(config)["raw_shapes"]
         for row in raw_shapes_list:
             tuple_row = [tuple(x) for x in row]
             raw_shapes.append(WoodokuShape(tuple_row))
@@ -59,7 +59,9 @@ def random_shapes(shapes: List[WoodokuShape], num: int) -> List[WoodokuShape]:
     return list(random.choices(shapes, k=num))
 
 
-def is_out_of_space(board: WoodokuBoard, shapes: List[WoodokuShape], shape_availability: List[bool]) -> bool:
+def is_out_of_space(
+    board: WoodokuBoard, shapes: List[WoodokuShape], shape_availability: List[bool]
+) -> bool:
     for i, shape in enumerate(shapes):
         if shape_availability[i] and board.can_add_shape_to_board(shape):
             return True
@@ -114,5 +116,5 @@ def game(ui: UIInterface) -> None:
                 ui.show_cannot_place()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     game(CommandLineUI())

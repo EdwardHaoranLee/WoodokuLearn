@@ -66,11 +66,11 @@ class WoodokuShape:
         if not isinstance(other, WoodokuShape):
             return False
 
-        if len(other.__coords) != len(self.__coords):
+        if len(other.get_coords()) != len(self.__coords):
             return False
 
         for coord in self.__coords:
-            if coord not in other.__coords:
+            if coord not in other.get_coords():
                 return False
 
         return True

@@ -6,25 +6,34 @@ from entity.woodoku_board import _WoodokuBoardRepresentation
 
 N = 9
 
+# pylint: disable=protected-access
+
 
 class TestWoodokuRepresentation:
     one_block_lst = [(0, 0)]
     three_block_lst = [(1, 3), (5, 8), (0, 7)]
     five_block_lst = three_block_lst + [(2, 1), (0, 8)]
 
-    def board_after_adding(self, rep: _WoodokuBoardRepresentation, lst: list) -> ndarray:
+    def board_after_adding(
+        self, rep: _WoodokuBoardRepresentation, lst: list
+    ) -> ndarray:
         rep.add_blocks(lst)
         return rep._WoodokuBoardRepresentation__board
 
-    def board_after_removing(self, rep: _WoodokuBoardRepresentation, lst: list) -> ndarray:
+    def board_after_removing(
+        self, rep: _WoodokuBoardRepresentation, lst: list
+    ) -> ndarray:
         rep.remove_blocks(lst)
         return rep._WoodokuBoardRepresentation__board
 
-    @pytest.mark.parametrize("lst", [
-        one_block_lst,
-        three_block_lst,
-        five_block_lst,
-    ])
+    @pytest.mark.parametrize(
+        "lst",
+        [
+            one_block_lst,
+            three_block_lst,
+            five_block_lst,
+        ],
+    )
     def test_add_blocks_add_list_of_blocks(self, lst: list) -> None:
         board = self.board_after_adding(_WoodokuBoardRepresentation(), lst)
 
@@ -33,11 +42,14 @@ class TestWoodokuRepresentation:
             expect[row, col] = True
         assert (board == expect).all()
 
-    @pytest.mark.parametrize("lst", [
-        one_block_lst,
-        three_block_lst,
-        five_block_lst,
-    ])
+    @pytest.mark.parametrize(
+        "lst",
+        [
+            one_block_lst,
+            three_block_lst,
+            five_block_lst,
+        ],
+    )
     def test_remove_blocks_remove_list_of_blocks(self, lst: list) -> None:
         rep = _WoodokuBoardRepresentation()
         rep.add_blocks(lst)
@@ -57,7 +69,9 @@ class TestWoodokuRepresentation:
             if (row, col) not in self.three_block_lst:
                 expect[row, col] = True
 
-        assert (board_removed == expect).all(), f'test fail because board =\n {board_removed}, \n\n while expect =\n {expect}'
+        assert (
+            board_removed == expect
+        ).all(), f"test fail because board =\n {board_removed}, \n\n while expect =\n {expect}"
 
     def test_is_occupied_on_empty_board(self) -> None:
         rep = _WoodokuBoardRepresentation()
@@ -106,7 +120,7 @@ class TestWoodokuRepresentation:
         rep.remove_blocks(self.three_block_lst)
         assert not rep.is_not_occupied(self.five_block_lst)
 
-    def test_is_not_occupied_with_all_occupied(self) -> None:
+    def test_is_not_occupied_with_blocks_added_then_removed(self) -> None:
         rep = _WoodokuBoardRepresentation()
         rep.add_blocks(self.five_block_lst)
         rep.remove_blocks(self.five_block_lst)
