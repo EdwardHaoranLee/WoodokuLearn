@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Tuple, Set
+from typing import List, Set, Tuple
 
 
 class WoodokuShape:
