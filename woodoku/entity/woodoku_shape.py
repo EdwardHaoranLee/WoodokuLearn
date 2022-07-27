@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Tuple, Set
+from typing import List, Tuple, Set, Any
 from woodoku.ui.utils import green, BLOCK
 
 
@@ -81,7 +81,7 @@ class WoodokuShape:
         """
         return len(self.__coords)
 
-    def __eq__(self, other: any):
+    def __eq__(self, other: Any) -> bool:
         if not isinstance(other, WoodokuShape):
             return False
 
@@ -94,10 +94,10 @@ class WoodokuShape:
 
         return True
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash("WoodokuShape Salt" + str(self.__coords))
 
-    def __str__(self):
+    def __str__(self) -> str:
         result = ""
         for row in range(5):
             for col in range(5):
