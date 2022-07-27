@@ -1,6 +1,6 @@
 import pytest
 
-from entity.woodoku_shape import WoodokuShape
+from woodoku.entity.woodoku_shape import WoodokuShape
 
 
 class TestWoodokuShape:
