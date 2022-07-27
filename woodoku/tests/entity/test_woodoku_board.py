@@ -345,8 +345,8 @@ class TestWoodokuBoard:
         "shape, location",
         [
             (l_shape, (6, 8)),
-            (horizontal_bar_shape, (4, 3)),
-            (gun_shape, (4, 0)),
+            (horizontal_bar_shape, (4, 5)),
+            (gun_shape, (8, 0)),
         ],
     )
     def test_can_add_shape_at_location_on_empty_board_go_beyond_board(
