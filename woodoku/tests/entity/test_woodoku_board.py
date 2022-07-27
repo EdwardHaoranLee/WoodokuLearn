@@ -1,8 +1,7 @@
 import numpy as np
 import pytest
 from numpy import ndarray
-
-from entity.woodoku_board import _WoodokuBoardRepresentation
+from woodoku.entity.woodoku_board import _WoodokuBoardRepresentation
 
 N = 9
 

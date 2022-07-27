@@ -1,12 +1,10 @@
-from typing import Iterable
-from typing import List, Tuple, Set
+from typing import Iterable, List, Set, Tuple
 
 import numpy as np
 from numpy import ndarray
-
-from entity.score_agent import ScoreAgent
-from entity.woodoku_shape import WoodokuShape
-from exceptions.shape_out_of_board_error import ShapeOutOfBoardError
+from woodoku.entity.score_agent import ScoreAgent
+from woodoku.entity.woodoku_shape import WoodokuShape
+from woodoku.exceptions.shape_out_of_board_error import ShapeOutOfBoardError
 
 # the length of the square game board
 N = 9

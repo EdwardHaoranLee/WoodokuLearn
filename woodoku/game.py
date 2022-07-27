@@ -4,10 +4,10 @@ from typing import List
 
 import yaml
 
-from entity.woodoku_board import WoodokuBoard
-from entity.woodoku_shape import WoodokuShape
-from ui.command_line_ui import CommandLineUI
-from ui.ui_interface import UIInterface
+from woodoku.entity.woodoku_board import WoodokuBoard
+from woodoku.entity.woodoku_shape import WoodokuShape
+from woodoku.ui.command_line_ui import CommandLineUI
+from woodoku.ui.ui_interface import UIInterface
 
 
 # get the current absolute path to config.yaml at runtime
