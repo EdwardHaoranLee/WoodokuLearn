@@ -61,7 +61,7 @@ class WoodokuShape:
 
     def rotate(self) -> WoodokuShape:
         """
-        Rotate this shape by 90 degree clockwise.
+        Rotate this shape by 90 degree counter-clockwise.
 
         Returns: The rotated shape.
 
