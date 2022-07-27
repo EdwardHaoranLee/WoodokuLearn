@@ -5,9 +5,14 @@ name = "pypi"
 
 [packages]
 numpy = "*"
+pyyaml = "*"
 
 [dev-packages]
 black = "*"
+pylint = "*"
+pytest = "*"
+pre-commit = "*"
+mypy = "*"
 ipykernel = "*"
 local-woodoku = {editable = true, path = "."}
 
