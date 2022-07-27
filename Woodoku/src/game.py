@@ -116,32 +116,7 @@ def game(ui: UIInterface) -> None:
 
 
 if __name__ == '__main__':
-    ui = CommandLineUI()
-    board = WoodokuBoard()
-
-    # test start game
-    ui.show_start_game(board)
-
-    # test choose shape
-    shape_availability = [True] * 3
-    shapes_lst = []
-    shapes_lst.append(WoodokuShape([(0, 0), (1, 0), (1, 1), (1, 2)]))
-    shapes_lst.append(WoodokuShape([(0, 1), (1, 0), (1, 1), (1, 2), (2, 1)]))
-    shapes_lst.append(WoodokuShape([(0, 1), (1, 0), (1, 1), (1, 2), (2, 2)]))
-    idx = ui.choose_shape(shapes_lst, shape_availability)
-
-    # test put_shape_at
-    x, y = ui.put_shape_at()
-    board.add_shape(shapes_lst[idx], x, y)
-
-    # test show_earned
-    ui.show_earned(4)
-
-    # test show_cannot_place
-    ui.show_cannot_place()
-
-    # test show_result
-    ui.show_result(board, shapes_lst, shape_availability)
+    game(CommandLineUI())
 
 
 

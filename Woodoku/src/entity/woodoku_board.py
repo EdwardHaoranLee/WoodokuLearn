@@ -3,7 +3,7 @@ from typing import Dict, List, Tuple, Set, Iterable
 import numpy as np
 from numpy import ndarray
 
-from elements import *
+from ui.utils import *
 from entity.woodoku_shape import WoodokuShape
 from entity.score_agent import ScoreAgent
 from typing import Dict, List, Tuple, Set
@@ -28,7 +28,6 @@ class _WoodokuBoardRepresentation:
 
     def __init__(self):
         self.__board = np.full((N, N), False)
-
 
     def add_blocks(self, blocks_coord: Iterable[Tuple[int, int]]) -> None:
         """
@@ -113,21 +112,30 @@ class _WoodokuBoardRepresentation:
     def __str__(self) -> str:
         result = ""
         horizontal_bar = HORIZONTAL * 5
+        bold_horizontal_bar = BOLD_HORIZONTAL * 5
         for row in range(18):
             if row == 0:
-                row_str = inbetween(TOP_LEFT, TOP_JOIN, TOP_RIGHT, horizontal_bar)
+                row_str = inbetween(TOP_LEFT, TOP_JOIN, BOLD_TOP_JOIN, TOP_RIGHT, horizontal_bar)
             elif row % 2 == 0:
-                row_str = inbetween(LEFT_JOIN, CROSS, RIGHT_JOIN, horizontal_bar)
+                if row % 3 == 0:
+                    row_str = inbetween(LEFT_JOIN, HORIZONTAL_BOLD_CROSS, black(ALL_BOLD_CROSS), RIGHT_JOIN,
+                                        black(bold_horizontal_bar))
+                else:
+                    row_str = inbetween(LEFT_JOIN, CROSS, VERTICAL_CROSS, RIGHT_JOIN, horizontal_bar)
             else:
                 row_str = f"{VERTICAL}"
                 for col in range(9):
-                    pos = f"     {VERTICAL}"
+                    pos = "     "
                     if self.__board[row // 2, col]:
-                        pos = f"  {green(BLOCK)}  {VERTICAL}"
+                        pos = f"  {green(BLOCK)}  "
+                    if col == 2 or col == 5:
+                        pos += black(BOLD_VERTICAL)
+                    else:
+                        pos += VERTICAL
                     row_str += pos
             row_str += "\n"
             result += row_str
-        row_str = inbetween(BOTTOM_LEFT, BOTTOM_JOIN, BOTTOM_RIGHT, horizontal_bar)
+        row_str = inbetween(BOTTOM_LEFT, BOTTOM_JOIN, BOLD_BOTTOM_JOIN, BOTTOM_RIGHT, horizontal_bar)
         result += row_str
         return result
 
@@ -287,5 +295,6 @@ class WoodokuBoard:
         return [(row, col) for row in range(x, x + 3) for col in range(y, y + 3)]
 
     def __str__(self) -> str:
-        score = f"\nYour current score is {self.__scoreAgent.get_score()}\n"
+        # score = f"\nYour current score is {self.__scoreAgent.get_score()}\n"
+        score = f"\nYour current score is 4\n"
         return orange(score) + str(self.__representation)

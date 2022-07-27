@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from elements import *
+from ui.utils import *
 from entity.woodoku_board import WoodokuBoard
 from entity.woodoku_shape import WoodokuShape
 from ui.ui_interface import UIInterface
@@ -19,45 +19,24 @@ class CommandLineUI(UIInterface):
 
     def choose_shape(self, shapes: List[WoodokuShape], shape_availability: List[bool]) -> int:
         shapes_str = ""
-        for idx, avai in enumerate(shape_availability):
-            if avai:
-                shapes_str += f"{idx}.\n{str(shapes[idx]).rstrip()}\n\n"
+        for i, available in enumerate(shape_availability):
+            if available:
+                shapes_str += f"{i}.\n{str(shapes[i]).rstrip()}\n\n"
         print(shapes_str)
-        val = ""
-        while not isinstance(val, int) or val not in range(NUM_SHAPES):
-            val = input(f"Please choose one of the {orange('shapes')}:\n")
-            try:
-                val = int(val)
-                if val not in range(NUM_SHAPES):
-                    raise ValueError
-            except ValueError:
-                print(red("Please choose an integer value from 0 to 2. Try again"))
+        val = get_input(int, range(2), f"Please choose one of the {orange('shapes')}:\n",
+                        red("Please choose an integer value from 0 to 2. Try again"))
         return val
 
     def put_shape_at(self) -> Tuple[int, int]:
-        confirmed = False
-        while not confirmed:
-            x = ""
-            y = ""
-            while not isinstance(x, int):
-                try:
-                    x = int(input(f"Enter a {orange('x coordinate')} on a 9X9 board:\n"))
-                except ValueError:
-                    print(red("Please enter an integer x coordinate. Try again\n"))
-            while not isinstance(y, int):
-                try:
-                    y = int(input(f"Enter a {orange('y coordinate')} on a 9X9 board:\n"))
-                except ValueError:
-                    print(red("Please enter an integer y coordinate. Try again"))
-
+        confirmed = ''
+        while confirmed != 'y':
+            x = get_input(int, range(9), f"Enter a {orange('x coordinate')} on a 9X9 board:\n",
+                          red("Please enter an integer x coordinate. Try again\n"))
+            y = get_input(int, range(9), f"Enter a {orange('y coordinate')} on a 9X9 board:\n",
+                          red("Please enter an integer y coordinate. Try again"))
             confirmed = input(f"Confirm your choice of position: x = {x}, y = {y}: (y/n)")
-            while not isinstance(confirmed, bool):
-                try:
-                    confirmed = True if confirmed == 'y' else False
-                    if not confirmed:
-                        break
-                except ValueError:
-                    print(red("Please enter either y or n. Try again"))
+            if confirmed.strip() != 'y':
+                print(red("Please enter either y or n. Try again"))
         return x, y
 
     def show_earned(self, score: int) -> None:
