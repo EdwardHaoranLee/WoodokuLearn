@@ -1,12 +1,10 @@
-from typing import Iterable
-from typing import List, Tuple, Set
+from typing import Iterable, List, Set, Tuple
 
 import numpy as np
 from numpy import ndarray
-
-from entity.score_agent import ScoreAgent
-from entity.woodoku_shape import WoodokuShape
-from exceptions.exceptions import ShapeOutOfBoardError
+from woodoku.entity.score_agent import ScoreAgent
+from woodoku.entity.woodoku_shape import WoodokuShape
+from woodoku.exceptions.shape_out_of_board_error import ShapeOutOfBoardError
 
 # the length of the square game board
 N = 9
@@ -143,7 +141,7 @@ class WoodokuBoard:
             try:
                 if self.can_add_shape_at_location(shape, x=row, y=col):
                     return True
-            except ShapeOutOfBoardError(row, col):
+            except ShapeOutOfBoardError:
                 # exceptions are ignored when checking can_add_shape_to_board
                 # as it is only for internal checking and avoids checking shapes that are out of the board
                 pass
