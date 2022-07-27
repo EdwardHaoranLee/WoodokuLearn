@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple, Set, Iterable
+from typing import List, Tuple, Set, Iterable
 
 import numpy as np
 from numpy import ndarray
@@ -6,7 +6,6 @@ from numpy import ndarray
 from ui.utils import *
 from entity.woodoku_shape import WoodokuShape
 from entity.score_agent import ScoreAgent
-from typing import List, Tuple, Set
 from exceptions.exceptions import ShapeOutOfBoardError
 
 # the length of the square game board
@@ -116,13 +115,22 @@ class _WoodokuBoardRepresentation:
         bold_horizontal_bar = BOLD_HORIZONTAL * 5
         for row in range(18):
             if row == 0:
-                row_str = inbetween(TOP_LEFT, TOP_JOIN, BOLD_TOP_JOIN, TOP_RIGHT, horizontal_bar)
+                row_str = inbetween(
+                    TOP_LEFT, TOP_JOIN, BOLD_TOP_JOIN, TOP_RIGHT, horizontal_bar
+                )
             elif row % 2 == 0:
                 if row % 3 == 0:
-                    row_str = inbetween(LEFT_JOIN, HORIZONTAL_BOLD_CROSS, black(ALL_BOLD_CROSS), RIGHT_JOIN,
-                                        black(bold_horizontal_bar))
+                    row_str = inbetween(
+                        LEFT_JOIN,
+                        HORIZONTAL_BOLD_CROSS,
+                        black(ALL_BOLD_CROSS),
+                        RIGHT_JOIN,
+                        black(bold_horizontal_bar),
+                    )
                 else:
-                    row_str = inbetween(LEFT_JOIN, CROSS, VERTICAL_CROSS, RIGHT_JOIN, horizontal_bar)
+                    row_str = inbetween(
+                        LEFT_JOIN, CROSS, VERTICAL_CROSS, RIGHT_JOIN, horizontal_bar
+                    )
             else:
                 row_str = f"{VERTICAL}"
                 for col in range(9):
@@ -136,7 +144,9 @@ class _WoodokuBoardRepresentation:
                     row_str += pos
             row_str += "\n"
             result += row_str
-        row_str = inbetween(BOTTOM_LEFT, BOTTOM_JOIN, BOLD_BOTTOM_JOIN, BOTTOM_RIGHT, horizontal_bar)
+        row_str = inbetween(
+            BOTTOM_LEFT, BOTTOM_JOIN, BOLD_BOTTOM_JOIN, BOTTOM_RIGHT, horizontal_bar
+        )
         result += row_str
         return result
 
