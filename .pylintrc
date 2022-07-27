@@ -69,6 +69,7 @@ disable=
     C0303, # trailing-whitespace
     W0511, # fixme
     F0010, # parse-error
+    E0611, # no-name-in-module
 
 [REPORTS]
 
