@@ -6,7 +6,7 @@ from numpy import ndarray
 from ui.utils import *
 from entity.woodoku_shape import WoodokuShape
 from entity.score_agent import ScoreAgent
-from typing import Dict, List, Tuple, Set
+from typing import List, Tuple, Set
 from exceptions.exceptions import ShapeOutOfBoardError
 
 # the length of the square game board
@@ -24,6 +24,7 @@ class _WoodokuBoardRepresentation:
     _board: an 2d array to record the occupancy of each position on the game board. The value is set to True when
     the position occupied
     """
+
     __board: ndarray
 
     def __init__(self):
@@ -184,6 +185,7 @@ class WoodokuBoard:
             shape (WoodokuShape): The shape needed to be checked
             x (int): x coordinate
             y (int): y coordinate
+
         Raises:
             ShapeOutOfBoundError: if any block in `blocks` is invalid
 
@@ -211,14 +213,14 @@ class WoodokuBoard:
         self.__representation.add_blocks(shape_blocks)
 
         # determine groups and clear the groups
-        group_info, group_blocks = self.__find_groups()
-        self.__scoreAgent.calculate_winning(group_info)
+        groups, group_blocks = self.__find_groups()
+        self.__scoreAgent.calculate_winning(len(shape), groups)
         self.__representation.remove_blocks(group_blocks)
 
     def get_score(self) -> int:
         return self.__scoreAgent.get_score()
 
-    def __find_groups(self) -> Tuple[Dict[str, int], Iterable[Tuple[int, int]]]:
+    def __find_groups(self) -> Tuple[int, Set[Tuple[int, int]]]:
         """Check current board and see if there is any groups such as
         complete rows, columns or 3x3 box and report them.
 
@@ -226,13 +228,11 @@ class WoodokuBoard:
         [Wikipedia Sudoku Glossary](https://en.wikipedia.org/wiki/Glossary_of_Sudoku#Terminology_and_grid_layout)
 
         Returns:
-            Tuple[Dict[str, int], Set[Tuple[int,int]]]:
-                1. A dictionary mapping from name of the group to the number of groups.
-                e.g. { "row": 1, "column": 2, "box": 0 }
+            Tuple[int, Set[Tuple[int,int]]]:
+                1. Number of groups that is complete
                 2. Set of block coordinates for the group
-
         """
-        info = {"row": 0, "column": 0, "box": 0}
+        groups = 0
         rep = self.__representation
         group_blocks = set()  # use set to handle overlapping group removal
         for index in range(9):
@@ -241,18 +241,18 @@ class WoodokuBoard:
             box_blocks = self.__get_box_coords(index)
 
             if rep.is_occupied(row_blocks):
-                info["row"] += 1
+                groups += 1
                 group_blocks.update(row_blocks)
 
             if rep.is_occupied(col_blocks):
-                info["column"] += 1
+                groups += 1
                 group_blocks.update(col_blocks)
 
             if rep.is_occupied(box_blocks):
-                info["box"] += 1
+                groups += 1
                 group_blocks.update(box_blocks)
 
-        return info, group_blocks
+        return groups, group_blocks
 
     @staticmethod
     def __get_row_coords(row_index: int) -> List[Tuple[int, int]]:
