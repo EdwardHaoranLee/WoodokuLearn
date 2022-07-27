@@ -1,14 +1,17 @@
 import random
+from os import path
 from typing import List
 
 import yaml
 
-from entity.woodoku_board import WoodokuBoard
-from entity.woodoku_shape import WoodokuShape
-from ui.command_line_ui import CommandLineUI
-from ui.ui_interface import UIInterface
+from woodoku.entity.woodoku_board import WoodokuBoard
+from woodoku.entity.woodoku_shape import WoodokuShape
+from woodoku.ui.command_line_ui import CommandLineUI
+from woodoku.ui.ui_interface import UIInterface
 
-CONFIG_FILE = "./config.yaml"
+
+# get the current absolute path to config.yaml at runtime
+CONFIG_FILE = path.join(path.dirname(__file__), "config.yaml")
 NUM_SHAPES = 3
 
 
