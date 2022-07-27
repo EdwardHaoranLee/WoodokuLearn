@@ -28,7 +28,21 @@ class WoodokuShape:
     __coords: Set[Tuple[int, int]]
 
     def __init__(self, coords: List[Tuple[int, int]]):
-        self.__coords = set(coords)
+        self.__coords = set(self.__standardize(coords))
+
+    @staticmethod
+    def __standardize(coords) -> Set[Tuple[int, int]]:
+        """Pushes shape to top left corner if it has not done so
+
+        Args:
+            coords: the coordinates of the shape, cornered at top left or not.
+
+        Returns:
+            The adjusted, at-top-left-corner coordinates.
+        """
+        smallest_x = min(list(x for x, _ in coords))
+        smallest_y = min(list(y for _, y in coords))
+        return set(list((x - smallest_x, y - smallest_y) for x, y in coords))
 
     def get_coords(self) -> List[Tuple[int, int]]:
         return list(self.__coords)
@@ -52,7 +66,11 @@ class WoodokuShape:
         Returns: The rotated shape.
 
         """
-        pass
+        boarder_size = max(list(sum(self.__coords, ())))
+
+        new_coords = [(boarder_size - y, x) for x, y in self.__coords]
+
+        return WoodokuShape(new_coords)
 
     def __len__(self) -> int:
         """Return the size of this shape
