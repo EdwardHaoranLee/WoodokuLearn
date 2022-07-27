@@ -1,12 +1,36 @@
-from typing import List, Tuple, Set, Iterable
+from typing import Iterable, List, Set, Tuple
 
 import numpy as np
 from numpy import ndarray
+from woodoku.entity.score_agent import ScoreAgent
+from woodoku.entity.woodoku_shape import WoodokuShape
+from woodoku.exceptions.shape_out_of_board_error import ShapeOutOfBoardError
 
-from ui.utils import *
-from entity.woodoku_shape import WoodokuShape
-from entity.score_agent import ScoreAgent
-from exceptions.exceptions import ShapeOutOfBoardError
+from woodoku.ui.utils import (
+    ALL_BOLD_CROSS,
+    BLOCK,
+    BOLD_BOTTOM_JOIN,
+    BOLD_HORIZONTAL,
+    BOLD_TOP_JOIN,
+    BOLD_VERTICAL,
+    BOTTOM_JOIN,
+    BOTTOM_LEFT,
+    BOTTOM_RIGHT,
+    CROSS,
+    HORIZONTAL,
+    HORIZONTAL_BOLD_CROSS,
+    LEFT_JOIN,
+    RIGHT_JOIN,
+    TOP_JOIN,
+    TOP_LEFT,
+    TOP_RIGHT,
+    VERTICAL,
+    VERTICAL_CROSS,
+    black,
+    green,
+    inbetween,
+    orange,
+)
 
 # the length of the square game board
 N = 9
@@ -137,7 +161,7 @@ class _WoodokuBoardRepresentation:
                     pos = "     "
                     if self.__board[row // 2, col]:
                         pos = f"  {green(BLOCK)}  "
-                    if col == 2 or col == 5:
+                    if col in (2, 5):
                         pos += black(BOLD_VERTICAL)
                     else:
                         pos += VERTICAL
@@ -154,11 +178,11 @@ class _WoodokuBoardRepresentation:
 class WoodokuBoard:
     """A 9x9 Woodoku Board"""
 
-    __scoreAgent: ScoreAgent
+    __score_agent: ScoreAgent
     __representation: _WoodokuBoardRepresentation
 
     def __init__(self):
-        self.__scoreAgent = ScoreAgent()
+        self.__score_agent = ScoreAgent()
         self.__representation = _WoodokuBoardRepresentation()
 
     def can_add_shape_to_board(self, shape: WoodokuShape) -> bool:
@@ -181,7 +205,7 @@ class WoodokuBoard:
             try:
                 if self.can_add_shape_at_location(shape, x=row, y=col):
                     return True
-            except ShapeOutOfBoardError(row, col):
+            except ShapeOutOfBoardError:
                 # exceptions are ignored when checking can_add_shape_to_board
                 # as it is only for internal checking and avoids checking shapes that are out of the board
                 pass
@@ -224,11 +248,11 @@ class WoodokuBoard:
 
         # determine groups and clear the groups
         groups, group_blocks = self.__find_groups()
-        self.__scoreAgent.calculate_winning(len(shape), groups)
+        self.__score_agent.calculate_winning(len(shape), groups)
         self.__representation.remove_blocks(group_blocks)
 
     def get_score(self) -> int:
-        return self.__scoreAgent.get_score()
+        return self.__score_agent.get_score()
 
     def __find_groups(self) -> Tuple[int, Set[Tuple[int, int]]]:
         """Check current board and see if there is any groups such as
@@ -305,5 +329,5 @@ class WoodokuBoard:
         return [(row, col) for row in range(x, x + 3) for col in range(y, y + 3)]
 
     def __str__(self) -> str:
-        score = f"\nYour current score is {self.__scoreAgent.get_score()}\n"
+        score = f"\nYour current score is {self.__score_agent.get_score()}\n"
         return orange(score) + str(self.__representation)

@@ -5,10 +5,15 @@ name = "pypi"
 
 [packages]
 numpy = "*"
+pyyaml = "*"
+local-woodoku = {editable = true, path = "."}
 
 [dev-packages]
 black = "*"
-ipykernel = "*"
+pylint = "*"
+pytest = "*"
+pre-commit = "*"
+mypy = "*"
 
 [requires]
 python_version = "3.9"

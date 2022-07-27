@@ -1,9 +1,9 @@
 from typing import Callable, List, Tuple
 
-from ui.utils import *
-from entity.woodoku_board import WoodokuBoard
-from entity.woodoku_shape import WoodokuShape
-from ui.ui_interface import UIInterface
+from woodoku.ui.utils import get_input, red, orange
+from woodoku.entity.woodoku_board import WoodokuBoard
+from woodoku.entity.woodoku_shape import WoodokuShape
+from woodoku.ui.ui_interface import UIInterface
 
 NUM_SHAPES = 3
 
@@ -47,15 +47,13 @@ class CommandLineUI(UIInterface):
             )
             if confirmation.strip() == "y":
                 break
-            else:
-                print(red("Please enter either y or n. Try again"))
+
+            print(red("Please enter either y or n. Try again"))
+
         return x, y
 
     def show_earned(self, score: int) -> None:
         print(orange(f"\n\nYou earned {score}. Nice job\n"))
-
-    def show_cannot_place(self) -> None:
-        print(red("You are not able to place the shape at the position you chose\n"))
 
     def show_cannot_place(self) -> None:
         print(red("You are not able to place the shape at the position you chose\n"))

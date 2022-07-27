@@ -31,7 +31,7 @@ HORIZONTAL_BOLD_CROSS = chr(0x253F)
 
 
 def colored(r, g, b, text):
-    return "\033[38;2;{};{};{}m{}\033[38;2;255;255;255m".format(r, g, b, text)
+    return f"\033[38;2;{r};{g};{b}m{text}\033[38;2;255;255;255m"
 
 
 def red(text):
@@ -56,7 +56,7 @@ def inbetween(
     row_str = f"{start}"
     for col in range(8):
         line = horizontal_bar
-        if col == 2 or col == 5:
+        if col in (2, 5):
             line += bold_in_between
         else:
             line += in_between
