@@ -5,10 +5,13 @@ name = "pypi"
 
 [packages]
 numpy = "*"
+pyyaml = "*"
 
 [dev-packages]
 black = "*"
-ipykernel = "*"
+pylint = "*"
+pytest = "*"
+pre-commit = "*"
 
 [requires]
 python_version = "3.9"
