@@ -1,7 +1,7 @@
 from typing import List, Tuple, Set, Iterable
 
 import numpy as np
-from numpy import ndarray
+from numpy.typing import NDArray
 
 from ui.utils import *
 from entity.woodoku_shape import WoodokuShape
@@ -24,9 +24,9 @@ class _WoodokuBoardRepresentation:
     the position occupied
     """
 
-    __board: ndarray
+    __board: NDArray[np.bool8]
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.__board = np.full((N, N), False)
 
     def add_blocks(self, blocks_coord: Iterable[Tuple[int, int]]) -> None:
@@ -157,7 +157,7 @@ class WoodokuBoard:
     __scoreAgent: ScoreAgent
     __representation: _WoodokuBoardRepresentation
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.__scoreAgent = ScoreAgent()
         self.__representation = _WoodokuBoardRepresentation()
 

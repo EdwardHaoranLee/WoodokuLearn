@@ -30,24 +30,24 @@ ALL_BOLD_CROSS = chr(0x254B)
 HORIZONTAL_BOLD_CROSS = chr(0x253F)
 
 
-def colored(r, g, b, text):
-    return "\033[38;2;{};{};{}m{}\033[38;2;255;255;255m".format(r, g, b, text)
+def __colored(r: int, g: int, b: int, text: str) -> str:
+    return f"\033[38;2;{r};{g};{b}m{text}\033[38;2;255;255;255m"
 
 
-def red(text):
-    return colored(*RED, text)
+def red(text: str) -> str:
+    return __colored(*RED, text)
 
 
-def green(text):
-    return colored(*GREEN, text)
+def green(text: str) -> str:
+    return __colored(*GREEN, text)
 
 
-def orange(text):
-    return colored(*ORANGE, text)
+def orange(text: str) -> str:
+    return __colored(*ORANGE, text)
 
 
-def black(text):
-    return colored(*BLACK, text)
+def black(text: str) -> str:
+    return __colored(*BLACK, text)
 
 
 def inbetween(

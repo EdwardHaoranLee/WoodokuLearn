@@ -6,9 +6,8 @@ from entity.woodoku_shape import WoodokuShape
 
 
 class UIInterface(ABC):
-
     @abstractmethod
-    def show_start_game(self, board) -> None:
+    def show_start_game(self, board: WoodokuBoard) -> None:
         raise NotImplementedError()
 
     @abstractmethod
@@ -21,7 +20,9 @@ class UIInterface(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def choose_shape(self, shapes: List[WoodokuShape], shape_availability: List[bool]) -> int:
+    def choose_shape(
+        self, shapes: List[WoodokuShape], shape_availability: List[bool]
+    ) -> int:
         """
         Precondition: len(shapes) == len(shape_availability)
 
@@ -59,7 +60,12 @@ class UIInterface(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def show_result(self, board: WoodokuBoard, shapes: List[WoodokuShape], shape_availabilities: List[bool]) -> None:
+    def show_result(
+        self,
+        board: WoodokuBoard,
+        shapes: List[WoodokuShape],
+        shape_availabilities: List[bool],
+    ) -> None:
         """
         Precondition: len(shapes) == len(shape_availability)
 
