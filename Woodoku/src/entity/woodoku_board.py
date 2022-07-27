@@ -295,6 +295,5 @@ class WoodokuBoard:
         return [(row, col) for row in range(x, x + 3) for col in range(y, y + 3)]
 
     def __str__(self) -> str:
-        # score = f"\nYour current score is {self.__scoreAgent.get_score()}\n"
-        score = f"\nYour current score is 4\n"
+        score = f"\nYour current score is {self.__scoreAgent.get_score()}\n"
         return orange(score) + str(self.__representation)
