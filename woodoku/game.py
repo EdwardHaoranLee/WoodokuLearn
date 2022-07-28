@@ -21,7 +21,8 @@ def read_shapes_from_file(filepath: str) -> List[WoodokuShape]:
         raw_shapes_list = yaml.safe_load(config)["raw_shapes"]
         for row in raw_shapes_list:
             tuple_row = [tuple(x) for x in row]
-            raw_shapes.append(WoodokuShape(tuple_row))
+            raw_shapes.append(WoodokuShape(tuple_row))  # type: ignore[arg-type]
+            # ignore mypy being confused about config.yml import data
 
     return raw_shapes
 

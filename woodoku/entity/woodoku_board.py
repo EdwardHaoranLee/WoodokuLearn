@@ -1,7 +1,7 @@
 from typing import Iterable, List, Set, Tuple
 
 import numpy as np
-from numpy import ndarray
+from numpy.typing import NDArray
 from woodoku.entity.score_agent import ScoreAgent
 from woodoku.entity.woodoku_shape import WoodokuShape
 from woodoku.exceptions.shape_out_of_board_error import ShapeOutOfBoardError
@@ -22,10 +22,10 @@ class _WoodokuBoardRepresentation:
     the position occupied
     """
 
-    __board: ndarray
+    _board: NDArray[np.bool8]
 
-    def __init__(self):
-        self.__board = np.full((N, N), False)
+    def __init__(self) -> None:
+        self._board = np.full((N, N), False)
 
     def add_blocks(self, blocks_coord: Iterable[Tuple[int, int]]) -> None:
         """
@@ -39,7 +39,7 @@ class _WoodokuBoardRepresentation:
         """
         for row, col in blocks_coord:
             self.__validate((row, col))
-            self.__board[row, col] = True
+            self._board[row, col] = True
 
     def remove_blocks(self, blocks_coord: Iterable[Tuple[int, int]]) -> None:
         """
@@ -53,7 +53,7 @@ class _WoodokuBoardRepresentation:
         """
         for row, col in blocks_coord:
             self.__validate((row, col))
-            self.__board[row, col] = False
+            self._board[row, col] = False
 
     def is_occupied(self, blocks_coord: Iterable[Tuple[int, int]]) -> bool:
         """Check if each block has is occupied. If all of those blocks are
@@ -70,7 +70,7 @@ class _WoodokuBoardRepresentation:
         """
         for row, col in blocks_coord:
             self.__validate((row, col))
-            if not self.__board[row, col]:
+            if not self._board[row, col]:
                 return False
         return True
 
@@ -89,7 +89,7 @@ class _WoodokuBoardRepresentation:
         """
         for row, col in blocks_coord:
             self.__validate((row, col))
-            if self.__board[row, col]:
+            if self._board[row, col]:
                 return False
         return True
 
@@ -115,11 +115,11 @@ class WoodokuBoard:
     """A 9x9 Woodoku Board"""
 
     __score_agent: ScoreAgent
-    __representation: _WoodokuBoardRepresentation
+    _representation: _WoodokuBoardRepresentation
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.__score_agent = ScoreAgent()
-        self.__representation = _WoodokuBoardRepresentation()
+        self._representation = _WoodokuBoardRepresentation()
 
     def can_add_shape_to_board(self, shape: WoodokuShape) -> bool:
         """Check if the woodoku shape can fit into the board. If all current
@@ -163,7 +163,7 @@ class WoodokuBoard:
             bool: if `shape` can be added to `(x,y)`
         """
         blocks = shape.map_to_board_at(x, y)
-        return self.__representation.is_not_occupied(blocks)
+        return self._representation.is_not_occupied(blocks)
 
     def add_shape(self, shape: WoodokuShape, x: int, y: int) -> None:
         """Add the shape to woodoku at coordinate (x, y). Only called if the shape
@@ -180,17 +180,17 @@ class WoodokuBoard:
         """
         # add shape to block
         shape_blocks = shape.map_to_board_at(x, y)
-        self.__representation.add_blocks(shape_blocks)
+        self._representation.add_blocks(shape_blocks)
 
         # determine groups and clear the groups
-        groups, group_blocks = self.__find_groups()
+        groups, group_blocks = self._find_groups()
         self.__score_agent.calculate_winning(len(shape), groups)
-        self.__representation.remove_blocks(group_blocks)
+        self._representation.remove_blocks(group_blocks)
 
     def get_score(self) -> int:
         return self.__score_agent.get_score()
 
-    def __find_groups(self) -> Tuple[int, Set[Tuple[int, int]]]:
+    def _find_groups(self) -> Tuple[int, Set[Tuple[int, int]]]:
         """Check current board and see if there is any groups such as
         complete rows, columns or 3x3 box and report them.
 
@@ -203,12 +203,12 @@ class WoodokuBoard:
                 2. Set of block coordinates for the group
         """
         groups = 0
-        rep = self.__representation
+        rep = self._representation
         group_blocks = set()  # use set to handle overlapping group removal
         for index in range(9):
-            row_blocks = self.__get_row_coords(index)
-            col_blocks = self.__get_col_coords(index)
-            box_blocks = self.__get_box_coords(index)
+            row_blocks = self._get_row_coords(index)
+            col_blocks = self._get_col_coords(index)
+            box_blocks = self._get_box_coords(index)
 
             if rep.is_occupied(row_blocks):
                 groups += 1
@@ -225,15 +225,15 @@ class WoodokuBoard:
         return groups, group_blocks
 
     @staticmethod
-    def __get_row_coords(row_index: int) -> List[Tuple[int, int]]:
+    def _get_row_coords(row_index: int) -> List[Tuple[int, int]]:
         return [(row_index, col) for col in range(9)]
 
     @staticmethod
-    def __get_col_coords(col_index: int) -> List[Tuple[int, int]]:
+    def _get_col_coords(col_index: int) -> List[Tuple[int, int]]:
         return [(row, col_index) for row in range(9)]
 
     @staticmethod
-    def __get_box_coords(index: int) -> List[Tuple[int, int]]:
+    def _get_box_coords(index: int) -> List[Tuple[int, int]]:
         """The index of 3x3 box is as following:
         | 0 	| 1 	| 2 	|
         |---	|---	|---	|

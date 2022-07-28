@@ -7,7 +7,7 @@ class ScoreAgent:
     __score: int
     __streaks: int
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.__score = 0
         self.__streaks = 0
 
