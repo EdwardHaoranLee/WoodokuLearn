@@ -46,15 +46,17 @@ def orange(text: str) -> str:
 
 
 def inbetween(
-        start: str, in_between: str, bold_in_between: str, end: str, horizontal_bar: str
+    start: str, in_between: str, bold_in_between: str, end: str, horizontal_bar: str
 ) -> str:
-    """Return a string which is further printed out in the terminal as a horizontal line.
-    """
+    """Return a string which is further printed out in the terminal as a horizontal line."""
     # The string starts with the start strings followed with eight iterations of horizontal_bar and in_between.
     row_str = f"{start}"
     for col in range(8):
         line = horizontal_bar
-        if col in (2, 5):  # the borders of every 3X3 blocks is at col = 2 and col = 5 and thus need to be bolded
+        if col in (
+            2,
+            5,
+        ):  # the borders of every 3X3 blocks is at col = 2 and col = 5 and thus need to be bolded
             line += bold_in_between
         else:
             line += in_between
@@ -67,10 +69,10 @@ def inbetween(
 
 
 def get_input(
-        convert: Type[T],
-        valid: Iterable[T],
-        input_msg: str,
-        again_msg: str,
+    convert: Type[T],
+    valid: Iterable[T],
+    input_msg: str,
+    again_msg: str,
 ) -> T:
     """Ask for user input of the requested type `T`, will keep asking until a
     valid value is entered
