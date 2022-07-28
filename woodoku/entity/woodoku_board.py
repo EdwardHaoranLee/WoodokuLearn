@@ -184,7 +184,7 @@ class _WoodokuBoardRepresentation:
                 row_str = f"{VERTICAL}"
                 for col in range(9):
                     pos = "     "
-                    if self.__board[row // 2, col]:
+                    if self._board[row // 2, col]:
                         pos = f"  {green(BLOCK)}  "
                     # since the vertical line at index 0 is drawn separately, the border of every 3X3 blocks is
                     # at col = 2 and col = 5
