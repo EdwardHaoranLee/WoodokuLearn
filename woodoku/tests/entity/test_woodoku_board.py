@@ -10,6 +10,7 @@ from woodoku.entity.woodoku_shape import WoodokuShape
 
 N = 9
 
+random.seed(69)  # keep the test explorer happy
 
 # pylint: disable=protected-access
 
@@ -23,13 +24,13 @@ class TestWoodokuRepresentation:
         self, rep: _WoodokuBoardRepresentation, lst: list
     ) -> ndarray:
         rep.add_blocks(lst)
-        return rep._WoodokuBoardRepresentation__board
+        return rep._board
 
     def board_after_removing(
         self, rep: _WoodokuBoardRepresentation, lst: list
     ) -> ndarray:
         rep.remove_blocks(lst)
-        return rep._WoodokuBoardRepresentation__board
+        return rep._board
 
     @pytest.mark.parametrize(
         "lst",
@@ -143,48 +144,44 @@ class TestWoodokuBoard:
     cross: WoodokuShape = WoodokuShape([(0, 1), (1, 0), (1, 1), (1, 2), (2, 1)])
 
     @pytest.mark.parametrize("row", list(range(9)))
-    def test_find_groups_a_row(self, row) -> None:
+    def test_find_groups_a_row(self, row: int) -> None:
         """
         row should be the only group on the board
         """
         board = WoodokuBoard()
         board_with_a_row_occupied = np.full((9, 9), False)
         board_with_a_row_occupied[row] = np.full((9,), True)
-        board._representation._WoodokuBoardRepresentation__board = (
-            board_with_a_row_occupied
-        )
+        board._representation._board = board_with_a_row_occupied
 
-        group, group_blocks = board._WoodokuBoard__find_groups()
+        group, group_blocks = board._find_groups()
         assert group == 1
         assert group_blocks == set((row, col) for col in range(9))
 
     @pytest.mark.parametrize("col", list(range(9)))
-    def test_find_groups_a_col(self, col) -> None:
+    def test_find_groups_a_col(self, col: int) -> None:
         """
         col column should be the only group on the board
         """
         board = WoodokuBoard()
         board_with_a_col_occupied = np.full((9, 9), False)
         board_with_a_col_occupied[:, col] = np.full((9,), True)
-        board._representation._WoodokuBoardRepresentation__board = (
-            board_with_a_col_occupied
-        )
+        board._representation._board = board_with_a_col_occupied
 
-        group, group_blocks = board._WoodokuBoard__find_groups()
+        group, group_blocks = board._find_groups()
         assert group == 1
         assert group_blocks == set((row, col) for row in range(9))
 
     @pytest.mark.parametrize("index", list(range(9)))
-    def test_find_groups_3_by_3(self, index) -> None:
+    def test_find_groups_3_by_3(self, index: int) -> None:
         """
         The box created according to index is the only group on the board
         """
         board = WoodokuBoard()
-        box_coordinate = board._WoodokuBoard__get_box_coords(index)
+        box_coordinate = board._get_box_coords(index)
         for x, y in box_coordinate:
-            board._representation._WoodokuBoardRepresentation__board[x, y] = True
+            board._representation._board[x, y] = True
 
-        group, group_blocks = board._WoodokuBoard__find_groups()
+        group, group_blocks = board._find_groups()
         assert group == 1
         assert group_blocks == set(box_coordinate)
 
@@ -192,7 +189,9 @@ class TestWoodokuBoard:
         "row, col, index",
         [(random.randint(0, 8), random.randint(0, 8), random.randint(0, 8))],
     )
-    def test_find_groups_a_col_a_row_and_a_3_by_3_block(self, row, col, index):
+    def test_find_groups_a_col_a_row_and_a_3_by_3_block(
+        self, row: int, col: int, index: int
+    ) -> None:
         """
         three groups is expected to be found
         """
@@ -200,14 +199,12 @@ class TestWoodokuBoard:
         repo = np.full((9, 9), False)
         repo[row] = np.full((9,), True)  # add a row to the board
         repo[:, col] = np.full((9,), True)  # add a column to the board
-        box_coordinate = board._WoodokuBoard__get_box_coords(
-            index
-        )  # add a box to the board
+        box_coordinate = board._get_box_coords(index)  # add a box to the board
         for x, y in box_coordinate:
             repo[x, y] = True
 
-        board._representation._WoodokuBoardRepresentation__board = repo
-        group, group_blocks = board._WoodokuBoard__find_groups()
+        board._representation._board = repo
+        group, group_blocks = board._find_groups()
         assert group == 3
 
         expected_set = set((row, i) for i in range(9))
@@ -233,10 +230,7 @@ class TestWoodokuBoard:
         board = WoodokuBoard()
         board.add_shape(shape, 5, 0)
         board._representation.remove_blocks(shape.map_to_board_at(5, 0))
-        assert (
-            board._representation._WoodokuBoardRepresentation__board
-            == np.full((9, 9), False)
-        ).all()
+        assert (board._representation._board == np.full((9, 9), False)).all()
 
     @pytest.mark.parametrize(
         "first_shape, first_position, sec_shape, sec_position",
@@ -266,9 +260,7 @@ class TestWoodokuBoard:
             expected[x, y] = True
         for x, y in sec_shape.map_to_board_at(*sec_position):
             expected[x, y] = True
-        assert (
-            board._representation._WoodokuBoardRepresentation__board == expected
-        ).all()
+        assert (board._representation._board == expected).all()
 
     def test_add_shape_with_a_row_formed(self) -> None:
         """
@@ -278,7 +270,7 @@ class TestWoodokuBoard:
         board.add_shape(self.horizontal_bar_shape, 0, 0)
         board.add_shape(self.gun_shape, 0, 5)
         board.add_shape(self.vertical_two_block, 0, 8)
-        group, group_blocks = board._WoodokuBoard__find_groups()
+        group, group_blocks = board._find_groups()
         assert group == 0
         assert group_blocks == set([])
 
@@ -291,7 +283,7 @@ class TestWoodokuBoard:
         board.add_shape(self.vertical_two_block, 2, 1)
         board.add_shape(self.gun_shape, 4, 1)
         board.add_shape(self.vertical_two_block, 6, 1)
-        group, group_blocks = board._WoodokuBoard__find_groups()
+        group, group_blocks = board._find_groups()
         assert group == 0
         assert len(group_blocks) == 0
 
@@ -305,7 +297,7 @@ class TestWoodokuBoard:
         board.add_shape(self.gun_shape, 4, 1)
         board.add_shape(self.vertical_two_block, 6, 1)
         board.add_shape(self.l_shape, 7, 0)
-        group, group_blocks = board._WoodokuBoard__find_groups()
+        group, group_blocks = board._find_groups()
         assert group == 0
         assert group_blocks == set([])
 
@@ -317,7 +309,7 @@ class TestWoodokuBoard:
         board.add_shape(self.gun_shape, 0, 0)
         board.add_shape(self.horizontal_bar_shape, 1, 1)
         board.add_shape(self.gun_shape, 2, 0)
-        group, group_blocks = board._WoodokuBoard__find_groups()
+        group, group_blocks = board._find_groups()
         assert group == 0
         assert group_blocks == set([])
 
@@ -397,7 +389,9 @@ class TestWoodokuBoard:
     @pytest.mark.parametrize(
         "shape", [l_shape, horizontal_bar_shape, gun_shape, vertical_two_block, cross]
     )
-    def test_can_add_shape_to_board_on_crowded_board_fail(self, shape) -> None:
+    def test_can_add_shape_to_board_on_crowded_board_fail(
+        self, shape: WoodokuShape
+    ) -> None:
         """
         The board is designed that all positions are occupied except the left diagonal
         """
@@ -405,7 +399,7 @@ class TestWoodokuBoard:
         repo = np.full((9, 9), True)
         for x, y in [(i, i) for i in range(9)]:
             repo[x, y] = False
-        board._representation._WoodokuBoardRepresentation__board = repo
+        board._representation._board = repo
         assert not board.can_add_shape_to_board(shape)
 
     def test_can_add_shape_to_board_on_crowded_board_success(self) -> None:
@@ -416,5 +410,5 @@ class TestWoodokuBoard:
         repo = np.full((9, 9), True)
         for x, y in [(i, i) for i in range(9)]:
             repo[x, y] = False
-        board._representation._WoodokuBoardRepresentation__board = repo
+        board._representation._board = repo
         assert board.can_add_shape_to_board(self.one_block)
