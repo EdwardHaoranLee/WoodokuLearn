@@ -359,4 +359,4 @@ class WoodokuBoard:
 
     def __str__(self) -> str:
         score = f"\nYour current score is {self.__score_agent.get_score()}\n"
-        return orange(score) + str(self.__representation)
+        return orange(score) + str(self._representation)

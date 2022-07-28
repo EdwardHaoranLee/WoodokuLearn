@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from woodoku.ui.utils import green, BLOCK
 from typing import Any, Iterable, List, Set, Tuple
-
+from woodoku.ui.utils import (green, BLOCK)
 
 
 class WoodokuShape:
