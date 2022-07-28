@@ -26,7 +26,7 @@ from woodoku.ui.utils import (
     TOP_RIGHT,
     VERTICAL,
     VERTICAL_CROSS,
-    black,
+    red,
     green,
     inbetween,
     orange,
@@ -134,40 +134,69 @@ class _WoodokuBoardRepresentation:
             raise ShapeOutOfBoardError(x, y)
 
     def __str__(self) -> str:
+        """
+        A string representation of a 9X9 game board where each line and block are drawn using box-drawing characters
+        https://www.unicode.org/charts/PDF/U2500.pdf
+
+        The board consists of ten horizontal lines starting from the far left of the board to the far right and
+         nine rows of vertical lines where each line in a row separates columns on the board.
+
+         To print out smooth joins, left and right borders, the first and the last box-drawing characters in a
+         horizontal line are concatenated separately from the rest.
+         Similarly, to print out smooth corners, top and bottom borders, the first and last lines are concatenated
+         separately with delicately chosen joins.
+
+         To highlight every non-overlapping 3X3 blocks, two vertical and two horizontal lines are bolded
+         and colored red.
+        """
         result = ""
         horizontal_bar = HORIZONTAL * 5
         bold_horizontal_bar = BOLD_HORIZONTAL * 5
+
         for row in range(18):
+            # the first line of the board is concatenated using delicately chosen joins and corners for smooth corners
+            # and top border
             if row == 0:
                 row_str = inbetween(
                     TOP_LEFT, TOP_JOIN, BOLD_TOP_JOIN, TOP_RIGHT, horizontal_bar
                 )
+
+            # every even indexed row corresponds to a horizontal line on the board
             elif row % 2 == 0:
+                # every six indexed row corresponds to a boundary of 3X3 blocks, and thus need to be bolded
                 if row % 3 == 0:
                     row_str = inbetween(
                         LEFT_JOIN,
                         HORIZONTAL_BOLD_CROSS,
-                        black(ALL_BOLD_CROSS),
+                        red(ALL_BOLD_CROSS),
                         RIGHT_JOIN,
-                        black(bold_horizontal_bar),
+                        red(bold_horizontal_bar),
                     )
                 else:
                     row_str = inbetween(
                         LEFT_JOIN, CROSS, VERTICAL_CROSS, RIGHT_JOIN, horizontal_bar
                     )
+
+            # every odd indexed row consists of vertical lines separating columns on the board
             else:
+                # this else block can't be replaced by calling helper function inbetween(...), since traversing
+                # boardrepresentation relies on the loop invariant "row"
                 row_str = f"{VERTICAL}"
                 for col in range(9):
                     pos = "     "
                     if self.__board[row // 2, col]:
                         pos = f"  {green(BLOCK)}  "
+                    # since the vertical line at index 0 is drawn separately, the border of every 3X3 blocks is
+                    # at col = 2 and col = 5
                     if col in (2, 5):
-                        pos += black(BOLD_VERTICAL)
+                        pos += red(BOLD_VERTICAL)
                     else:
                         pos += VERTICAL
                     row_str += pos
             row_str += "\n"
             result += row_str
+        # the last line of the board is concatenated using delicately chosen joins and corners for smooth corners and
+        # bottom border of the board
         row_str = inbetween(
             BOTTOM_LEFT, BOTTOM_JOIN, BOLD_BOTTOM_JOIN, BOTTOM_RIGHT, horizontal_bar
         )

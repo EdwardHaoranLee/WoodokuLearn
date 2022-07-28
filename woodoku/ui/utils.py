@@ -2,10 +2,9 @@ from typing import Iterable, Type, TypeVar
 
 T = TypeVar("T", str, int)
 
-RED = (255, 0, 0)  # warning
+RED = (255, 0, 0)  # warning, boundary of 3X3 blocks
 GREEN = (0, 255, 0)  # block
 ORANGE = (255, 128, 0)  # score
-BLACK = (0, 0, 0)  # 3X3 board
 
 BLOCK = chr(0x25A0)
 TOP_RIGHT = chr(0x2510)
@@ -46,31 +45,32 @@ def orange(text: str) -> str:
     return __colored(*ORANGE, text)
 
 
-def black(text: str) -> str:
-    return __colored(*BLACK, text)
-
-
 def inbetween(
-    start: str, in_between: str, bold_in_between: str, end: str, horizontal_bar: str
+        start: str, in_between: str, bold_in_between: str, end: str, horizontal_bar: str
 ) -> str:
+    """Return a string which is further printed out in the terminal as a horizontal line.
+    """
+    # The string starts with the start strings followed with eight iterations of horizontal_bar and in_between.
     row_str = f"{start}"
     for col in range(8):
         line = horizontal_bar
-        if col in (2, 5):
+        if col in (2, 5):  # the borders of every 3X3 blocks is at col = 2 and col = 5 and thus need to be bolded
             line += bold_in_between
         else:
             line += in_between
         row_str += line
+
+    # The string ends with end string
     row_str += horizontal_bar
     row_str += end
     return row_str
 
 
 def get_input(
-    convert: Type[T],
-    valid: Iterable[T],
-    input_msg: str,
-    again_msg: str,
+        convert: Type[T],
+        valid: Iterable[T],
+        input_msg: str,
+        again_msg: str,
 ) -> T:
     """Ask for user input of the requested type `T`, will keep asking until a
     valid value is entered

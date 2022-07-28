@@ -98,7 +98,11 @@ class WoodokuShape:
         return hash("WoodokuShape Salt" + str(self.__coords))
 
     def __str__(self) -> str:
+        """each block in a WoodokuShape is drawn drawn using box-drawing characters
+        https://www.unicode.org/charts/PDF/U2500.pdf
+        """
         result = ""
+        # by observation, each shape is at most 5 blocks height or 5 blocks long
         for row in range(5):
             for col in range(5):
                 if (row, col) in self.__coords:
