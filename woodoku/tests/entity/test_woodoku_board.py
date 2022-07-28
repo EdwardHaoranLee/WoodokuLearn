@@ -150,7 +150,7 @@ class TestWoodokuBoard:
         board = WoodokuBoard()
         board_with_a_row_occupied = np.full((9, 9), False)
         board_with_a_row_occupied[row] = np.full((9,), True)
-        board._WoodokuBoard__representation._WoodokuBoardRepresentation__board = (
+        board._representation._WoodokuBoardRepresentation__board = (
             board_with_a_row_occupied
         )
 
@@ -166,7 +166,7 @@ class TestWoodokuBoard:
         board = WoodokuBoard()
         board_with_a_col_occupied = np.full((9, 9), False)
         board_with_a_col_occupied[:, col] = np.full((9,), True)
-        board._WoodokuBoard__representation._WoodokuBoardRepresentation__board = (
+        board._representation._WoodokuBoardRepresentation__board = (
             board_with_a_col_occupied
         )
 
@@ -182,9 +182,7 @@ class TestWoodokuBoard:
         board = WoodokuBoard()
         box_coordinate = board._WoodokuBoard__get_box_coords(index)
         for x, y in box_coordinate:
-            board._WoodokuBoard__representation._WoodokuBoardRepresentation__board[
-                x, y
-            ] = True
+            board._representation._WoodokuBoardRepresentation__board[x, y] = True
 
         group, group_blocks = board._WoodokuBoard__find_groups()
         assert group == 1
@@ -208,7 +206,7 @@ class TestWoodokuBoard:
         for x, y in box_coordinate:
             repo[x, y] = True
 
-        board._WoodokuBoard__representation._WoodokuBoardRepresentation__board = repo
+        board._representation._WoodokuBoardRepresentation__board = repo
         group, group_blocks = board._WoodokuBoard__find_groups()
         assert group == 3
 
@@ -234,9 +232,9 @@ class TestWoodokuBoard:
         """
         board = WoodokuBoard()
         board.add_shape(shape, 5, 0)
-        board._WoodokuBoard__representation.remove_blocks(shape.map_to_board_at(5, 0))
+        board._representation.remove_blocks(shape.map_to_board_at(5, 0))
         assert (
-            board._WoodokuBoard__representation._WoodokuBoardRepresentation__board
+            board._representation._WoodokuBoardRepresentation__board
             == np.full((9, 9), False)
         ).all()
 
@@ -269,8 +267,7 @@ class TestWoodokuBoard:
         for x, y in sec_shape.map_to_board_at(*sec_position):
             expected[x, y] = True
         assert (
-            board._WoodokuBoard__representation._WoodokuBoardRepresentation__board
-            == expected
+            board._representation._WoodokuBoardRepresentation__board == expected
         ).all()
 
     def test_add_shape_with_a_row_formed(self) -> None:
@@ -408,7 +405,7 @@ class TestWoodokuBoard:
         repo = np.full((9, 9), True)
         for x, y in [(i, i) for i in range(9)]:
             repo[x, y] = False
-        board._WoodokuBoard__representation._WoodokuBoardRepresentation__board = repo
+        board._representation._WoodokuBoardRepresentation__board = repo
         assert not board.can_add_shape_to_board(shape)
 
     def test_can_add_shape_to_board_on_crowded_board_success(self) -> None:
@@ -419,5 +416,5 @@ class TestWoodokuBoard:
         repo = np.full((9, 9), True)
         for x, y in [(i, i) for i in range(9)]:
             repo[x, y] = False
-        board._WoodokuBoard__representation._WoodokuBoardRepresentation__board = repo
+        board._representation._WoodokuBoardRepresentation__board = repo
         assert board.can_add_shape_to_board(self.one_block)

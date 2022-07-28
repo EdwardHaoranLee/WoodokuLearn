@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Set, Tuple
+from typing import Any, List, Set, Tuple
 
 
 class WoodokuShape:
@@ -80,7 +80,7 @@ class WoodokuShape:
         """
         return len(self.__coords)
 
-    def __eq__(self, other: any):
+    def __eq__(self, other: Any):
         if not isinstance(other, WoodokuShape):
             return False
 

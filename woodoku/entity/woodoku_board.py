@@ -115,11 +115,11 @@ class WoodokuBoard:
     """A 9x9 Woodoku Board"""
 
     __score_agent: ScoreAgent
-    __representation: _WoodokuBoardRepresentation
+    _representation: _WoodokuBoardRepresentation
 
     def __init__(self):
         self.__score_agent = ScoreAgent()
-        self.__representation = _WoodokuBoardRepresentation()
+        self._representation = _WoodokuBoardRepresentation()
 
     def can_add_shape_to_board(self, shape: WoodokuShape) -> bool:
         """Check if the woodoku shape can fit into the board. If all current
@@ -163,7 +163,7 @@ class WoodokuBoard:
             bool: if `shape` can be added to `(x,y)`
         """
         blocks = shape.map_to_board_at(x, y)
-        return self.__representation.is_not_occupied(blocks)
+        return self._representation.is_not_occupied(blocks)
 
     def add_shape(self, shape: WoodokuShape, x: int, y: int) -> None:
         """Add the shape to woodoku at coordinate (x, y). Only called if the shape
@@ -180,12 +180,12 @@ class WoodokuBoard:
         """
         # add shape to block
         shape_blocks = shape.map_to_board_at(x, y)
-        self.__representation.add_blocks(shape_blocks)
+        self._representation.add_blocks(shape_blocks)
 
         # determine groups and clear the groups
         groups, group_blocks = self.__find_groups()
         self.__score_agent.calculate_winning(len(shape), groups)
-        self.__representation.remove_blocks(group_blocks)
+        self._representation.remove_blocks(group_blocks)
 
     def get_score(self) -> int:
         return self.__score_agent.get_score()
@@ -203,7 +203,7 @@ class WoodokuBoard:
                 2. Set of block coordinates for the group
         """
         groups = 0
-        rep = self.__representation
+        rep = self._representation
         group_blocks = set()  # use set to handle overlapping group removal
         for index in range(9):
             row_blocks = self.__get_row_coords(index)
