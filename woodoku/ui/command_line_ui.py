@@ -85,3 +85,9 @@ class CommandLineUI(UIInterface):
             )
         )
         self.show_board(board)
+        print("You are left with the following shape(s):")
+        shapes_str = ""
+        for i, available in enumerate(shape_availabilities):
+            if available:
+                shapes_str += f"\n{str(shapes[i]).rstrip()}\n\n"
+        print(shapes_str)
