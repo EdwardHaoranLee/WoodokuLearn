@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Set, Tuple
+from typing import Any, Iterable, List, Set, Tuple
 
 
 class WoodokuShape:
@@ -31,7 +31,7 @@ class WoodokuShape:
         self.__coords = set(self.__standardize(coords))
 
     @staticmethod
-    def __standardize(coords) -> Set[Tuple[int, int]]:
+    def __standardize(coords: Iterable[Tuple[int, int]]) -> Set[Tuple[int, int]]:
         """Pushes shape to top left corner if it has not done so
 
         Args:
@@ -80,7 +80,7 @@ class WoodokuShape:
         """
         return len(self.__coords)
 
-    def __eq__(self, other: any):
+    def __eq__(self, other: Any) -> bool:
         if not isinstance(other, WoodokuShape):
             return False
 
@@ -93,5 +93,5 @@ class WoodokuShape:
 
         return True
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash("WoodokuShape Salt" + str(self.__coords))
