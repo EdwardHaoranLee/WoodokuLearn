@@ -18,3 +18,8 @@ repos:
           "--rcfile=./.pylintrc", # Link to your config file
           "--load-plugins=pylint.extensions.docparams", # Load an extension
         ]
+    - id: mypy 
+      name: mypy 
+      entry: mypy
+      language: python
+      types: [python]

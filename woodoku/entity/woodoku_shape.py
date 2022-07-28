@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from typing import List, Tuple, Set, Any
 from woodoku.ui.utils import green, BLOCK
+from typing import Any, Iterable, List, Set, Tuple
+
 
 
 class WoodokuShape:
@@ -32,7 +33,7 @@ class WoodokuShape:
         self.__coords = set(self.__standardize(coords))
 
     @staticmethod
-    def __standardize(coords) -> Set[Tuple[int, int]]:
+    def __standardize(coords: Iterable[Tuple[int, int]]) -> Set[Tuple[int, int]]:
         """Pushes shape to top left corner if it has not done so
 
         Args:

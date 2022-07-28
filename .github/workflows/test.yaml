@@ -1,0 +1,28 @@
+name: Test and static type check
+
+on: [pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        cache: 'pipenv'
+
+    - name: Install dependencies
+      run: |
+        curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+        pipenv install --dev
+
+    - name: Run tests
+      run: |
+        pipenv run pytest
+    
+    - name: Run static type checker
+      run: | 
+        pipenv run mypy --install-types --non-interactive
+

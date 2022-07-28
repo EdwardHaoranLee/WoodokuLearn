@@ -14,6 +14,9 @@ pylint = "*"
 pytest = "*"
 pre-commit = "*"
 mypy = "*"
+types-pyyaml = "*"
+types-atomicwrites = "*"
+types-setuptools = "*"
 
 [requires]
 python_version = "3.9"
