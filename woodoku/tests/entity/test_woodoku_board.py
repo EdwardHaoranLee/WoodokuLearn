@@ -1,12 +1,12 @@
 import random
-from typing import Tuple
+from typing import List, Tuple
+
 import numpy as np
 import pytest
-from numpy import ndarray
+from numpy.typing import NDArray
 from woodoku.entity.woodoku_board import WoodokuBoard, _WoodokuBoardRepresentation
-
-from woodoku.exceptions.shape_out_of_board_error import ShapeOutOfBoardError
 from woodoku.entity.woodoku_shape import WoodokuShape
+from woodoku.exceptions.shape_out_of_board_error import ShapeOutOfBoardError
 
 N = 9
 
@@ -21,14 +21,14 @@ class TestWoodokuRepresentation:
     five_block_lst = three_block_lst + [(2, 1), (0, 8)]
 
     def board_after_adding(
-        self, rep: _WoodokuBoardRepresentation, lst: list
-    ) -> ndarray:
+        self, rep: _WoodokuBoardRepresentation, lst: List[Tuple[int, int]]
+    ) -> NDArray[np.bool8]:
         rep.add_blocks(lst)
         return rep._board
 
     def board_after_removing(
-        self, rep: _WoodokuBoardRepresentation, lst: list
-    ) -> ndarray:
+        self, rep: _WoodokuBoardRepresentation, lst: List[Tuple[int, int]]
+    ) -> NDArray[np.bool8]:
         rep.remove_blocks(lst)
         return rep._board
 
@@ -40,7 +40,7 @@ class TestWoodokuRepresentation:
             five_block_lst,
         ],
     )
-    def test_add_blocks_add_list_of_blocks(self, lst: list) -> None:
+    def test_add_blocks_add_list_of_blocks(self, lst: List[Tuple[int, int]]) -> None:
         board = self.board_after_adding(_WoodokuBoardRepresentation(), lst)
 
         expect = np.full((N, N), False)
@@ -56,7 +56,9 @@ class TestWoodokuRepresentation:
             five_block_lst,
         ],
     )
-    def test_remove_blocks_remove_list_of_blocks(self, lst: list) -> None:
+    def test_remove_blocks_remove_list_of_blocks(
+        self, lst: List[Tuple[int, int]]
+    ) -> None:
         rep = _WoodokuBoardRepresentation()
         rep.add_blocks(lst)
         board_removed = self.board_after_removing(rep, lst)

@@ -1,6 +1,6 @@
 from typing import List, Tuple
-import pytest
 
+import pytest
 from woodoku.entity.woodoku_shape import WoodokuShape
 
 

@@ -1,7 +1,7 @@
 from typing import Iterable, List, Set, Tuple
 
 import numpy as np
-from numpy import ndarray
+from numpy.typing import NDArray
 from woodoku.entity.score_agent import ScoreAgent
 from woodoku.entity.woodoku_shape import WoodokuShape
 from woodoku.exceptions.shape_out_of_board_error import ShapeOutOfBoardError
@@ -22,7 +22,7 @@ class _WoodokuBoardRepresentation:
     the position occupied
     """
 
-    _board: ndarray
+    _board: NDArray[np.bool8]
 
     def __init__(self) -> None:
         self._board = np.full((N, N), False)
