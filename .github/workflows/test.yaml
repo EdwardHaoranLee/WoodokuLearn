@@ -1,4 +1,4 @@
-name: pytest
+name: Test and static type check
 
 on: [pull_request]
 
@@ -22,5 +22,9 @@ jobs:
 
     - name: Run tests
       run: |
-          pytest
+        pytest
+    
+    - name: Run static type checker
+      run: | 
+        mypy --install-types --non-interactive
 
