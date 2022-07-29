@@ -256,7 +256,10 @@ class WoodokuBoard:
             bool: if `shape` can be added to `(x,y)`
         """
         blocks = shape.map_to_board_at(x, y)
-        return self._representation.is_not_occupied(blocks)
+        try:
+            return self._representation.is_not_occupied(blocks)
+        except ShapeOutOfBoardError:
+            return False
 
     def add_shape(self, shape: WoodokuShape, x: int, y: int) -> None:
         """Add the shape to woodoku at coordinate (x, y). Only called if the shape
