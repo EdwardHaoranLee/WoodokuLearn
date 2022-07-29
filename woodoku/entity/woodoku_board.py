@@ -159,7 +159,9 @@ class _WoodokuBoardRepresentation:
             row_str = "   "  # print some space to match the first column
             if row == 0:
                 row_str = f"  {green('y')}   "
-                row_str += "     ".join([f"{y}" for y in range(9)])  # print y coordinates
+                row_str += "     ".join(
+                    [f"{y}" for y in range(9)]
+                )  # print y coordinates
                 row_str += "\n"
                 row_str += f"{green('x')}  "  # print the first row
                 row_str += inbetween(
@@ -202,7 +204,7 @@ class _WoodokuBoardRepresentation:
             result += row_str
         # the last line of the board is concatenated using delicately chosen joins and corners for smooth corners and
         # bottom border of the board
-        row_str = "   "   # print some empty space to match the row above
+        row_str = "   "  # print some empty space to match the row above
         row_str += inbetween(
             BOTTOM_LEFT, BOTTOM_JOIN, BOLD_BOTTOM_JOIN, BOTTOM_RIGHT, horizontal_bar
         )
@@ -369,4 +371,3 @@ class WoodokuBoard:
     def __str__(self) -> str:
         score = f"\nYour current score is {self.__score_agent.get_score()}\n"
         return orange(score) + str(self._representation)
-
