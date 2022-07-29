@@ -25,12 +25,12 @@ class TestGame:
             ([WoodokuShape([(0, 0)])]),
         ],
     )
-    def test_rotate_all_shapes(self, raw_shapes: List[WoodokuShape]):
-        rotated = rotate_all_shapes(raw_shapes)
-        assert len(set(rotated)) == len(rotated)
-        assert len(rotated) >= len(raw_shapes)
+    def test_rotate_all_shapes(self, raw_shapes: List[WoodokuShape]) -> None:
+        raw_rotated = rotate_all_shapes(raw_shapes)
+        assert len(set(raw_rotated)) == len(raw_rotated)
+        assert len(raw_rotated) >= len(raw_shapes)
 
-        rotated = set(rotated)
+        rotated = set(raw_rotated)
         for shape in raw_shapes:
             assert shape.rotate() in rotated
             assert shape.rotate().rotate() in rotated
@@ -60,21 +60,24 @@ class TestGame:
             ),
         ],
     )
-    def test_random_shapes(self, shapes, num):
+    def test_random_shapes(self, shapes: List[WoodokuShape], num: int) -> None:
         selected = random_shapes(shapes, num)
         assert len(selected) == num
         assert len(set(selected)) == len(selected)
 
-    def test_is_not_out_of_space(self):
+    def test_is_not_out_of_space(self) -> None:
         board = WoodokuBoard()
-        board.can_add_shape_to_board = MagicMock(side_effect=[True, True])
+        board.can_add_shape_to_board = MagicMock(side_effect=[True, True])  # type: ignore[assignment]
+        # Assigning method type bug was not fixed by mypy team. Ref: https://github.com/python/mypy/issues/708
+
         assert not is_out_of_space(
             board, [WoodokuShape([(0, 0)]), WoodokuShape([(0, 0)])], [True, True]
         )
 
-    def test_is_out_of_space(self):
+    def test_is_out_of_space(self) -> None:
         board = WoodokuBoard()
-        board.can_add_shape_to_board = MagicMock(side_effect=[True, False])
+        board.can_add_shape_to_board = MagicMock(side_effect=[True, False])  # type: ignore[assignment]
+        # Assigning method type bug was not fixed by mypy team. Ref: https://github.com/python/mypy/issues/708
         assert is_out_of_space(
             board, [WoodokuShape([(0, 0)]), WoodokuShape([(0, 0)])], [True, True]
         )
