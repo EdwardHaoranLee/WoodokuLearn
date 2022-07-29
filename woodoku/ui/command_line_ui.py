@@ -26,7 +26,7 @@ class CommandLineUI(UIInterface):
         print(shapes_str)
         val = get_input(
             int,
-            range(2),
+            range(3),
             f"Please choose one of the {orange('shapes')}:\n",
             red("Please choose an integer value from 0 to 2. Try again"),
         )
