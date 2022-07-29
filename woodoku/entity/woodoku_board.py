@@ -156,7 +156,7 @@ class _WoodokuBoardRepresentation:
         for row in range(18):
             # the first line of the board is concatenated using delicately chosen joins and corners for smooth corners
             # and top border
-            row_str = "   "
+            row_str = "   "  # print some space to match the first column
             if row == 0:
                 row_str = f"  {green('y')}   "
                 row_str += "     ".join([f"{y}" for y in range(9)])  # print y coordinates
