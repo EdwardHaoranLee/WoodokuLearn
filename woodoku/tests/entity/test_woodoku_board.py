@@ -6,7 +6,6 @@ import pytest
 from numpy.typing import NDArray
 from woodoku.entity.woodoku_board import WoodokuBoard, _WoodokuBoardRepresentation
 from woodoku.entity.woodoku_shape import WoodokuShape
-from woodoku.exceptions.shape_out_of_board_error import ShapeOutOfBoardError
 
 N = 9
 
@@ -347,8 +346,7 @@ class TestWoodokuBoard:
         Add shape to an empty board where location goes beyond the game board
         """
         board = WoodokuBoard()
-        with pytest.raises(ShapeOutOfBoardError):
-            board.can_add_shape_at_location(shape, *location)
+        assert not board.can_add_shape_at_location(shape, *location)
 
     @pytest.mark.parametrize(
         "first_shape, first_position, sec_shape, sec_position",
