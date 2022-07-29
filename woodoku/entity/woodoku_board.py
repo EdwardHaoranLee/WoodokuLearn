@@ -156,8 +156,13 @@ class _WoodokuBoardRepresentation:
         for row in range(18):
             # the first line of the board is concatenated using delicately chosen joins and corners for smooth corners
             # and top border
+            row_str = "   "
             if row == 0:
-                row_str = inbetween(
+                row_str = f"  {green('y')}   "
+                row_str += "     ".join([f"{y}" for y in range(9)])  # print y coordinates
+                row_str += "\n"
+                row_str += f"{green('x')}  "  # print the first row
+                row_str += inbetween(
                     TOP_LEFT, TOP_JOIN, BOLD_TOP_JOIN, TOP_RIGHT, horizontal_bar
                 )
 
@@ -165,7 +170,7 @@ class _WoodokuBoardRepresentation:
             elif row % 2 == 0:
                 # every six indexed row corresponds to a boundary of 3X3 blocks, and thus need to be bolded
                 if row % 3 == 0:
-                    row_str = inbetween(
+                    row_str += inbetween(
                         LEFT_JOIN,
                         HORIZONTAL_BOLD_CROSS,
                         red(ALL_BOLD_CROSS),
@@ -173,7 +178,7 @@ class _WoodokuBoardRepresentation:
                         red(bold_horizontal_bar),
                     )
                 else:
-                    row_str = inbetween(
+                    row_str += inbetween(
                         LEFT_JOIN, CROSS, VERTICAL_CROSS, RIGHT_JOIN, horizontal_bar
                     )
 
@@ -181,9 +186,9 @@ class _WoodokuBoardRepresentation:
             else:
                 # this else block can't be replaced by calling helper function inbetween(...), since traversing
                 # boardrepresentation relies on the loop invariant "row"
-                row_str = f"{VERTICAL}"
+                row_str = f"{row // 2}  {VERTICAL}"  # print x coordinate
                 for col in range(9):
-                    pos = "     "
+                    pos = f"     "
                     if self._board[row // 2, col]:
                         pos = f"  {green(BLOCK)}  "
                     # since the vertical line at index 0 is drawn separately, the border of every 3X3 blocks is
@@ -197,7 +202,8 @@ class _WoodokuBoardRepresentation:
             result += row_str
         # the last line of the board is concatenated using delicately chosen joins and corners for smooth corners and
         # bottom border of the board
-        row_str = inbetween(
+        row_str = "   "   # print some empty space to match the row above
+        row_str += inbetween(
             BOTTOM_LEFT, BOTTOM_JOIN, BOLD_BOTTOM_JOIN, BOTTOM_RIGHT, horizontal_bar
         )
         result += row_str
@@ -363,3 +369,4 @@ class WoodokuBoard:
     def __str__(self) -> str:
         score = f"\nYour current score is {self.__score_agent.get_score()}\n"
         return orange(score) + str(self._representation)
+
