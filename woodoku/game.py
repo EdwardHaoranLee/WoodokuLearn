@@ -43,8 +43,9 @@ def rotate_all_shapes(raw_shapes: List[WoodokuShape]) -> List[WoodokuShape]:
     # Duplicates are eliminated by set operation.
     for shape in raw_shapes:
         shapes.add(shape)
+        new_shape = shape
         for _ in range(3):
-            new_shape = shape.rotate()
+            new_shape = new_shape.rotate()
             shapes.add(new_shape)
 
     return list(shapes)
@@ -67,7 +68,7 @@ def is_out_of_space(
     board: WoodokuBoard, shapes: List[WoodokuShape], shape_availability: List[bool]
 ) -> bool:
     for i, shape in enumerate(shapes):
-        if shape_availability[i] and board.can_add_shape_to_board(shape):
+        if shape_availability[i] and not board.can_add_shape_to_board(shape):
             return True
 
     return False
