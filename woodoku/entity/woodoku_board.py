@@ -190,7 +190,7 @@ class _WoodokuBoardRepresentation:
                 # boardrepresentation relies on the loop invariant "row"
                 row_str = f"{row // 2}  {VERTICAL}"  # print x coordinate
                 for col in range(9):
-                    pos = f"     "
+                    pos = "     "
                     if self._board[row // 2, col]:
                         pos = f"  {green(BLOCK)}  "
                     # since the vertical line at index 0 is drawn separately, the border of every 3X3 blocks is
