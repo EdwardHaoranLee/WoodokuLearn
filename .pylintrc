@@ -70,6 +70,7 @@ disable=
     W0511, # fixme
     F0010, # parse-error
     E0611, # no-name-in-module
+    W1401, # anomalous-backslash-in-string
 
 [REPORTS]
 
@@ -102,7 +103,7 @@ disable=
 [BASIC]
 
 # Good variable names which should always be accepted, separated by a comma
- good-names=i,j,x,y,ui
+ good-names=i,j,x,y,ui,r,g,b
 
 # Bad variable names which should always be refused, separated by a comma
 # bad-names=foo,bar,baz,toto,tutu,tata
