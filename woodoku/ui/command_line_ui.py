@@ -20,15 +20,17 @@ class CommandLineUI(UIInterface):
         self, shapes: List[WoodokuShape], shape_availability: List[bool]
     ) -> int:
         shapes_str = ""
+        available_idx = []
         for i, available in enumerate(shape_availability):
             if available:
                 shapes_str += f"{i}.\n{str(shapes[i]).rstrip()}\n\n"
+                available_idx.append(i)
         print(shapes_str)
         val = get_input(
             int,
-            range(3),
+            available_idx,
             f"Please choose one of the {orange('shapes')}:\n",
-            red("Please choose an integer value from 0 to 2. Try again"),
+            red(f"Please choose an integer value from {available_idx}. Try again"),
         )
         return val
 
