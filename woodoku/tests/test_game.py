@@ -63,7 +63,6 @@ class TestGame:
     def test_random_shapes(self, shapes: List[WoodokuShape], num: int) -> None:
         selected = random_shapes(shapes, num)
         assert len(selected) == num
-        assert len(set(selected)) == len(selected)
 
     def test_is_not_out_of_space(self) -> None:
         board = WoodokuBoard()

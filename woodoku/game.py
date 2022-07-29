@@ -61,7 +61,7 @@ def random_shapes(shapes: List[WoodokuShape], num: int) -> List[WoodokuShape]:
     Returns:
         List[WoodokuShape]: The shapes for this round.
     """
-    return list(random.sample(shapes, k=num))
+    return list(random.choices(shapes, k=num))
 
 
 def is_out_of_space(
