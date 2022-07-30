@@ -10,7 +10,7 @@ NUM_SHAPES = 3
 
 class CommandLineUI(UIInterface):
     def show_start_game(self, board: WoodokuBoard) -> None:
-        print(orange("\nWelcome to Wooduku"))
+        print(orange("\nWelcome to Woodoku"))
         print(board)
 
     def show_board(self, board: WoodokuBoard) -> None:

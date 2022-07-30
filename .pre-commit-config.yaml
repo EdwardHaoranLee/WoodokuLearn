@@ -8,7 +8,7 @@ repos:
   hooks:
     - id: pylint
       name: pylint
-      entry: pylint
+      entry: pipenv run pylint
       language: system
       types: [python]
       args:
@@ -20,6 +20,6 @@ repos:
         ]
     - id: mypy 
       name: mypy 
-      entry: mypy
-      language: python
+      entry: pipenv run mypy
+      language: system
       types: [python]
