@@ -26,6 +26,9 @@ class ScoreAgent:
             blocks (int): The number of blocks placed
             groups (int): The number of groups completed
         """
+        # Note: assertion can be turned of with -O flag to python
+        assert blocks > 0 and groups >= 0, "Precondition violated"
+
         self.__score += blocks
 
         if groups:

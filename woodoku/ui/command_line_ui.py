@@ -11,7 +11,6 @@ NUM_SHAPES = 3
 class CommandLineUI(UIInterface):
     def show_start_game(self, board: WoodokuBoard) -> None:
         print(orange("\nWelcome to Woodoku"))
-        print(board)
 
     def show_board(self, board: WoodokuBoard) -> None:
         print(board)
@@ -19,6 +18,7 @@ class CommandLineUI(UIInterface):
     def choose_shape(
         self, shapes: List[WoodokuShape], shape_availability: List[bool]
     ) -> int:
+        assert len(shapes) == len(shape_availability), "Precondition violated"
         shapes_str = ""
         available_idx = []
         for i, available in enumerate(shape_availability):
@@ -66,6 +66,7 @@ class CommandLineUI(UIInterface):
         shapes: List[WoodokuShape],
         shape_availabilities: List[bool],
     ) -> None:
+        assert len(shapes) == len(shape_availabilities), "Precondition violated"
         print(
             orange(
                 """
