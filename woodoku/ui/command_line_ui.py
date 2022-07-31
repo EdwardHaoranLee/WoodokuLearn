@@ -63,9 +63,8 @@ class CommandLineUI(UIInterface):
     def show_earned(self, score: int) -> None:
         print(f"\n\nYou scored {orange(str(score))}. Nice!\n")
 
-    # TODO: change font
     def show_cannot_place(self) -> None:
-        print(red("\nYou cannot place the shape at the position you chose\n"))
+        print(red("\n❌ You cannot place the shape at the position you chose\n"))
 
     def show_result(
         self,
