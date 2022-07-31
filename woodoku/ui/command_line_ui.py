@@ -1,64 +1,88 @@
+from time import sleep
 from typing import Callable, List, Tuple
 
-from woodoku.ui.utils import get_input, red, orange
-from woodoku.entity.woodoku_board import WoodokuBoard
-from woodoku.entity.woodoku_shape import WoodokuShape
+from art import text2art
+from woodoku.entity.woodoku_board import BOARD_SIZE, WoodokuBoard
+from woodoku.entity.woodoku_shape import (
+    BLOCK_PADDING,
+    MAX_SHAPE_SIZE,
+    ROW_PADDING,
+    WoodokuShape,
+)
 from woodoku.ui.ui_interface import UIInterface
+from woodoku.ui.utils import get_input, orange, red
 
 NUM_SHAPES = 3
 
 
 class CommandLineUI(UIInterface):
     def show_start_game(self, board: WoodokuBoard) -> None:
-        print(orange("\nWelcome to Wooduku"))
-        print(board)
+        print(orange(text2art("Woodoku!", "3d_diagonal")))
 
     def show_board(self, board: WoodokuBoard) -> None:
         print(board)
 
     def choose_shape(
-        self, shapes: List[WoodokuShape], shape_availability: List[bool]
+        self, shapes: List[WoodokuShape], shape_availabilities: List[bool]
     ) -> int:
-        shapes_str = ""
-        available_idx = []
-        for i, available in enumerate(shape_availability):
-            if available:
-                shapes_str += f"{i}.\n{str(shapes[i]).rstrip()}\n\n"
-                available_idx.append(i)
-        print(shapes_str)
+        assert len(shapes) == len(shape_availabilities), "Precondition violated"
+        self.__show_available_shapes(shapes, shape_availabilities)
+
+        available_indices = [
+            i for i, available in enumerate(shape_availabilities) if available
+        ]
         val = get_input(
             int,
-            available_idx,
+            available_indices,
             f"Please choose one of the {orange('shapes')}:\n",
-            red(f"Please choose an integer value from {available_idx}. Try again"),
+            red(f"Please choose an integer value from {available_indices}. Try again"),
         )
         return val
 
+    def __show_available_shapes(
+        self, shapes: List[WoodokuShape], shape_availabilities: List[bool]
+    ) -> None:
+        shape_str_lst = []
+        for i, available in enumerate(shape_availabilities):
+            if available:
+                shape_str = (
+                    f"{i}.".ljust(BLOCK_PADDING * MAX_SHAPE_SIZE + ROW_PADDING) + "\n"
+                )
+                shape_str += f"{str(shapes[i])}"
+                shape_str_lst.append(shape_str[:-1].split("\n"))
+
+        for shape_row in zip(*shape_str_lst):
+            for shape_part in shape_row:
+                print(shape_part, end="")
+            print()
+
     def put_shape_at(self) -> Tuple[int, int]:
         input_msg: Callable[[str], str] = lambda coord_name: (
-            f"Enter a {orange(f'{coord_name} coordinate')} on a 9X9 board:"
+            f"Enter a {orange(f'{coord_name} coordinate')} on a 9X9 board:\n"
         )
         again_msg: Callable[[str], str] = lambda coord_name: red(
-            f"Please enter an integer {coord_name} coordinate. Try again"
+            f"Please enter an integer {coord_name} coordinate. Try again\n"
         )
         while True:
-            x = get_input(int, range(9), input_msg("x"), again_msg("x"))
-            y = get_input(int, range(9), input_msg("y"), again_msg("y"))
-            confirmation = input(
-                f"Confirm your choice of position: x = {x}, y = {y}: (y/n)"
+            x = get_input(int, range(BOARD_SIZE), input_msg("x"), again_msg("x"))
+            y = get_input(int, range(BOARD_SIZE), input_msg("y"), again_msg("y"))
+            confirmation = get_input(
+                str,
+                ["y", "n", "", "yes", "no"],
+                f"Confirm your choice of position: x = {x}, y = {y}: (Enter/y/n)\n",
+                red("Please enter either y or n. Try again"),
             )
-            if confirmation.strip() == "y":
+            if confirmation in ["", "y", "yes"]:
                 break
-
-            print(red("Please enter either y or n. Try again"))
 
         return x, y
 
     def show_earned(self, score: int) -> None:
-        print(orange(f"\n\nYou earned {score}. Nice job\n"))
+        print(f"\n\nYou scored {orange(str(score))}. Nice!\n")
 
+    # TODO: change font
     def show_cannot_place(self) -> None:
-        print(red("You are not able to place the shape at the position you chose\n"))
+        print(red("\nYou cannot place the shape at the position you chose\n"))
 
     def show_result(
         self,
@@ -66,30 +90,11 @@ class CommandLineUI(UIInterface):
         shapes: List[WoodokuShape],
         shape_availabilities: List[bool],
     ) -> None:
-        print(
-            orange(
-                """
-             _____       ___       ___  ___   _____  
-            /  ___|     /   |     /   |/   | |  ___| 
-            | |        / /| |    / /|   /| | | |__   
-            | |  _    / ___ |   / / |__/ | | |  __|  
-            | |_| |  / /  | |  / /       | | | |___  
-            \_____/ /_/   |_| /_/        |_| |_____|
+        assert len(shapes) == len(shape_availabilities), "Precondition violated"
+        print()
+        print(orange(text2art("Game\nOver", "rnd-xlarge")))
+        sleep(2)
 
-             _____   _     _   _____   _____   
-            /  _  \ | |   / / |  ___| |  _  \  
-            | | | | | |  / /  | |__   | |_| |  
-            | | | | | | / /   |  __|  |  _  /  
-            | |_| | | |/ /    | |___  | | \ \  
-            \_____/ |___/     |_____| |_|  \_\
-
-            """
-            )
-        )
         self.show_board(board)
-        print("You are left with the following shape(s):")
-        shapes_str = ""
-        for i, available in enumerate(shape_availabilities):
-            if available:
-                shapes_str += f"\n{str(shapes[i]).rstrip()}\n\n"
-        print(shapes_str)
+        print("You are left with the following shape(s):\n")
+        self.__show_available_shapes(shapes, shape_availabilities)
