@@ -1,7 +1,12 @@
 from __future__ import annotations
 
 from typing import Any, Iterable, List, Set, Tuple
-from woodoku.ui.utils import green, BLOCK
+
+from woodoku.ui.utils import BLOCK, green
+
+MAX_SHAPE_SIZE = 5
+ROW_PADDING = 10
+BLOCK_PADDING = 3
 
 
 class WoodokuShape:
@@ -103,11 +108,12 @@ class WoodokuShape:
         """
         result = ""
         # by observation, each shape is at most 5 blocks height or 5 blocks long
-        for row in range(5):
-            for col in range(5):
+        for row in range(MAX_SHAPE_SIZE):
+            row_str = ""
+            for col in range(MAX_SHAPE_SIZE):
                 if (row, col) in self.__coords:
-                    result += f"{green(BLOCK)}  "
+                    row_str += f"{green(BLOCK)}" + " " * (BLOCK_PADDING - 1)
                 else:
-                    result += "   "
-            result += "\n"
+                    row_str += " " * (BLOCK_PADDING)
+            result += row_str + " " * ROW_PADDING + "\n"
         return result
