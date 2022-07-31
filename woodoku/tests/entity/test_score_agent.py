@@ -178,7 +178,7 @@ class TestScoreAgent:
             ),
         ],
     )
-    def test_combo_streaks(
+    def test_combo_streak(
         self,
         winnings: Iterable[Tuple[int, int]],
         expected_score: int,
