@@ -39,23 +39,6 @@ class CommandLineUI(UIInterface):
         )
         return val
 
-    def __show_available_shapes(
-        self, shapes: List[WoodokuShape], shape_availabilities: List[bool]
-    ) -> None:
-        shape_str_lst = []
-        for i, available in enumerate(shape_availabilities):
-            if available:
-                shape_str = (
-                    f"{i}.".ljust(BLOCK_PADDING * MAX_SHAPE_SIZE + ROW_PADDING) + "\n"
-                )
-                shape_str += f"{str(shapes[i])}"
-                shape_str_lst.append(shape_str[:-1].split("\n"))
-
-        for shape_row in zip(*shape_str_lst):
-            for shape_part in shape_row:
-                print(shape_part, end="")
-            print()
-
     def put_shape_at(self) -> Tuple[int, int]:
         input_msg: Callable[[str], str] = lambda coord_name: (
             f"Enter a {orange(f'{coord_name} coordinate')} on a 9X9 board:\n"
@@ -98,3 +81,28 @@ class CommandLineUI(UIInterface):
         self.show_board(board)
         print("You are left with the following shape(s):\n")
         self.__show_available_shapes(shapes, shape_availabilities)
+
+    def __show_available_shapes(
+        self, shapes: List[WoodokuShape], shape_availabilities: List[bool]
+    ) -> None:
+        """Helper to show the shape ui horizontally
+
+        Args:
+            shapes (List[WoodokuShape]): Shapes for this round
+            shape_availabilities (List[bool]): Availability for these shapes
+        """
+        shape_str_lst = []
+        for i, available in enumerate(shape_availabilities):
+            if available:
+                shape_str = (
+                    f"{i}.".ljust(BLOCK_PADDING * MAX_SHAPE_SIZE + ROW_PADDING) + "\n"
+                )
+                shape_str += f"{str(shapes[i])}"
+                # store the shape string split by rows
+                shape_str_lst.append(shape_str[:-1].split("\n"))
+
+        # use zip to repackage shapes and access the row parts for each shape
+        for shapes_row in zip(*shape_str_lst):
+            for shape_part in shapes_row:
+                print(shape_part, end="")
+            print()
