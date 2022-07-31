@@ -5,11 +5,13 @@ COMBO_POINTS = 28
 
 class ScoreAgent:
     __score: int
-    __streaks: int
+    __streak: int
+    __combo: int
 
     def __init__(self) -> None:
         self.__score = 0
-        self.__streaks = 0
+        self.__streak = 0
+        self.__combo = 0
 
     def calculate_winning(self, blocks: int, groups: int) -> None:
         """Given `groups`, calculate score and add to score
@@ -26,19 +28,30 @@ class ScoreAgent:
             blocks (int): The number of blocks placed
             groups (int): The number of groups completed
         """
-        self.__score += blocks
+        # Note: assertion can be turned off with -O flag to python
+        assert blocks > 0 and groups >= 0, "Precondition violated"
+
+        # Note: instead of self.__score += blocks. Do
+        self.__score = self.get_score() + blocks
+        # this way get_score() can be mocked for easier testing setup ;)
 
         if groups:
-            self.__score += GROUP_POINTS
-            if self.__streaks:
-                self.__score += STREAK_POINTS * self.__streaks
-            self.__streaks += 1
+            self.__score = self.get_score() + GROUP_POINTS
+            if self.__streak:
+                self.__score = self.get_score() + STREAK_POINTS * self.get_streak()
+            self.__streak = self.get_streak() + 1
         else:
-            self.__streaks = 0
+            self.__streak = 0
 
-        combos = groups - 1
-        if combos > 0:
-            self.__score += COMBO_POINTS * combos
+        self.__combo = groups - 1
+        if self.get_combo() > 0:
+            self.__score = self.get_score() + COMBO_POINTS * self.get_combo()
 
     def get_score(self) -> int:
         return self.__score
+
+    def get_streak(self) -> int:
+        return self.__streak
+
+    def get_combo(self) -> int:
+        return self.__combo
