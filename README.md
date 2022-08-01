@@ -12,8 +12,9 @@ To get started:
 5. Install virtual environment and all package dependency with `pipenv`
 
 ```Shell
+# Install all package dependency for development
 pip install pipenv
-pipenv install --dev # Install all package dependency
+pipenv install --dev 
 pipenv shell 
 
 # Install pre-commit linter
@@ -59,6 +60,5 @@ structure
 
 ## TODO
 - Add an overview of Woodoku
-- Add instructions on using `mypy`
 - Add instructions on creating tests
 
