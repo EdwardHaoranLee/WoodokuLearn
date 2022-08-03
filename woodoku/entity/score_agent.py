@@ -31,21 +31,19 @@ class ScoreAgent:
         # Note: assertion can be turned off with -O flag to python
         assert blocks > 0 and groups >= 0, "Precondition violated"
 
-        # Note: instead of self.__score += blocks. Do
-        self.__score = self.get_score() + blocks
-        # this way get_score() can be mocked for easier testing setup ;)
+        self.__score += blocks
 
         if groups:
-            self.__score = self.get_score() + GROUP_POINTS
+            self.__score += GROUP_POINTS
             if self.__streak:
-                self.__score = self.get_score() + STREAK_POINTS * self.get_streak()
-            self.__streak = self.get_streak() + 1
+                self.__score += STREAK_POINTS * self.__streak
+            self.__streak += 1
         else:
             self.__streak = 0
 
-        self.__combo = groups - 1
-        if self.get_combo() > 0:
-            self.__score = self.get_score() + COMBO_POINTS * self.get_combo()
+        combos = groups - 1
+        if combos > 0:
+            self.__score += COMBO_POINTS * combos
 
     def get_score(self) -> int:
         return self.__score
