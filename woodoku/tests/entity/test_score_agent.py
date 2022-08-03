@@ -40,7 +40,19 @@ def fixture_setup_and_apply_winnings(
             information (block placed, groups completed) to calculate score
         scorekeeper (ScoreAgent): a new scorekeeper instance for this test
     """
-    # setup the real world initial state if needed
+    __score_agent_manual_setup(init_score, init_streak, scorekeeper)
+    # apply the winnings
+    for winning in winnings:
+        scorekeeper.calculate_winning(*winning)
+
+
+def __score_agent_manual_setup(
+    init_score: int, init_streak: int, scorekeeper: ScoreAgent
+) -> None:
+    """setup the real world initial state if needed"""
+
+    # get the score before setting up the streak by removing any score incurred
+    # by the streaks first
     score_before_streak = (
         init_score
         # remove score added by blocks (init_streak * 1)
@@ -52,17 +64,15 @@ def fixture_setup_and_apply_winnings(
         - init_streak * (init_streak - 1) // 2 * STREAK_POINTS
     )
     if score_before_streak > 0:
+        # add score_before_streak
         scorekeeper.calculate_winning(score_before_streak, 0)
-        # init_streak + init_streak * 18 + init_streak
+        # loop `init_streak` times to setup streak
         for _ in range(init_streak):
             scorekeeper.calculate_winning(1, 1)
-    # elif init_score > 0 and not init_streak:
-    # scorekeeper.calculate_winning(init_score, 0)
-    assert init_score == scorekeeper.get_score()
-
-    # apply the winnings
-    for winning in winnings:
-        scorekeeper.calculate_winning(*winning)
+    assert (
+        init_score == scorekeeper.get_score()
+        and init_streak == scorekeeper.get_streak()
+    ), "ScoreAgent setup failed"
 
 
 class TestScoreAgent:

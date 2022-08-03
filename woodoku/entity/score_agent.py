@@ -5,11 +5,13 @@ COMBO_POINTS = 28
 
 class ScoreAgent:
     __score: int
-    __streaks: int
+    __streak: int
+    __combo: int
 
     def __init__(self) -> None:
         self.__score = 0
-        self.__streaks = 0
+        self.__streak = 0
+        self.__combo = 0
 
     def calculate_winning(self, blocks: int, groups: int) -> None:
         """Given `groups`, calculate score and add to score
@@ -33,11 +35,11 @@ class ScoreAgent:
 
         if groups:
             self.__score += GROUP_POINTS
-            if self.__streaks:
-                self.__score += STREAK_POINTS * self.__streaks
-            self.__streaks += 1
+            if self.__streak:
+                self.__score += STREAK_POINTS * self.__streak
+            self.__streak += 1
         else:
-            self.__streaks = 0
+            self.__streak = 0
 
         combos = groups - 1
         if combos > 0:
@@ -45,3 +47,9 @@ class ScoreAgent:
 
     def get_score(self) -> int:
         return self.__score
+
+    def get_streak(self) -> int:
+        return self.__streak
+
+    def get_combo(self) -> int:
+        return self.__combo
