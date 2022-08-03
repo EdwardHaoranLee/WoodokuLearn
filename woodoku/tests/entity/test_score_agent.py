@@ -31,7 +31,7 @@ def fixture_setup_and_apply_winnings(
 ) -> None:
     """
     Automatically setup up scorekeeper and apply the winning to scorekeeper
-    for any test with with fixture/parameters
+    for any test with fixture/parameters
 
     Args:
         init_score (int): score to setup
