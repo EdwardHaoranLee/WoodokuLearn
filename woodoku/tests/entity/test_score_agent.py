@@ -17,11 +17,6 @@ def fixture_scorekeeper() -> ScoreAgent:
     return ScoreAgent()
 
 
-# Question... (just wanna know if there is a better way)
-# Is there any way to use Mock or MagicMock to set the private state instead of
-# a hack like this or accessing the private variable
-# for example: I want to set up so that before testing the scorekeeper has a
-# score of 42 and current streak of 1
 @pytest.fixture(name="setup_and_apply_winnings", autouse=True)
 def fixture_setup_and_apply_winnings(
     init_score: int,
