@@ -1,11 +1,11 @@
 from typing import Iterable, List, Set, Tuple
 
 import numpy as np
+from art import text2art
 from numpy.typing import NDArray
 from woodoku.entity.score_agent import ScoreAgent
 from woodoku.entity.woodoku_shape import WoodokuShape
 from woodoku.exceptions.shape_out_of_board_error import ShapeOutOfBoardError
-
 from woodoku.ui.utils import (
     ALL_BOLD_CROSS,
     BLOCK,
@@ -26,14 +26,14 @@ from woodoku.ui.utils import (
     TOP_RIGHT,
     VERTICAL,
     VERTICAL_CROSS,
-    red,
     green,
     inbetween,
     orange,
+    red,
 )
 
 # the length of the square game board
-N = 9
+BOARD_SIZE = 9
 
 
 class _WoodokuBoardRepresentation:
@@ -51,7 +51,7 @@ class _WoodokuBoardRepresentation:
     _board: NDArray[np.bool8]
 
     def __init__(self) -> None:
-        self._board = np.full((N, N), False)
+        self._board = np.full((BOARD_SIZE, BOARD_SIZE), False)
 
     def add_blocks(self, blocks_coord: Iterable[Tuple[int, int]]) -> None:
         """
@@ -130,7 +130,7 @@ class _WoodokuBoardRepresentation:
             ShapeOutOfBoardError: when some block is not valid
         """
         x, y = block
-        if not (0 <= x <= N - 1 and 0 <= y <= N - 1):
+        if not (0 <= x <= BOARD_SIZE - 1 and 0 <= y <= BOARD_SIZE - 1):
             raise ShapeOutOfBoardError(x, y)
 
     def __str__(self) -> str:
@@ -153,14 +153,14 @@ class _WoodokuBoardRepresentation:
         horizontal_bar = HORIZONTAL * 5
         bold_horizontal_bar = BOLD_HORIZONTAL * 5
 
-        for row in range(18):
+        for row in range(2 * BOARD_SIZE):
             # the first line of the board is concatenated using delicately chosen joins and corners for smooth corners
             # and top border
             row_str = "   "  # print some space to match the first column
             if row == 0:
                 row_str = f"  {green('y')}   "
                 row_str += "     ".join(
-                    [f"{y}" for y in range(9)]
+                    [f"{y}" for y in range(BOARD_SIZE)]
                 )  # print y coordinates
                 row_str += "\n"
                 row_str += f"{green('x')}  "  # print the first row
@@ -187,9 +187,9 @@ class _WoodokuBoardRepresentation:
             # every odd indexed row consists of vertical lines separating columns on the board
             else:
                 # this else block can't be replaced by calling helper function inbetween(...), since traversing
-                # boardrepresentation relies on the loop invariant "row"
+                # boardRepresentation relies on the loop invariant "row"
                 row_str = f"{row // 2}  {VERTICAL}"  # print x coordinate
-                for col in range(9):
+                for col in range(BOARD_SIZE):
                     pos = "     "
                     if self._board[row // 2, col]:
                         pos = f"  {green(BLOCK)}  "
@@ -235,7 +235,7 @@ class WoodokuBoard:
             bool: if the `shape` fits the board
         """
         rng = np.random.default_rng()
-        all_blocks = [(i, j) for i in range(9) for j in range(9)]
+        all_blocks = [(i, j) for i in range(9) for j in range(BOARD_SIZE)]
         rng.shuffle(all_blocks)
 
         for row, col in all_blocks:
@@ -309,7 +309,7 @@ class WoodokuBoard:
         groups = 0
         rep = self._representation
         group_blocks = set()  # use set to handle overlapping group removal
-        for index in range(9):
+        for index in range(BOARD_SIZE):
             row_blocks = self._get_row_coords(index)
             col_blocks = self._get_col_coords(index)
             box_blocks = self._get_box_coords(index)
@@ -330,11 +330,11 @@ class WoodokuBoard:
 
     @staticmethod
     def _get_row_coords(row_index: int) -> List[Tuple[int, int]]:
-        return [(row_index, col) for col in range(9)]
+        return [(row_index, col) for col in range(BOARD_SIZE)]
 
     @staticmethod
     def _get_col_coords(col_index: int) -> List[Tuple[int, int]]:
-        return [(row, col_index) for row in range(9)]
+        return [(row, col_index) for row in range(BOARD_SIZE)]
 
     @staticmethod
     def _get_box_coords(index: int) -> List[Tuple[int, int]]:
@@ -369,5 +369,20 @@ class WoodokuBoard:
         return [(row, col) for row in range(x, x + 3) for col in range(y, y + 3)]
 
     def __str__(self) -> str:
-        score = f"\nYour current score is {self.__score_agent.get_score()}\n"
-        return orange(score) + str(self._representation)
+        streak = self.__score_agent.get_streak()
+        combo = self.__score_agent.get_combo()
+        bonus = ""
+
+        if streak >= 2:
+            bonus += f"Streak:{streak}x!"
+
+        if combo > 0:
+            bonus += "\n" if bonus else ""
+            bonus += f"Combo:{combo}x!"
+
+        if bonus:
+            bonus = str(text2art(f"{bonus}", "starwars"))
+        score = str(
+            text2art(f"Score:{str(self.__score_agent.get_score())}", "starwars")
+        )
+        return orange(score + bonus) + str(self._representation) + "\n"

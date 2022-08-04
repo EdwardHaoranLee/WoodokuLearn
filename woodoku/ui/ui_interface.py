@@ -12,25 +12,27 @@ class UIInterface(ABC):
 
     @abstractmethod
     def show_board(self, board: WoodokuBoard) -> None:
-        """
-        Show the board and score to user.
+        """Show the board and score to user.
 
-        :param board: The board
+        Args:
+            board (WoodokuBoard): The board
         """
         raise NotImplementedError()
 
     @abstractmethod
     def choose_shape(
-        self, shapes: List[WoodokuShape], shape_availability: List[bool]
+        self, shapes: List[WoodokuShape], shape_availabilities: List[bool]
     ) -> int:
-        """
-        Precondition: len(shapes) == len(shape_availability)
+        """Show the UI to let user choose one of the shapes.
 
-        Show the UI to let user choose one of the shapes.
+        Precondition: len(shapes) == len(shape_availabilities)
 
-        :param shapes: All the shapes in this round, no matter if chosen before.
-        :param shape_availability: List of bool representing if the shape in is still waiting to be chosen
-        :return: The index of shape chosen by the user.
+        Args:
+            shapes (List[WoodokuShape]): All the shapes in this round, no matter if chosen before.
+            shape_availabilities (List[bool]): List of bool representing if the shape in is still waiting to be chosen
+
+        Returns:
+            int: The index of shape chosen by the user.
         """
         raise NotImplementedError()
 
@@ -39,16 +41,17 @@ class UIInterface(ABC):
         """
         Get the coords from user on where to put shape.
 
-        :return: (x, y) coordinates.
+        Returns:
+            int: (x, y) coordinates.
         """
         raise NotImplementedError()
 
     @abstractmethod
     def show_earned(self, score: int) -> None:
-        """
-        Show user the earned score after a successful placement.
+        """Show user the earned score after a successful placement.
 
-        :param score: The change in score.
+        Args:
+            score (int): The change in score
         """
         raise NotImplementedError()
 
@@ -66,13 +69,13 @@ class UIInterface(ABC):
         shapes: List[WoodokuShape],
         shape_availabilities: List[bool],
     ) -> None:
-        """
-        Precondition: len(shapes) == len(shape_availability)
+        """Show the final result to the user.
 
-        Show the final result to the user.
+        Precondition: len(shapes) == len(shape_availabilities)
 
-        :param board: The board
-        :param shapes: All the shapes in this round, no matter if chosen before.
-        :param shape_availabilities: If the shape in <shapes> is still waiting to be chosen.
+        Args:
+            board (WoodokuBoard): The board
+            shapes (List[WoodokuShape]): All the shapes in this round, no matter if chosen before.
+            shape_availabilities (List[bool]): If the shape in <shapes> is still waiting to be chosen.
         """
         raise NotImplementedError()

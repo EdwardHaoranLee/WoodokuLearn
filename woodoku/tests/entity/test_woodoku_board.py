@@ -4,10 +4,12 @@ from typing import List, Tuple
 import numpy as np
 import pytest
 from numpy.typing import NDArray
-from woodoku.entity.woodoku_board import WoodokuBoard, _WoodokuBoardRepresentation
+from woodoku.entity.woodoku_board import (
+    BOARD_SIZE,
+    WoodokuBoard,
+    _WoodokuBoardRepresentation,
+)
 from woodoku.entity.woodoku_shape import WoodokuShape
-
-N = 9
 
 random.seed(69)  # keep the test explorer happy
 
@@ -42,7 +44,7 @@ class TestWoodokuRepresentation:
     def test_add_blocks_add_list_of_blocks(self, lst: List[Tuple[int, int]]) -> None:
         board = self.board_after_adding(_WoodokuBoardRepresentation(), lst)
 
-        expect = np.full((N, N), False)
+        expect = np.full((BOARD_SIZE, BOARD_SIZE), False)
         for row, col in lst:
             expect[row, col] = True
         assert (board == expect).all()
@@ -62,7 +64,7 @@ class TestWoodokuRepresentation:
         rep.add_blocks(lst)
         board_removed = self.board_after_removing(rep, lst)
 
-        expect = np.full((N, N), False)
+        expect = np.full((BOARD_SIZE, BOARD_SIZE), False)
         assert (board_removed == expect).all()
 
     # add five blocks and remove three of them
@@ -71,7 +73,7 @@ class TestWoodokuRepresentation:
         rep.add_blocks(self.five_block_lst)
         board_removed = self.board_after_removing(rep, self.three_block_lst)
 
-        expect = np.full((N, N), False)
+        expect = np.full((BOARD_SIZE, BOARD_SIZE), False)
         for row, col in self.five_block_lst:
             if (row, col) not in self.three_block_lst:
                 expect[row, col] = True
@@ -144,35 +146,35 @@ class TestWoodokuBoard:
     one_block: WoodokuShape = WoodokuShape([(0, 0)])
     cross: WoodokuShape = WoodokuShape([(0, 1), (1, 0), (1, 1), (1, 2), (2, 1)])
 
-    @pytest.mark.parametrize("row", list(range(9)))
+    @pytest.mark.parametrize("row", list(range(BOARD_SIZE)))
     def test_find_groups_a_row(self, row: int) -> None:
         """
         row should be the only group on the board
         """
         board = WoodokuBoard()
-        board_with_a_row_occupied = np.full((9, 9), False)
-        board_with_a_row_occupied[row] = np.full((9,), True)
+        board_with_a_row_occupied = np.full((BOARD_SIZE, BOARD_SIZE), False)
+        board_with_a_row_occupied[row] = np.full((BOARD_SIZE,), True)
         board._representation._board = board_with_a_row_occupied
 
         group, group_blocks = board._find_groups()
         assert group == 1
-        assert group_blocks == set((row, col) for col in range(9))
+        assert group_blocks == set((row, col) for col in range(BOARD_SIZE))
 
-    @pytest.mark.parametrize("col", list(range(9)))
+    @pytest.mark.parametrize("col", list(range(BOARD_SIZE)))
     def test_find_groups_a_col(self, col: int) -> None:
         """
         col column should be the only group on the board
         """
         board = WoodokuBoard()
-        board_with_a_col_occupied = np.full((9, 9), False)
-        board_with_a_col_occupied[:, col] = np.full((9,), True)
+        board_with_a_col_occupied = np.full((BOARD_SIZE, BOARD_SIZE), False)
+        board_with_a_col_occupied[:, col] = np.full((BOARD_SIZE,), True)
         board._representation._board = board_with_a_col_occupied
 
         group, group_blocks = board._find_groups()
         assert group == 1
-        assert group_blocks == set((row, col) for row in range(9))
+        assert group_blocks == set((row, col) for row in range(BOARD_SIZE))
 
-    @pytest.mark.parametrize("index", list(range(9)))
+    @pytest.mark.parametrize("index", list(range(BOARD_SIZE)))
     def test_find_groups_3_by_3(self, index: int) -> None:
         """
         The box created according to index is the only group on the board
@@ -197,9 +199,9 @@ class TestWoodokuBoard:
         three groups is expected to be found
         """
         board = WoodokuBoard()
-        repo = np.full((9, 9), False)
-        repo[row] = np.full((9,), True)  # add a row to the board
-        repo[:, col] = np.full((9,), True)  # add a column to the board
+        repo = np.full((BOARD_SIZE, BOARD_SIZE), False)
+        repo[row] = np.full((BOARD_SIZE,), True)  # add a row to the board
+        repo[:, col] = np.full((BOARD_SIZE,), True)  # add a column to the board
         box_coordinate = board._get_box_coords(index)  # add a box to the board
         for x, y in box_coordinate:
             repo[x, y] = True
@@ -208,8 +210,8 @@ class TestWoodokuBoard:
         group, group_blocks = board._find_groups()
         assert group == 3
 
-        expected_set = set((row, i) for i in range(9))
-        expected_set.update([(i, col) for i in range(9)])
+        expected_set = set((row, i) for i in range(BOARD_SIZE))
+        expected_set.update([(i, col) for i in range(BOARD_SIZE)])
         expected_set.update(box_coordinate)
         assert group_blocks == expected_set
 
@@ -231,7 +233,9 @@ class TestWoodokuBoard:
         board = WoodokuBoard()
         board.add_shape(shape, 5, 0)
         board._representation.remove_blocks(shape.map_to_board_at(5, 0))
-        assert (board._representation._board == np.full((9, 9), False)).all()
+        assert (
+            board._representation._board == np.full((BOARD_SIZE, BOARD_SIZE), False)
+        ).all()
 
     @pytest.mark.parametrize(
         "first_shape, first_position, sec_shape, sec_position",
@@ -256,7 +260,7 @@ class TestWoodokuBoard:
         board.add_shape(first_shape, *first_position)
         board.add_shape(sec_shape, *sec_position)
 
-        expected = np.full((9, 9), False)
+        expected = np.full((BOARD_SIZE, BOARD_SIZE), False)
         for x, y in first_shape.map_to_board_at(*first_position):
             expected[x, y] = True
         for x, y in sec_shape.map_to_board_at(*sec_position):
@@ -396,8 +400,8 @@ class TestWoodokuBoard:
         The board is designed that all positions are occupied except the left diagonal
         """
         board = WoodokuBoard()
-        repo = np.full((9, 9), True)
-        for x, y in [(i, i) for i in range(9)]:
+        repo = np.full((BOARD_SIZE, BOARD_SIZE), True)
+        for x, y in [(i, i) for i in range(BOARD_SIZE)]:
             repo[x, y] = False
         board._representation._board = repo
         assert not board.can_add_shape_to_board(shape)
@@ -407,8 +411,8 @@ class TestWoodokuBoard:
         The board is designed that all positions are occupied except the left diagonal
         """
         board = WoodokuBoard()
-        repo = np.full((9, 9), True)
-        for x, y in [(i, i) for i in range(9)]:
+        repo = np.full((BOARD_SIZE, BOARD_SIZE), True)
+        for x, y in [(i, i) for i in range(BOARD_SIZE)]:
             repo[x, y] = False
         board._representation._board = repo
         assert board.can_add_shape_to_board(self.one_block)
