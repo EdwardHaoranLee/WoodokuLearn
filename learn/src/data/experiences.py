@@ -1,4 +1,3 @@
-# pylint: disable=missing-param-doc
 from typing import Tuple
 
 import torch
