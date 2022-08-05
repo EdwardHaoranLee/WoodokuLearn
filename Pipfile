@@ -8,6 +8,7 @@ numpy = "*"
 pyyaml = "*"
 local-woodoku = {editable = true, path = "."}
 art = "*"
+torch = "*"
 
 [dev-packages]
 black = "*"
