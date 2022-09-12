@@ -1,28 +1,58 @@
 # pylint: disable=unused-argument
+from __future__ import annotations
+from typing import Tuple
 
 
-def get_action(model: int, state: int, action_space_len: int, epsilon: int) -> None:
-    pass
-    # # We do not require gradient at this point, because this function will be
-    # used either # during experience collection or during inference
+class Action:
+    """
+    The class representing the action.
 
-    # with torch.no_grad():
-    #     Qp = model.policy_net(torch.from_numpy(state).float())
+    The first dimension is integer between 0 and 2, inclusive, representing which shape to choose. The second and the
+    third dimensions are both integer between 0 and 8, inclusive, representing the x, y coordinates to place.
+    """
 
-    # ## TODO: select and return action based on epsilon-greedy
-    # # From the 4 states predict the a list of Expected cumulative rewards
-    # given all state and action pair # (seems like the naive brute force way)
+    dimension: Tuple[int] = (3,)
+    range: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]] = (
+        (0, 3),
+        (0, 9),
+        (0, 9),
+    )
+    data: Tuple[int, int, int]
 
-    # # Pick the action with the maximum expected cumulative reward Q*(s,a)
+    @staticmethod
+    def random_action() -> Action:
+        """
+        Generate a random action within the range.
 
-    # # with probability epsilon:
-    # # do random exploration (sample a random action)
-    # if torch.rand(1).item() <= epsilon:
-    #     action = torch.randint(0, action_space_len, (1,))
-    # else:  # stick with exploitation
-    #     q, action = Qp.max(axis=0)
+        Returns:
 
-    # return action
+        """
+        pass
+
+    def get_action(
+        self, model: int, state: int, action_space_len: int, epsilon: int
+    ) -> None:
+        pass
+        # # We do not require gradient at this point, because this function will be
+        # used either # during experience collection or during inference
+
+        # with torch.no_grad():
+        #     Qp = model.policy_net(torch.from_numpy(state).float())
+
+        # ## TODO: select and return action based on epsilon-greedy
+        # # From the 4 states predict the a list of Expected cumulative rewards
+        # given all state and action pair # (seems like the naive brute force way)
+
+        # # Pick the action with the maximum expected cumulative reward Q*(s,a)
+
+        # # with probability epsilon:
+        # # do random exploration (sample a random action)
+        # if torch.rand(1).item() <= epsilon:
+        #     action = torch.randint(0, action_space_len, (1,))
+        # else:  # stick with exploitation
+        #     q, action = Qp.max(axis=0)
+
+        # return action
 
 
 def train(model: int, batch_size: int) -> None:

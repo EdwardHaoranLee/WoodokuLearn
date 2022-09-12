@@ -6,21 +6,23 @@ import torch
 from woodoku import game
 from woodoku.entity.woodoku_board import WoodokuBoard, BOARD_SIZE
 from woodoku.entity.woodoku_shape import MAX_SHAPE_SIZE, WoodokuShape
+from learn.src.models.train_model import Action
 
 
 class Observation:
     """
     The class representing the observation.
 
-    The observation space is a 1D tensor that has the following length. One board representation and three shapes to
-    choose from.
+    The observation space is a 1D tensor that has the following length. One board representation, three shapes to
+    choose from and one integer representing the number of streaks.
 
     The board representation part will be integer 0 or 1 indicating whether that block is occupied. Each shape will also
-    be 0 or 1 and will reflect the actual shape, and will be totally empty if is not available to choose.
+    be 0 or 1 and will reflect the actual shape, and will be totally empty if is not available to choose. Last integer
+    will simply be the number of streaks so far.
     """
 
     dimension: Tuple[int] = (
-        BOARD_SIZE * BOARD_SIZE + MAX_SHAPE_SIZE * MAX_SHAPE_SIZE * 3,
+        BOARD_SIZE * BOARD_SIZE + MAX_SHAPE_SIZE * MAX_SHAPE_SIZE * 3 + 1,
     )
     data: torch.Tensor
 
@@ -34,33 +36,6 @@ class Observation:
         Args:
             board: The Woodoku Board.
             shapes: The shapes to choose.
-        """
-        pass
-
-
-class Action:
-    """
-    The class representing the action.
-
-    The first dimension is integer between 0 and 2, inclusive, representing which shape to choose. The second and the
-    third dimensions are both integer between 0 and 8, inclusive, representing the x, y coordinates to place.
-    """
-
-    dimension: Tuple[int] = (3,)
-    range: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]] = (
-        (0, 3),
-        (0, 9),
-        (0, 9),
-    )
-    data: Tuple[int, int, int]
-
-    @staticmethod
-    def random_action() -> Action:
-        """
-        Generate a random action within the range.
-
-        Returns:
-
         """
         pass
 
