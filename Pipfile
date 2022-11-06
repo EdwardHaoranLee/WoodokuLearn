@@ -4,11 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-numpy = "*"
 pyyaml = "*"
 local-woodoku = {editable = true, path = "."}
 art = "*"
 torch = "*"
+typeguard = "*"
+types-pyyaml = "*"
+jaxtyping = "*"
+numpy = "*"
 
 [dev-packages]
 black = "*"
@@ -19,9 +22,10 @@ mypy = "*"
 types-pyyaml = "*"
 types-atomicwrites = "*"
 types-setuptools = "*"
+ipykernel = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.11"
 
 [pipenv]
 allow_prereleases = true
