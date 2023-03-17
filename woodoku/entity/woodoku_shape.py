@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from typing import Any, Iterable, List, Set, Tuple
+from typing import Any, Iterable
+from jaxtyping import Float
+import numpy as np
 
 from woodoku.ui.utils import BLOCK, green
 
@@ -31,13 +33,25 @@ class WoodokuShape:
          Note that (0,0) and (0,1) is not in the list
     """
 
-    __coords: Set[Tuple[int, int]]
+    __coords: set[tuple[int, int]]
 
-    def __init__(self, coords: List[Tuple[int, int]]):
+    def __init__(self, coords: list[tuple[int, int]]):
         self.__coords = set(self.__standardize(coords))
 
+    def get_shape_data(self) -> Float[np.ndarray, "MAX_SHAPE_SIZE*MAX_SHAPE_SIZE"]:  # type: ignore[type-arg]
+        """Returns the shape data of this shape
+
+        Returns:
+            Float[np.ndarray, "MAX_SHAPE_SIZE*MAX_SHAPE_SIZE"]: The shape data of this shape
+        """
+        shape_data = np.zeros((MAX_SHAPE_SIZE, MAX_SHAPE_SIZE))
+        for x, y in self.__coords:
+            shape_data[x][y] = 1.0
+
+        return shape_data
+
     @staticmethod
-    def __standardize(coords: Iterable[Tuple[int, int]]) -> Set[Tuple[int, int]]:
+    def __standardize(coords: Iterable[tuple[int, int]]) -> set[tuple[int, int]]:
         """Pushes shape to top left corner if it has not done so
 
         Args:
@@ -50,10 +64,10 @@ class WoodokuShape:
         smallest_y = min(list(y for _, y in coords))
         return set(list((x - smallest_x, y - smallest_y) for x, y in coords))
 
-    def get_coords(self) -> List[Tuple[int, int]]:
+    def get_coords(self) -> list[tuple[int, int]]:
         return list(self.__coords)
 
-    def map_to_board_at(self, x: int, y: int) -> List[Tuple[int, int]]:
+    def map_to_board_at(self, x: int, y: int) -> list[tuple[int, int]]:
         """Maps the shape coordinates to map coordinates
 
         Args:
@@ -61,7 +75,7 @@ class WoodokuShape:
             y (int): The top left y coordinate of the shape on the board
 
         Returns:
-            List[Tuple[int, int]]: List of coordinates of shape on the board
+            list[tuple[int, int]]: list of coordinates of shape on the board
         """
         return [(x + row, y + col) for (row, col) in self.get_coords()]
 

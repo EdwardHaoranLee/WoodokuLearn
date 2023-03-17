@@ -1,6 +1,5 @@
 from time import sleep
-from typing import Callable, List, Tuple
-
+from typing import Callable
 from art import text2art
 from woodoku.entity.woodoku_board import BOARD_SIZE, WoodokuBoard
 from woodoku.entity.woodoku_shape import (
@@ -22,15 +21,11 @@ class CommandLineUI(UIInterface):
     def show_board(self, board: WoodokuBoard) -> None:
         print(board)
 
-    def choose_shape(
-        self, shapes: List[WoodokuShape], shape_availabilities: List[bool]
-    ) -> int:
+    def choose_shape(self, shapes: list[WoodokuShape], shape_availabilities: list[bool]) -> int:
         assert len(shapes) == len(shape_availabilities), "Precondition violated"
         self.__show_available_shapes(shapes, shape_availabilities)
 
-        available_indices = [
-            i for i, available in enumerate(shape_availabilities) if available
-        ]
+        available_indices = [i for i, available in enumerate(shape_availabilities) if available]
         val = get_input(
             int,
             available_indices,
@@ -39,7 +34,7 @@ class CommandLineUI(UIInterface):
         )
         return val
 
-    def put_shape_at(self) -> Tuple[int, int]:
+    def put_shape_at(self) -> tuple[int, int]:
         input_msg: Callable[[str], str] = lambda coord_name: (
             f"Enter a {orange(f'{coord_name} coordinate')} on a 9X9 board:\n"
         )
@@ -69,8 +64,8 @@ class CommandLineUI(UIInterface):
     def show_result(
         self,
         board: WoodokuBoard,
-        shapes: List[WoodokuShape],
-        shape_availabilities: List[bool],
+        shapes: list[WoodokuShape],
+        shape_availabilities: list[bool],
     ) -> None:
         assert len(shapes) == len(shape_availabilities), "Precondition violated"
         print()
@@ -81,21 +76,17 @@ class CommandLineUI(UIInterface):
         print("You are left with the following shape(s):\n")
         self.__show_available_shapes(shapes, shape_availabilities)
 
-    def __show_available_shapes(
-        self, shapes: List[WoodokuShape], shape_availabilities: List[bool]
-    ) -> None:
+    def __show_available_shapes(self, shapes: list[WoodokuShape], shape_availabilities: list[bool]) -> None:
         """Helper to show the shape ui horizontally
 
         Args:
-            shapes (List[WoodokuShape]): Shapes for this round
-            shape_availabilities (List[bool]): Availability for these shapes
+            shapes (list[WoodokuShape]): Shapes for this round
+            shape_availabilities (list[bool]): Availability for these shapes
         """
         shape_str_lst = []
         for i, available in enumerate(shape_availabilities):
             if available:
-                shape_str = (
-                    f"{i}.".ljust(BLOCK_PADDING * MAX_SHAPE_SIZE + ROW_PADDING) + "\n"
-                )
+                shape_str = f"{i}.".ljust(BLOCK_PADDING * MAX_SHAPE_SIZE + ROW_PADDING) + "\n"
                 shape_str += f"{str(shapes[i])}"
                 # store the shape string split by rows
                 shape_str_lst.append(shape_str[:-1].split("\n"))

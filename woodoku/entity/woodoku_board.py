@@ -1,8 +1,8 @@
-from typing import Iterable, List, Set, Tuple
+from typing import Iterable
+from jaxtyping import Bool
 
 import numpy as np
 from art import text2art
-from numpy.typing import NDArray
 from woodoku.entity.score_agent import ScoreAgent
 from woodoku.entity.woodoku_shape import WoodokuShape
 from woodoku.exceptions.shape_out_of_board_error import ShapeOutOfBoardError
@@ -48,12 +48,12 @@ class _WoodokuBoardRepresentation:
     the position occupied
     """
 
-    _board: NDArray[np.bool8]
+    _board: Bool[np.ndarray, "BOARD_SIZE*BOARD_SIZE"]  # type: ignore[type-arg]
 
     def __init__(self) -> None:
         self._board = np.full((BOARD_SIZE, BOARD_SIZE), False)
 
-    def add_blocks(self, blocks_coord: Iterable[Tuple[int, int]]) -> None:
+    def add_blocks(self, blocks_coord: Iterable[tuple[int, int]]) -> None:
         """
         Mark each position specified in blocks_coord as True to indicate that the position is occupied.
 
@@ -67,7 +67,7 @@ class _WoodokuBoardRepresentation:
             self.__validate((row, col))
             self._board[row, col] = True
 
-    def remove_blocks(self, blocks_coord: Iterable[Tuple[int, int]]) -> None:
+    def remove_blocks(self, blocks_coord: Iterable[tuple[int, int]]) -> None:
         """
         Mark each position specified in blocks_coord as False to indicate that the position is not occupied.
 
@@ -81,12 +81,12 @@ class _WoodokuBoardRepresentation:
             self.__validate((row, col))
             self._board[row, col] = False
 
-    def is_occupied(self, blocks_coord: Iterable[Tuple[int, int]]) -> bool:
+    def is_occupied(self, blocks_coord: Iterable[tuple[int, int]]) -> bool:
         """Check if each block has is occupied. If all of those blocks are
         occupied, return true. Otherwise, false.
 
         Args:
-            blocks_coord (List[Tuple[int, int]]): list of blocks to check
+            blocks_coord (list[tuple[int, int]]): list of blocks to check
 
         Returns:
             bool: if all blocks in `blocks_coord` is occupied
@@ -100,12 +100,12 @@ class _WoodokuBoardRepresentation:
                 return False
         return True
 
-    def is_not_occupied(self, blocks_coord: Iterable[Tuple[int, int]]) -> bool:
+    def is_not_occupied(self, blocks_coord: Iterable[tuple[int, int]]) -> bool:
         """Check if each block is empty. If all of those blocks are empty,
         return true. Otherwise, false.
 
         Args:
-            blocks_coord (List[Tuple[int, int]]): list of blocks to check
+            blocks_coord (list[tuple[int, int]]): list of blocks to check
 
         Returns:
             bool: if all blocks in `blocks_coord` is empty
@@ -119,12 +119,15 @@ class _WoodokuBoardRepresentation:
                 return False
         return True
 
+    def get_board_data(self) -> Bool[np.ndarray, "BOARD_SIZE*BOARD_SIZE"]:  # type: ignore[type-arg]
+        return self._board
+
     @staticmethod
-    def __validate(block: Tuple[int, int]) -> None:
+    def __validate(block: tuple[int, int]) -> None:
         """validate if block is within the 9x9 board. raise Error if not.
 
         Args:
-            block (Tuple[int, int]): The block to be validated
+            block (tuple[int, int]): The block to be validated
 
         Raises:
             ShapeOutOfBoardError: when some block is not valid
@@ -159,14 +162,10 @@ class _WoodokuBoardRepresentation:
             row_str = "   "  # print some space to match the first column
             if row == 0:
                 row_str = f"  {green('y')}   "
-                row_str += "     ".join(
-                    [f"{y}" for y in range(BOARD_SIZE)]
-                )  # print y coordinates
+                row_str += "     ".join([f"{y}" for y in range(BOARD_SIZE)])  # print y coordinates
                 row_str += "\n"
                 row_str += f"{green('x')}  "  # print the first row
-                row_str += inbetween(
-                    TOP_LEFT, TOP_JOIN, BOLD_TOP_JOIN, TOP_RIGHT, horizontal_bar
-                )
+                row_str += inbetween(TOP_LEFT, TOP_JOIN, BOLD_TOP_JOIN, TOP_RIGHT, horizontal_bar)
 
             # every even indexed row corresponds to a horizontal line on the board
             elif row % 2 == 0:
@@ -180,9 +179,7 @@ class _WoodokuBoardRepresentation:
                         red(bold_horizontal_bar),
                     )
                 else:
-                    row_str += inbetween(
-                        LEFT_JOIN, CROSS, VERTICAL_CROSS, RIGHT_JOIN, horizontal_bar
-                    )
+                    row_str += inbetween(LEFT_JOIN, CROSS, VERTICAL_CROSS, RIGHT_JOIN, horizontal_bar)
 
             # every odd indexed row consists of vertical lines separating columns on the board
             else:
@@ -205,9 +202,7 @@ class _WoodokuBoardRepresentation:
         # the last line of the board is concatenated using delicately chosen joins and corners for smooth corners and
         # bottom border of the board
         row_str = "   "  # print some empty space to match the row above
-        row_str += inbetween(
-            BOTTOM_LEFT, BOTTOM_JOIN, BOLD_BOTTOM_JOIN, BOTTOM_RIGHT, horizontal_bar
-        )
+        row_str += inbetween(BOTTOM_LEFT, BOTTOM_JOIN, BOLD_BOTTOM_JOIN, BOTTOM_RIGHT, horizontal_bar)
         result += row_str
         return result
 
@@ -294,7 +289,13 @@ class WoodokuBoard:
     def get_score(self) -> int:
         return self.__score_agent.get_score()
 
-    def _find_groups(self) -> Tuple[int, Set[Tuple[int, int]]]:
+    def get_streak(self) -> int:
+        return self.__score_agent.get_streak()
+
+    def get_board_data(self) -> Bool[np.ndarray, "BOARD_SIZE*BOARD_SIZE"]:  # type: ignore[type-arg]
+        return self._representation.get_board_data()
+
+    def _find_groups(self) -> tuple[int, set[tuple[int, int]]]:
         """Check current board and see if there is any groups such as
         complete rows, columns or 3x3 box and report them.
 
@@ -302,7 +303,7 @@ class WoodokuBoard:
         [Wikipedia Sudoku Glossary](https://en.wikipedia.org/wiki/Glossary_of_Sudoku#Terminology_and_grid_layout)
 
         Returns:
-            Tuple[int, Set[Tuple[int,int]]]:
+            tuple[int, Set[tuple[int,int]]]:
                 1. Number of groups that is complete
                 2. Set of block coordinates for the group
         """
@@ -329,15 +330,15 @@ class WoodokuBoard:
         return groups, group_blocks
 
     @staticmethod
-    def _get_row_coords(row_index: int) -> List[Tuple[int, int]]:
+    def _get_row_coords(row_index: int) -> list[tuple[int, int]]:
         return [(row_index, col) for col in range(BOARD_SIZE)]
 
     @staticmethod
-    def _get_col_coords(col_index: int) -> List[Tuple[int, int]]:
+    def _get_col_coords(col_index: int) -> list[tuple[int, int]]:
         return [(row, col_index) for row in range(BOARD_SIZE)]
 
     @staticmethod
-    def _get_box_coords(index: int) -> List[Tuple[int, int]]:
+    def _get_box_coords(index: int) -> list[tuple[int, int]]:
         """The index of 3x3 box is as following:
         | 0 	| 1 	| 2 	|
         |---	|---	|---	|
@@ -348,7 +349,7 @@ class WoodokuBoard:
             index (int): The index of 3x3 box as list above
 
         Returns:
-            List[Tuple[int, int]]: All the coordinates in that 3x3 box
+            list[tuple[int, int]]: All the coordinates in that 3x3 box
 
         """
         # map to 3x3 coordinates
@@ -382,7 +383,5 @@ class WoodokuBoard:
 
         if bonus:
             bonus = str(text2art(f"{bonus}", "starwars"))
-        score = str(
-            text2art(f"Score:{str(self.__score_agent.get_score())}", "starwars")
-        )
+        score = str(text2art(f"Score:{str(self.__score_agent.get_score())}", "starwars"))
         return orange(score + bonus) + str(self._representation) + "\n"

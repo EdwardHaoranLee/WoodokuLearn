@@ -1,15 +1,14 @@
 import random
-from typing import List, Tuple
 
 import numpy as np
 import pytest
-from numpy.typing import NDArray
 from woodoku.entity.woodoku_board import (
     BOARD_SIZE,
     WoodokuBoard,
     _WoodokuBoardRepresentation,
 )
 from woodoku.entity.woodoku_shape import WoodokuShape
+from jaxtyping import Bool
 
 random.seed(69)  # keep the test explorer happy
 
@@ -22,14 +21,14 @@ class TestWoodokuRepresentation:
     five_block_lst = three_block_lst + [(2, 1), (0, 8)]
 
     def board_after_adding(
-        self, rep: _WoodokuBoardRepresentation, lst: List[Tuple[int, int]]
-    ) -> NDArray[np.bool8]:
+        self, rep: _WoodokuBoardRepresentation, lst: list[tuple[int, int]]
+    ) -> Bool[np.ndarray, "BOARD_SIZE*BOARD_SIZE"]:  # type: ignore[type-arg]
         rep.add_blocks(lst)
         return rep._board
 
     def board_after_removing(
-        self, rep: _WoodokuBoardRepresentation, lst: List[Tuple[int, int]]
-    ) -> NDArray[np.bool8]:
+        self, rep: _WoodokuBoardRepresentation, lst: list[tuple[int, int]]
+    ) -> Bool[np.ndarray, "BOARD_SIZE*BOARD_SIZE"]:  # type: ignore[type-arg]
         rep.remove_blocks(lst)
         return rep._board
 
@@ -41,7 +40,7 @@ class TestWoodokuRepresentation:
             five_block_lst,
         ],
     )
-    def test_add_blocks_add_list_of_blocks(self, lst: List[Tuple[int, int]]) -> None:
+    def test_add_blocks_add_list_of_blocks(self, lst: list[tuple[int, int]]) -> None:
         board = self.board_after_adding(_WoodokuBoardRepresentation(), lst)
 
         expect = np.full((BOARD_SIZE, BOARD_SIZE), False)
@@ -57,9 +56,7 @@ class TestWoodokuRepresentation:
             five_block_lst,
         ],
     )
-    def test_remove_blocks_remove_list_of_blocks(
-        self, lst: List[Tuple[int, int]]
-    ) -> None:
+    def test_remove_blocks_remove_list_of_blocks(self, lst: list[tuple[int, int]]) -> None:
         rep = _WoodokuBoardRepresentation()
         rep.add_blocks(lst)
         board_removed = self.board_after_removing(rep, lst)
@@ -138,9 +135,7 @@ class TestWoodokuRepresentation:
 
 class TestWoodokuBoard:
     l_shape: WoodokuShape = WoodokuShape([(0, 0), (1, 0), (1, 1), (1, 2)])
-    horizontal_bar_shape: WoodokuShape = WoodokuShape(
-        [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4)]
-    )
+    horizontal_bar_shape: WoodokuShape = WoodokuShape([(0, 0), (0, 1), (0, 2), (0, 3), (0, 4)])
     gun_shape: WoodokuShape = WoodokuShape([(0, 0), (0, 1), (0, 2), (1, 0)])
     vertical_two_block: WoodokuShape = WoodokuShape([(0, 0), (1, 0)])
     one_block: WoodokuShape = WoodokuShape([(0, 0)])
@@ -192,9 +187,7 @@ class TestWoodokuBoard:
         "row, col, index",
         [(random.randint(0, 8), random.randint(0, 8), random.randint(0, 8))],
     )
-    def test_find_groups_a_col_a_row_and_a_3_by_3_block(
-        self, row: int, col: int, index: int
-    ) -> None:
+    def test_find_groups_a_col_a_row_and_a_3_by_3_block(self, row: int, col: int, index: int) -> None:
         """
         three groups is expected to be found
         """
@@ -233,9 +226,7 @@ class TestWoodokuBoard:
         board = WoodokuBoard()
         board.add_shape(shape, 5, 0)
         board._representation.remove_blocks(shape.map_to_board_at(5, 0))
-        assert (
-            board._representation._board == np.full((BOARD_SIZE, BOARD_SIZE), False)
-        ).all()
+        assert (board._representation._board == np.full((BOARD_SIZE, BOARD_SIZE), False)).all()
 
     @pytest.mark.parametrize(
         "first_shape, first_position, sec_shape, sec_position",
@@ -248,9 +239,9 @@ class TestWoodokuBoard:
     def test_add_shape_without_conflict(
         self,
         first_shape: WoodokuShape,
-        first_position: Tuple[int, int],
+        first_position: tuple[int, int],
         sec_shape: WoodokuShape,
-        sec_position: Tuple[int, int],
+        sec_position: tuple[int, int],
     ) -> None:
         """
         first_shape and first_location are chosen so that sec_shape will be NOT overlapped with first_shape when
@@ -327,7 +318,7 @@ class TestWoodokuBoard:
         ],
     )
     def test_can_add_shape_at_location_on_empty_board_within_board(
-        self, shape: WoodokuShape, location: Tuple[int, int]
+        self, shape: WoodokuShape, location: tuple[int, int]
     ) -> None:
         """
         Add shape to an empty board where each location to add is at the edge of the game board
@@ -344,7 +335,7 @@ class TestWoodokuBoard:
         ],
     )
     def test_can_add_shape_at_location_on_empty_board_go_beyond_board(
-        self, shape: WoodokuShape, location: Tuple[int, int]
+        self, shape: WoodokuShape, location: tuple[int, int]
     ) -> None:
         """
         Add shape to an empty board where location goes beyond the game board
@@ -363,9 +354,9 @@ class TestWoodokuBoard:
     def test_can_add_shape_at_occupied_location(
         self,
         first_shape: WoodokuShape,
-        first_position: Tuple[int, int],
+        first_position: tuple[int, int],
         sec_shape: WoodokuShape,
-        sec_position: Tuple[int, int],
+        sec_position: tuple[int, int],
     ) -> None:
         """
         first_shape and first_location are chosen so that sec_shape will be overlapped with first_shape when
@@ -390,12 +381,8 @@ class TestWoodokuBoard:
         board = WoodokuBoard()
         assert board.can_add_shape_to_board(shape)
 
-    @pytest.mark.parametrize(
-        "shape", [l_shape, horizontal_bar_shape, gun_shape, vertical_two_block, cross]
-    )
-    def test_can_add_shape_to_board_on_crowded_board_fail(
-        self, shape: WoodokuShape
-    ) -> None:
+    @pytest.mark.parametrize("shape", [l_shape, horizontal_bar_shape, gun_shape, vertical_two_block, cross])
+    def test_can_add_shape_to_board_on_crowded_board_fail(self, shape: WoodokuShape) -> None:
         """
         The board is designed that all positions are occupied except the left diagonal
         """
