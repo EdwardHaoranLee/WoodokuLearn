@@ -1,4 +1,4 @@
-from typing import Iterable, Tuple
+from typing import Iterable
 
 import pytest
 from woodoku.entity.score_agent import GROUP_POINTS, STREAK_POINTS, ScoreAgent
@@ -21,7 +21,7 @@ def fixture_scorekeeper() -> ScoreAgent:
 def fixture_setup_and_apply_winnings(
     init_score: int,
     init_streak: int,
-    winnings: Iterable[Tuple[int, int]],
+    winnings: Iterable[tuple[int, int]],
     scorekeeper: ScoreAgent,
 ) -> None:
     """
@@ -31,7 +31,7 @@ def fixture_setup_and_apply_winnings(
     Args:
         init_score (int): score to setup
         init_streak (int): streak to setup
-        winnings (Iterable[Tuple[int, int]]): Contains a ordered list of winning
+        winnings (Iterable[tuple[int, int]]): Contains a ordered list of winning
             information (block placed, groups completed) to calculate score
         scorekeeper (ScoreAgent): a new scorekeeper instance for this test
     """
@@ -41,9 +41,7 @@ def fixture_setup_and_apply_winnings(
         scorekeeper.calculate_winning(*winning)
 
 
-def __score_agent_manual_setup(
-    init_score: int, init_streak: int, scorekeeper: ScoreAgent
-) -> None:
+def __score_agent_manual_setup(init_score: int, init_streak: int, scorekeeper: ScoreAgent) -> None:
     """setup the real world initial state if needed"""
 
     # get the score before setting up the streak by removing any score incurred
@@ -64,10 +62,7 @@ def __score_agent_manual_setup(
         # loop `init_streak` times to setup streak
         for _ in range(init_streak):
             scorekeeper.calculate_winning(1, 1)
-    assert (
-        init_score == scorekeeper.get_score()
-        and init_streak == scorekeeper.get_streak()
-    ), "ScoreAgent setup failed"
+    assert init_score == scorekeeper.get_score() and init_streak == scorekeeper.get_streak(), "ScoreAgent setup failed"
 
 
 class TestScoreAgent:
@@ -86,7 +81,7 @@ class TestScoreAgent:
         self,
         init_score: int,
         init_streak: int,
-        winnings: Iterable[Tuple[int, int]],
+        winnings: Iterable[tuple[int, int]],
         expected_score: int,
         scorekeeper: ScoreAgent,
     ) -> None:
@@ -104,7 +99,7 @@ class TestScoreAgent:
     )
     def test_group_block_interchange(
         self,
-        winnings: Iterable[Tuple[int, int]],
+        winnings: Iterable[tuple[int, int]],
         expected_score: int,
         scorekeeper: ScoreAgent,
     ) -> None:
@@ -131,7 +126,7 @@ class TestScoreAgent:
     )
     def test_streaks(
         self,
-        winnings: Iterable[Tuple[int, int]],
+        winnings: Iterable[tuple[int, int]],
         expected_score: int,
         scorekeeper: ScoreAgent,
     ) -> None:
@@ -147,7 +142,7 @@ class TestScoreAgent:
     )
     def test_combos(
         self,
-        winnings: Iterable[Tuple[int, int]],
+        winnings: Iterable[tuple[int, int]],
         expected_score: int,
         scorekeeper: ScoreAgent,
     ) -> None:
@@ -185,7 +180,7 @@ class TestScoreAgent:
     )
     def test_combo_streak(
         self,
-        winnings: Iterable[Tuple[int, int]],
+        winnings: Iterable[tuple[int, int]],
         expected_score: int,
         scorekeeper: ScoreAgent,
     ) -> None:
@@ -220,7 +215,7 @@ class TestScoreAgent:
         self,
         init_score: int,
         init_streak: int,
-        winnings: Iterable[Tuple[int, int]],
+        winnings: Iterable[tuple[int, int]],
         expected_score: int,
         scorekeeper: ScoreAgent,
     ) -> None:

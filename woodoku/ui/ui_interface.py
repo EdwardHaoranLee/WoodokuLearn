@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import List, Tuple
 
 from woodoku.entity.woodoku_board import WoodokuBoard
 from woodoku.entity.woodoku_shape import WoodokuShape
@@ -20,16 +19,14 @@ class UIInterface(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def choose_shape(
-        self, shapes: List[WoodokuShape], shape_availabilities: List[bool]
-    ) -> int:
+    def choose_shape(self, shapes: list[WoodokuShape], shape_availabilities: list[bool]) -> int:
         """Show the UI to let user choose one of the shapes.
 
         Precondition: len(shapes) == len(shape_availabilities)
 
         Args:
-            shapes (List[WoodokuShape]): All the shapes in this round, no matter if chosen before.
-            shape_availabilities (List[bool]): List of bool representing if the shape in is still waiting to be chosen
+            shapes (list[WoodokuShape]): All the shapes in this round, no matter if chosen before.
+            shape_availabilities (list[bool]): list of bool representing if the shape in is still waiting to be chosen
 
         Returns:
             int: The index of shape chosen by the user.
@@ -37,7 +34,7 @@ class UIInterface(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def put_shape_at(self) -> Tuple[int, int]:
+    def put_shape_at(self) -> tuple[int, int]:
         """
         Get the coords from user on where to put shape.
 
@@ -66,8 +63,8 @@ class UIInterface(ABC):
     def show_result(
         self,
         board: WoodokuBoard,
-        shapes: List[WoodokuShape],
-        shape_availabilities: List[bool],
+        shapes: list[WoodokuShape],
+        shape_availabilities: list[bool],
     ) -> None:
         """Show the final result to the user.
 
@@ -75,7 +72,7 @@ class UIInterface(ABC):
 
         Args:
             board (WoodokuBoard): The board
-            shapes (List[WoodokuShape]): All the shapes in this round, no matter if chosen before.
-            shape_availabilities (List[bool]): If the shape in <shapes> is still waiting to be chosen.
+            shapes (list[WoodokuShape]): All the shapes in this round, no matter if chosen before.
+            shape_availabilities (list[bool]): If the shape in <shapes> is still waiting to be chosen.
         """
         raise NotImplementedError()

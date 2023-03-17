@@ -1,5 +1,3 @@
-from typing import List
-
 from unittest.mock import MagicMock
 import pytest
 
@@ -25,7 +23,7 @@ class TestGame:
             ([WoodokuShape([(0, 0)])]),
         ],
     )
-    def test_rotate_all_shapes(self, raw_shapes: List[WoodokuShape]) -> None:
+    def test_rotate_all_shapes(self, raw_shapes: list[WoodokuShape]) -> None:
         raw_rotated = rotate_all_shapes(raw_shapes)
         assert len(set(raw_rotated)) == len(raw_rotated)
         assert len(raw_rotated) >= len(raw_shapes)
@@ -60,31 +58,25 @@ class TestGame:
             ),
         ],
     )
-    def test_random_shapes(self, shapes: List[WoodokuShape], num: int) -> None:
+    def test_random_shapes(self, shapes: list[WoodokuShape], num: int) -> None:
         selected = random_shapes(shapes, num)
         assert len(selected) == num
 
     def test_is_not_out_of_space(self) -> None:
         board = WoodokuBoard()
-        board.can_add_shape_to_board = MagicMock(side_effect=[True, True])  # type: ignore[assignment]
+        board.can_add_shape_to_board = MagicMock(side_effect=[True, True])  # type: ignore[method-assign]
         # Assigning method type bug was not fixed by mypy team. Ref: https://github.com/python/mypy/issues/708
 
-        assert not is_out_of_space(
-            board, [WoodokuShape([(0, 0)]), WoodokuShape([(0, 0)])], [True, True]
-        )
+        assert not is_out_of_space(board, [WoodokuShape([(0, 0)]), WoodokuShape([(0, 0)])], [True, True])
 
     def test_is_not_out_of_space_2(self) -> None:
         board = WoodokuBoard()
-        board.can_add_shape_to_board = MagicMock(side_effect=[True, False])  # type: ignore[assignment]
+        board.can_add_shape_to_board = MagicMock(side_effect=[True, False])  # type: ignore[method-assign]
         # Assigning method type bug was not fixed by mypy team. Ref: https://github.com/python/mypy/issues/708
-        assert not is_out_of_space(
-            board, [WoodokuShape([(0, 0)]), WoodokuShape([(0, 0)])], [True, True]
-        )
+        assert not is_out_of_space(board, [WoodokuShape([(0, 0)]), WoodokuShape([(0, 0)])], [True, True])
 
     def test_is_out_of_space(self) -> None:
         board = WoodokuBoard()
-        board.can_add_shape_to_board = MagicMock(side_effect=[False, False])  # type: ignore[assignment]
+        board.can_add_shape_to_board = MagicMock(side_effect=[False, False])  # type: ignore[method-assign]
         # Assigning method type bug was not fixed by mypy team. Ref: https://github.com/python/mypy/issues/708
-        assert is_out_of_space(
-            board, [WoodokuShape([(0, 0)]), WoodokuShape([(0, 0)])], [True, True]
-        )
+        assert is_out_of_space(board, [WoodokuShape([(0, 0)]), WoodokuShape([(0, 0)])], [True, True])

@@ -1,5 +1,3 @@
-from typing import List, Tuple
-
 import pytest
 from woodoku.entity.woodoku_shape import WoodokuShape
 
@@ -16,9 +14,7 @@ class TestWoodokuShape:
             ([(3, 6), (4, 6), (5, 6), (4, 5)], [(0, 1), (1, 0), (1, 1), (2, 1)]),
         ],
     )
-    def test_standardize(
-        self, coords: List[Tuple[int, int]], coords_standardized: List[Tuple[int, int]]
-    ) -> None:
+    def test_standardize(self, coords: list[tuple[int, int]], coords_standardized: list[tuple[int, int]]) -> None:
         assert set(WoodokuShape(coords).get_coords()) == set(coords_standardized)
 
     @pytest.mark.parametrize(
@@ -33,12 +29,10 @@ class TestWoodokuShape:
     )
     def test_rotate(
         self,
-        coords_before_rotate: List[Tuple[int, int]],
-        coords_after_rotate: List[Tuple[int, int]],
+        coords_before_rotate: list[tuple[int, int]],
+        coords_after_rotate: list[tuple[int, int]],
     ) -> None:
-        assert set(WoodokuShape(coords_before_rotate).rotate().get_coords()) == set(
-            coords_after_rotate
-        )
+        assert set(WoodokuShape(coords_before_rotate).rotate().get_coords()) == set(coords_after_rotate)
 
     @pytest.mark.parametrize(
         "coords",
@@ -51,7 +45,7 @@ class TestWoodokuShape:
             ([(0, 1), (1, 0), (1, 1), (2, 1)]),
         ],
     )
-    def test_rotate_to_itself(self, coords: List[Tuple[int, int]]) -> None:
+    def test_rotate_to_itself(self, coords: list[tuple[int, int]]) -> None:
         shape = WoodokuShape(coords)
         new_shape = shape.rotate().rotate().rotate().rotate()
 
@@ -67,9 +61,7 @@ class TestWoodokuShape:
             ([(3, 6), (4, 6), (5, 6), (4, 5)], [(0, 1), (1, 0), (1, 1), (2, 1)]),
         ],
     )
-    def test_eq(
-        self, coords1: List[Tuple[int, int]], coords2: List[Tuple[int, int]]
-    ) -> None:
+    def test_eq(self, coords1: list[tuple[int, int]], coords2: list[tuple[int, int]]) -> None:
         assert WoodokuShape(coords1) == WoodokuShape(coords2)
         assert hash(WoodokuShape(coords1)) == hash(WoodokuShape(coords2))
 
@@ -81,9 +73,7 @@ class TestWoodokuShape:
             ([(3, 6), (4, 6), (5, 6), (4, 5)], [(0, 1), (1, 0), (1, 1)]),
         ],
     )
-    def test_not_eq_part(
-        self, coords1: List[Tuple[int, int]], coords2: List[Tuple[int, int]]
-    ) -> None:
+    def test_not_eq_part(self, coords1: list[tuple[int, int]], coords2: list[tuple[int, int]]) -> None:
         assert WoodokuShape(coords1) != WoodokuShape(coords2)
         assert hash(WoodokuShape(coords1)) != hash(WoodokuShape(coords2))
 
@@ -95,9 +85,7 @@ class TestWoodokuShape:
             ([(3, 6), (4, 6), (5, 6), (4, 5)], [(0, 1), (1, 1), (1, 1), (2, 1)]),
         ],
     )
-    def test_not_eq_diff_coord(
-        self, coords1: List[Tuple[int, int]], coords2: List[Tuple[int, int]]
-    ) -> None:
+    def test_not_eq_diff_coord(self, coords1: list[tuple[int, int]], coords2: list[tuple[int, int]]) -> None:
         assert WoodokuShape(coords1) != WoodokuShape(coords2)
         assert hash(WoodokuShape(coords1)) != hash(WoodokuShape(coords2))
 
@@ -112,9 +100,9 @@ class TestWoodokuShape:
     )
     def test_map_to_board_at(
         self,
-        coords1: List[Tuple[int, int]],
+        coords1: list[tuple[int, int]],
         x: int,
         y: int,
-        coords2: List[Tuple[int, int]],
+        coords2: list[tuple[int, int]],
     ) -> None:
         assert set(WoodokuShape(coords1).map_to_board_at(x, y)) == set(coords2)

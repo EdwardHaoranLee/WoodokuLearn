@@ -1,7 +1,6 @@
 import random
 from os import _exit as os_exit, path
 from sys import exit as sys_exit
-from typing import List
 
 import yaml
 
@@ -15,7 +14,7 @@ CONFIG_FILE = path.join(path.dirname(__file__), "config.yaml")
 NUM_SHAPES = 3
 
 
-def read_shapes_from_file(filepath: str) -> List[WoodokuShape]:
+def read_shapes_from_file(filepath: str) -> list[WoodokuShape]:
     raw_shapes = []
     with open(filepath, encoding="utf-8") as config:
         raw_shapes_list = yaml.safe_load(config)["raw_shapes"]
@@ -27,7 +26,7 @@ def read_shapes_from_file(filepath: str) -> List[WoodokuShape]:
     return raw_shapes
 
 
-def rotate_all_shapes(raw_shapes: List[WoodokuShape]) -> List[WoodokuShape]:
+def rotate_all_shapes(raw_shapes: list[WoodokuShape]) -> list[WoodokuShape]:
     """
     Rotate each shape in <raw_shapes> for three times, then gather all of them.
 
@@ -51,22 +50,20 @@ def rotate_all_shapes(raw_shapes: List[WoodokuShape]) -> List[WoodokuShape]:
     return list(shapes)
 
 
-def random_shapes(shapes: List[WoodokuShape], num: int) -> List[WoodokuShape]:
+def random_shapes(shapes: list[WoodokuShape], num: int) -> list[WoodokuShape]:
     """Choose `num` non-repeated random shapes from `shapes`.
 
     Args:
-        shapes (List[WoodokuShape]): All shapes available to choose in the game
+        shapes (list[WoodokuShape]): All shapes available to choose in the game
         num (int): Number of shapes to choose for this round
 
     Returns:
-        List[WoodokuShape]: The shapes for this round.
+        list[WoodokuShape]: The shapes for this round.
     """
     return list(random.choices(shapes, k=num))
 
 
-def is_out_of_space(
-    board: WoodokuBoard, shapes: List[WoodokuShape], shape_availability: List[bool]
-) -> bool:
+def is_out_of_space(board: WoodokuBoard, shapes: list[WoodokuShape], shape_availability: list[bool]) -> bool:
     for i, shape in enumerate(shapes):
         if shape_availability[i] and board.can_add_shape_to_board(shape):
             return False
@@ -86,7 +83,6 @@ def game(ui: UIInterface) -> None:
         score = 0
 
         while True:
-
             # Select NUM_SHAPES shapes from all possible shapes.
             shapes = random_shapes(all_shapes, NUM_SHAPES)
 
@@ -95,7 +91,6 @@ def game(ui: UIInterface) -> None:
 
             # When there is any shape in this round still waiting to be chosen.
             while any(shape_availability):
-
                 if is_out_of_space(board, shapes, shape_availability):
                     ui.show_result(board, shapes, shape_availability)
                     return
