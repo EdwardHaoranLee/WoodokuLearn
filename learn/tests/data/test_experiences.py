@@ -29,7 +29,12 @@ def test_init_experience(length: int) -> None:
 )
 @typechecked
 def test_experience_collect_once(
-    experience: tuple[Float[np.ndarray, "*state"], Int[np.ndarray, "*action"], float, Float[np.ndarray, "*state"]]
+    experience: tuple[
+        Float[np.ndarray, "*state"],
+        Int[np.ndarray, "*action"],
+        float,
+        Float[np.ndarray, "*state"],
+    ]
 ) -> None:
     exp = ExperienceReplay(10)
     exp.collect(experience)
@@ -51,7 +56,12 @@ def test_experience_collect_once(
 )
 @typechecked
 def test_experience_collect_multi(
-    experience: tuple[Float[np.ndarray, "*state"], Int[np.ndarray, "*action"], float, Float[np.ndarray, "*state"]]
+    experience: tuple[
+        Float[np.ndarray, "*state"],
+        Int[np.ndarray, "*action"],
+        float,
+        Float[np.ndarray, "*state"],
+    ]
 ) -> None:
     exp = ExperienceReplay(8)
     exp.collect(experience)
@@ -77,7 +87,12 @@ def test_experience_collect_multi(
 )
 @typechecked
 def test_experience_wraps(
-    experience: tuple[Float[np.ndarray, "*state"], Int[np.ndarray, "*action"], float, Float[np.ndarray, "*state"]]
+    experience: tuple[
+        Float[np.ndarray, "*state"],
+        Int[np.ndarray, "*action"],
+        float,
+        Float[np.ndarray, "*state"],
+    ]
 ) -> None:
     exp = ExperienceReplay(4)
     for _ in range(5):
@@ -132,7 +147,12 @@ def test_sample_from_experience(
     length: int,
     count: int,
     batch_size: int,
-    experience: tuple[Float[np.ndarray, "*state"], Int[np.ndarray, "*action"], float, Float[np.ndarray, "*state"]],
+    experience: tuple[
+        Float[np.ndarray, "*state"],
+        Int[np.ndarray, "*action"],
+        float,
+        Float[np.ndarray, "*state"],
+    ],
 ) -> None:
     exp = ExperienceReplay(length)
     for _ in range(count):

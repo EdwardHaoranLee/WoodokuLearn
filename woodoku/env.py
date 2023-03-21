@@ -26,7 +26,7 @@ class Observation:
     # size is (157, )
     shape: tuple[int] = (OBSERBATION_N,)
 
-    def __init__(self, board: WoodokuBoard, shapes: list[WoodokuShape]) -> None:
+    def __init__(self) -> None:
         """Initialize the observation space from the game.
         NB: a raw obervation cannot be used, it must be reset by the game environment first.
         """
