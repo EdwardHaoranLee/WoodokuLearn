@@ -2,13 +2,13 @@ import random
 
 import numpy as np
 import pytest
+from jaxtyping import Bool
 from woodoku.entity.woodoku_board import (
     BOARD_SIZE,
     WoodokuBoard,
     _WoodokuBoardRepresentation,
 )
 from woodoku.entity.woodoku_shape import WoodokuShape
-from jaxtyping import Bool
 
 random.seed(69)  # keep the test explorer happy
 

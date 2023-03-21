@@ -3,9 +3,17 @@ from typing import Union
 import torch
 from torch import nn
 from jaxtyping import Float
-from woodoku.env import observation_space_d, action_space_d  # do not delete
+
+# pylint: disable=unused-import
+from woodoku.env import (
+    observation_space_d,
+    action_space_d,
+)
+
+# imports for jaxtyping TODO: test if variables are actually evaluated
 
 
+# pylint: disable=invalid-name
 class DQN_Network:
     def __init__(self, layer_size_list: list[int], lr: float, seed: int = 1423):
         torch.manual_seed(seed)
@@ -13,7 +21,8 @@ class DQN_Network:
         # policy net is the Q function
         self._policy_net = self.create_network(layer_size_list)
         # target net is the same, but as a shadow of policy net,
-        # where it is not gradient update, but rather inherit the parameter of policy ner every 5 step (see training loop)
+        # where it is not gradient update, but rather inherit the parameter of
+        # policy ner every 5 step (see training loop)
         self._target_net = copy.deepcopy(self._policy_net)
         """
         ChatGPT:

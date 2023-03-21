@@ -4,14 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pyyaml = "*"
-local-woodoku = {editable = true, path = "."}
 art = "*"
-torch = "*"
+pyyaml = "*"
 typeguard = "*"
-types-pyyaml = "*"
 jaxtyping = "*"
 numpy = "*"
+torch = "*"
+local-woodoku = {editable = true, path = "."}
 
 [dev-packages]
 black = "*"

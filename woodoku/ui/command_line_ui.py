@@ -15,6 +15,7 @@ NUM_SHAPES = 3
 
 
 class CommandLineUI(UIInterface):
+    # pylint: disable=unused-argument
     def show_start_game(self, board: WoodokuBoard) -> None:
         print(orange(text2art("Woodoku!", "3d_diagonal")))
 

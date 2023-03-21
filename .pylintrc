@@ -72,6 +72,7 @@ disable=
     E0611, # no-name-in-module
     W1401, # anomalous-backslash-in-string
     R0903, # too-few-public-methods
+    
 
 [REPORTS]
 
@@ -226,7 +227,7 @@ generated-members=torch.*
 [FORMAT]
 
 # Maximum number of characters on a single line.
-max-line-length=120
+max-line-length=150
 
 # Regexp for a line that is allowed to be longer than the limit.
 # ignore-long-lines=^\s*(# )?<?https?://\S+>?$

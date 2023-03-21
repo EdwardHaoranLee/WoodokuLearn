@@ -45,9 +45,7 @@ def orange(text: str) -> str:
     return __colored(*ORANGE, text)
 
 
-def inbetween(
-    start: str, in_between: str, bold_in_between: str, end: str, horizontal_bar: str
-) -> str:
+def inbetween(start: str, in_between: str, bold_in_between: str, end: str, horizontal_bar: str) -> str:
     """Return a string which is further printed out in the terminal as a horizontal line."""
     # The string starts with the start strings followed with eight iterations of horizontal_bar and in_between.
     row_str = f"{start}"
