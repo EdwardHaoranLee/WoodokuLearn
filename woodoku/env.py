@@ -26,24 +26,24 @@ class Observation:
     # size is (157, )
     shape: tuple[int] = (OBSERBATION_N,)
 
-    def __init__(self) -> None:
-        """Initialize the observation space from the game.
-        NB: a raw obervation cannot be used, it must be reset by the game environment first.
-        """
-        self.data: Float[np.ndarray, "OBSERBATION_N"] = np.zeros(OBSERBATION_N)
+    def __init__(self, data: Float[np.ndarray, "OBSERBATION_N"]) -> None:
+        self.data = data
 
-    def from_game(self, board: WoodokuBoard, shapes: list[WoodokuShape]) -> None:
+    @staticmethod
+    def from_game(board: WoodokuBoard, shapes: list[WoodokuShape]) -> Observation:
         """
-        update the observation space from the game.
+        generate an observation from the game.
         """
-        self.data[: BOARD_SIZE * BOARD_SIZE] = board.get_board_data()
+        data: Float[np.ndarray, "OBSERBATION_N"] = np.zeros(OBSERBATION_N)
+        data[: BOARD_SIZE * BOARD_SIZE] = board.get_board_data()
         for i, shape in enumerate(shapes):
-            self.data[
+            data[
                 BOARD_SIZE * BOARD_SIZE
                 + i * MAX_SHAPE_SIZE * MAX_SHAPE_SIZE : BOARD_SIZE * BOARD_SIZE
                 + (i + 1) * MAX_SHAPE_SIZE * MAX_SHAPE_SIZE
             ] = shape.get_shape_data()
-        self.data[-1] = board.get_streak()
+        data[-1] = board.get_streak()
+        return Observation(data)
 
 
 class Action:
