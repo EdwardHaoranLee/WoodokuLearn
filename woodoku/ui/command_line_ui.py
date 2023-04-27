@@ -1,17 +1,15 @@
 from time import sleep
 from typing import Callable
 from art import text2art
-from woodoku.entity.woodoku_board import BOARD_SIZE, WoodokuBoard
+from config import BOARD_SIZE, MAX_SHAPE_SIZE
+from woodoku.entity.woodoku_board import WoodokuBoard
 from woodoku.entity.woodoku_shape import (
     BLOCK_PADDING,
-    MAX_SHAPE_SIZE,
     ROW_PADDING,
     WoodokuShape,
 )
 from woodoku.ui.ui_interface import UIInterface
 from woodoku.ui.utils import get_input, orange, red
-
-NUM_SHAPES = 3
 
 
 class CommandLineUI(UIInterface):

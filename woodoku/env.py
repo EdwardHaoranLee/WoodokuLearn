@@ -3,10 +3,10 @@ from jaxtyping import Int, Float
 
 import numpy as np
 
-
-from woodoku import game
-from woodoku.entity.woodoku_board import WoodokuBoard, BOARD_SIZE
-from woodoku.entity.woodoku_shape import MAX_SHAPE_SIZE, WoodokuShape
+from config import BOARD_SIZE, CONFIG_FILE, MAX_SHAPE_SIZE, NUM_SHAPES
+from woodoku.entity.woodoku_board import WoodokuBoard
+from woodoku.entity.woodoku_shape import WoodokuShape
+from woodoku.utils import get_all_shapes_from_file, is_out_of_space, random_shapes
 
 OBSERBATION_N = BOARD_SIZE * BOARD_SIZE + MAX_SHAPE_SIZE * MAX_SHAPE_SIZE * 3 + 1
 
@@ -94,10 +94,7 @@ class WoodokuGameEnv:
     _availability: list[bool]
 
     def __init__(self) -> None:
-        self._woodoku_board = WoodokuBoard()
-        self._all_shapes = game.read_shapes_from_file(game.CONFIG_FILE)
-        self._shapes = game.random_shapes(self._all_shapes, game.NUM_SHAPES)
-        self._availability = [True] * game.NUM_SHAPES
+        self.reset()
 
     def reset(self) -> tuple[Observation, bool, int]:
         """
