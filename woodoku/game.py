@@ -1,4 +1,4 @@
-from os import _exit as os_exit, path
+from os import _exit as os_exit
 from sys import exit as sys_exit
 from config import CONFIG_FILE, NUM_SHAPES
 

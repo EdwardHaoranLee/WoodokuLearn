@@ -46,14 +46,14 @@ def _rotate_all_shapes(raw_shapes: list[WoodokuShape]) -> list[WoodokuShape]:
 
 def get_all_shapes_from_file(config_path: str) -> list[WoodokuShape]:
     """
-    rotate all shape to gather the entire set of shapes
+    gather all possible shape from shape config file
     """
 
     return _rotate_all_shapes(_read_shapes_from_file(config_path))
 
 
 def random_shapes(shapes: list[WoodokuShape], num: int) -> list[WoodokuShape]:
-    """Choose `num` non-repeated random shapes from `shapes`.
+    """Choose `num` random shapes from `shapes` the shapes can be the same (with replacements).
 
     Args:
         shapes (list[WoodokuShape]): All shapes available to choose in the game
@@ -66,6 +66,16 @@ def random_shapes(shapes: list[WoodokuShape], num: int) -> list[WoodokuShape]:
 
 
 def is_out_of_space(board: WoodokuBoard, shapes: list[WoodokuShape], shape_availability: list[bool]) -> bool:
+    """Check if there is any space left on the board for the shapes to be placed.
+
+    Args:
+        board (WoodokuBoard): the board to check
+        shapes (list[WoodokuShape]): the shapes needed to be placed
+        shape_availability (list[bool]): the availability of each shape
+
+    Returns:
+        bool: _description_
+    """
     for i, shape in enumerate(shapes):
         if shape_availability[i] and board.can_add_shape_to_board(shape):
             return False
