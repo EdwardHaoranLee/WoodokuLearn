@@ -31,7 +31,7 @@ class TestWoodokuGameEnv:
         [
             ([(0, 4, 4)], True),
             ([(0, 0, 0)], True),
-            ([(0, 0, 0), (1, 0, 4), (2, 4, 0), (2, 4, 4)], True),  # placing 4 shape far apart should not end the game
+            ([(0, 0, 0), (1, 1, 4), (2, 4, 1)], True),  # placing 4 shape far apart should not end the game
             ([(0, 0, 0), (0, 4, 4)], False),  # choosing an unavailable shape
             ([(0, 0, 0), (1, 0, 0), (2, 0, 0), (1, 0, 0)], False),  # placing shapes repeatedly on the same location
         ],
