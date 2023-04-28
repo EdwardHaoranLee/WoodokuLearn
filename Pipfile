@@ -6,14 +6,10 @@ name = "pypi"
 [packages]
 art = "*"
 pyyaml = "*"
-typeguard = "*"
 jaxtyping = "*"
 numpy = "*"
 torch = "*"
 local-woodoku = {editable = true, path = "."}
-
-[dev-packages]
-black = "*"
 pylint = "*"
 pytest = "*"
 pre-commit = "*"
@@ -21,10 +17,14 @@ mypy = "*"
 types-pyyaml = "*"
 types-atomicwrites = "*"
 types-setuptools = "*"
+# typeguard >=4.0 breaks pytest to we only use 3.x version before a patch from
+# jaxtyping is available 
+# typeguard = "<4.0,>=3.0"
+typeguard = "*"
+
+[dev-packages]
+black = "*"
 ipykernel = "*"
 
 [requires]
 python_version = "3.11"
-
-[pipenv]
-allow_prereleases = true
