@@ -30,3 +30,8 @@ repos:
       entry: pipenv run mypy
       language: system
       types: [python]
+    - id: pytest 
+      name: pytest 
+      entry: pipenv run python -m pytest
+      language: system
+      types: [python]

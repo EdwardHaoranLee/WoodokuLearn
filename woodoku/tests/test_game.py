@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock
 import pytest
 
-from woodoku.game import rotate_all_shapes, random_shapes, is_out_of_space
+from woodoku.utils import _rotate_all_shapes, random_shapes, is_out_of_space
 from woodoku.entity.woodoku_shape import WoodokuShape
 from woodoku.entity.woodoku_board import WoodokuBoard
 
@@ -24,7 +24,7 @@ class TestGame:
         ],
     )
     def test_rotate_all_shapes(self, raw_shapes: list[WoodokuShape]) -> None:
-        raw_rotated = rotate_all_shapes(raw_shapes)
+        raw_rotated = _rotate_all_shapes(raw_shapes)
         assert len(set(raw_rotated)) == len(raw_rotated)
         assert len(raw_rotated) >= len(raw_shapes)
 
@@ -58,7 +58,7 @@ class TestGame:
             ),
         ],
     )
-    def test_random_shapes(self, shapes: list[WoodokuShape], num: int) -> None:
+    def test_random_shapes_len(self, shapes: list[WoodokuShape], num: int) -> None:
         selected = random_shapes(shapes, num)
         assert len(selected) == num
 

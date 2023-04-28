@@ -3,12 +3,18 @@ from jaxtyping import Int, Float
 
 import numpy as np
 
-
-from woodoku import game
-from woodoku.entity.woodoku_board import WoodokuBoard, BOARD_SIZE
-from woodoku.entity.woodoku_shape import MAX_SHAPE_SIZE, WoodokuShape
-
-OBSERBATION_N = BOARD_SIZE * BOARD_SIZE + MAX_SHAPE_SIZE * MAX_SHAPE_SIZE * 3 + 1
+from config import (
+    BOARD_SIZE,
+    CONFIG_FILE,
+    MAX_SHAPE_SIZE,
+    NUM_SHAPES,
+    OBSERVATION_N,
+    REWARD_INVALID_LOCATION,
+    REWARD_INVALID_SHAPE,
+)
+from woodoku.entity.woodoku_board import WoodokuBoard
+from woodoku.entity.woodoku_shape import WoodokuShape
+from woodoku.utils import get_all_shapes_from_file, is_out_of_space, random_shapes
 
 
 class Observation:
@@ -24,9 +30,9 @@ class Observation:
     """
 
     # size is (157, )
-    shape: tuple[int] = (OBSERBATION_N,)
+    shape: tuple[int] = (OBSERVATION_N,)
 
-    def __init__(self, data: Float[np.ndarray, "OBSERBATION_N"]) -> None:
+    def __init__(self, data: Float[np.ndarray, "OBSERVATION_N"]) -> None:
         self.data = data
 
     @staticmethod
@@ -34,14 +40,16 @@ class Observation:
         """
         generate an observation from the game.
         """
-        data: Float[np.ndarray, "OBSERBATION_N"] = np.zeros(OBSERBATION_N)
-        data[: BOARD_SIZE * BOARD_SIZE] = board.get_board_data()
+        data: Float[np.ndarray, "OBSERVATION_N"] = np.zeros(OBSERVATION_N)
+
+        data[: BOARD_SIZE * BOARD_SIZE] = board.get_board_data().ravel()  # ravel() is a referencing flatten function
         for i, shape in enumerate(shapes):
             data[
                 BOARD_SIZE * BOARD_SIZE
                 + i * MAX_SHAPE_SIZE * MAX_SHAPE_SIZE : BOARD_SIZE * BOARD_SIZE
                 + (i + 1) * MAX_SHAPE_SIZE * MAX_SHAPE_SIZE
-            ] = shape.get_shape_data()
+            ] = shape.get_shape_data().ravel()
+
         data[-1] = board.get_streak()
         return Observation(data)
 
@@ -70,16 +78,20 @@ class Action:
         """
         Generate a random action within the possible action space.
 
-        Returns:
-
+        Returns: a random action.
         """
-        raise NotImplementedError
+        shape_choice = np.random.randint(0, 3)
+        x_coord = np.random.randint(0, 9)
+        y_coord = np.random.randint(0, 9)
+
+        return Action(np.array([shape_choice, x_coord, y_coord], dtype=np.int_))
 
 
 observation_space_d = Observation.shape
 action_space_d = Action.shape
 
 
+# TODO: add documentation for reward function
 class WoodokuGameEnv:
     """
     A woodoku game environment.
@@ -94,16 +106,21 @@ class WoodokuGameEnv:
     _availability: list[bool]
 
     def __init__(self) -> None:
-        self._woodoku_board = WoodokuBoard()
-        self._all_shapes = game.read_shapes_from_file(game.CONFIG_FILE)
-        self._shapes = game.random_shapes(self._all_shapes, game.NUM_SHAPES)
-        self._availability = [True] * game.NUM_SHAPES
+        self.reset()
 
-    def reset(self) -> tuple[Observation, bool, int]:
+    def reset(self) -> Observation:
         """
         Reset the woodoku game env to initial Observation and return the initial Observation.
         """
-        raise NotImplementedError
+        self._woodoku_board = WoodokuBoard()
+        self._all_shapes = get_all_shapes_from_file(CONFIG_FILE)
+        self._shapes = random_shapes(self._all_shapes, NUM_SHAPES)
+        self._availability = [True] * NUM_SHAPES
+        self._available_count = NUM_SHAPES
+        self._cur_score = 0
+        self._is_done = False
+
+        return self._observe()
 
     def step(self, action: Action) -> tuple[Observation, int, bool]:
         """
@@ -114,7 +131,53 @@ class WoodokuGameEnv:
         Returns:
             A tuple of the Observation, reward (points earned) and whether the game is ended.
         """
-        raise NotImplementedError
+        # game has already ended
+        if self._is_done:
+            return self._observe(), 0, True
+
+        # Check if the game has already ended
+        # When there is still available shapes in this round waiting to be placed
+        if is_out_of_space(self._woodoku_board, self._shapes, self._availability):
+            self._is_done = True
+            return (
+                self._observe(),
+                0,
+                True,
+            )  # TODO: possibly need to tune the reward as negative reward
+
+        shape_choice, x, y = action.data[0], action.data[1], action.data[2]
+
+        # penalize action choosing an unavailable shape
+        if not self._availability[shape_choice]:
+            return self._observe(), REWARD_INVALID_SHAPE, False
+
+        # penalize action for choosing an occupied location
+        if not self._woodoku_board.can_add_shape_at_location(self._shapes[shape_choice], x, y):
+            return self._observe(), REWARD_INVALID_LOCATION, False
+
+        self._woodoku_board.add_shape(self._shapes[shape_choice], x, y)
+        self._availability[shape_choice] = False
+        self._available_count -= 1
+
+        reward = self._get_score_gain()
+        self._cur_score = self._woodoku_board.get_score()
+
+        # if all shapes are used up, reset the shapes for the next round
+        if self._available_count == 0:
+            self._shapes = random_shapes(self._all_shapes, NUM_SHAPES)
+            self._availability = [True] * NUM_SHAPES
+            self._available_count = NUM_SHAPES
+
+        return self._observe(), reward, False
+
+    def _get_score_gain(self) -> int:
+        """
+        Get the score gain from the current action.
+
+        Returns:
+            The score gain.
+        """
+        return self._woodoku_board.get_score() - self._cur_score
 
     def _observe(self) -> Observation:
         """
@@ -122,4 +185,4 @@ class WoodokuGameEnv:
         Returns:
             The observation.
         """
-        raise NotImplementedError
+        return Observation.from_game(self._woodoku_board, self._shapes)

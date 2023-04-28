@@ -3,10 +3,10 @@ from __future__ import annotations
 from typing import Any, Iterable
 from jaxtyping import Float
 import numpy as np
+from config import MAX_SHAPE_SIZE
 
 from woodoku.ui.utils import BLOCK, green
 
-MAX_SHAPE_SIZE = 5
 ROW_PADDING = 10
 BLOCK_PADDING = 3
 

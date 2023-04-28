@@ -56,6 +56,7 @@ class ExperienceReplay:
         if self.index == 0:
             self.is_full = True
 
+    # NOTE: example of type annotation for jaxtyped function
     @jaxtyped  # type: ignore[misc]
     @typechecked
     def sample_from_experience(
@@ -69,7 +70,9 @@ class ExperienceReplay:
         if not self.is_full:
             sample_size = min(self.index, sample_size)
         sample_indices = np.random.choice(
-            self.index if not self.is_full else self.length, size=sample_size, replace=False
+            self.index if not self.is_full else self.length,
+            size=sample_size,
+            replace=False,
         )
         state = torch.tensor(self.state[sample_indices])
         action = torch.tensor(self.action[sample_indices])

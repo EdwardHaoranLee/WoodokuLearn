@@ -3,6 +3,7 @@ from jaxtyping import Bool
 
 import numpy as np
 from art import text2art
+from config import BOARD_SIZE
 from woodoku.entity.score_agent import ScoreAgent
 from woodoku.entity.woodoku_shape import WoodokuShape
 from woodoku.exceptions.shape_out_of_board_error import ShapeOutOfBoardError
@@ -33,7 +34,6 @@ from woodoku.ui.utils import (
 )
 
 # the length of the square game board
-BOARD_SIZE = 9
 
 
 class _WoodokuBoardRepresentation:
@@ -292,6 +292,9 @@ class WoodokuBoard:
     def get_streak(self) -> int:
         return self.__score_agent.get_streak()
 
+    def get_combo(self) -> int:
+        return self.__score_agent.get_combo()
+
     def get_board_data(self) -> Bool[np.ndarray, "BOARD_SIZE*BOARD_SIZE"]:  # type: ignore[type-arg]
         return self._representation.get_board_data()
 
@@ -370,8 +373,8 @@ class WoodokuBoard:
         return [(row, col) for row in range(x, x + 3) for col in range(y, y + 3)]
 
     def __str__(self) -> str:
-        streak = self.__score_agent.get_streak()
-        combo = self.__score_agent.get_combo()
+        streak = self.get_streak()
+        combo = self.get_combo()
         bonus = ""
 
         if streak >= 2:
@@ -383,5 +386,5 @@ class WoodokuBoard:
 
         if bonus:
             bonus = str(text2art(f"{bonus}", "starwars"))
-        score = str(text2art(f"Score:{str(self.__score_agent.get_score())}", "starwars"))
+        score = str(text2art(f"Score:{str(self.get_score())}", "starwars"))
         return orange(score + bonus) + str(self._representation) + "\n"

@@ -3,8 +3,8 @@ import random
 import numpy as np
 import pytest
 from jaxtyping import Bool
+from config import BOARD_SIZE
 from woodoku.entity.woodoku_board import (
-    BOARD_SIZE,
     WoodokuBoard,
     _WoodokuBoardRepresentation,
 )

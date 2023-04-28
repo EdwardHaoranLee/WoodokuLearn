@@ -1,7 +1,9 @@
 from typing import Iterable
 
 import pytest
-from woodoku.entity.score_agent import GROUP_POINTS, STREAK_POINTS, ScoreAgent
+from config import GROUP_POINTS, STREAK_POINTS
+from woodoku.entity.score_agent import ScoreAgent
+
 
 # Scoring Rules:
 #   1. 1 point for each block placed

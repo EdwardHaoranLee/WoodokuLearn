@@ -72,6 +72,7 @@ disable=
     E0611, # no-name-in-module
     W1401, # anomalous-backslash-in-string
     R0903, # too-few-public-methods
+    W0201, # attribute-defined-outside-init
     
 
 [REPORTS]
